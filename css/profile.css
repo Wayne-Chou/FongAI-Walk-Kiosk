@@ -1,0 +1,238 @@
+/* --- 基礎佈局 --- */
+body {
+  margin: 0;
+  font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
+  background: linear-gradient(180deg, #4fa3a8, #2f6b7a);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.profile-page {
+  width: 100%;
+  max-width: 500px;
+  padding: 40px 30px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+/* --- 品牌 --- */
+.brand {
+  color: white;
+  margin-bottom: 20px;
+}
+
+.brand h1 {
+  font-size: 42px;
+  margin: 0;
+  letter-spacing: 2px;
+  font-weight: 600;
+}
+
+.brand p {
+  margin-top: 6px;
+  font-size: 16px;
+  opacity: 0.9;
+}
+
+/* --- 卡片 (俐落方角) --- */
+.profile-card {
+  padding: 35px 40px 40px;
+  background: white;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  border-radius: 0; /* 移除圓角 */
+}
+
+.profile-card h2 {
+  margin: 0 0 25px 0;
+  color: #2f6b7a;
+  font-size: 24px;
+}
+
+/* --- 表單群組與 Label --- */
+.form-group {
+  position: relative;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+label {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  letter-spacing: 2px;
+  color: #2f6b7a;
+  font-weight: 700;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  border-left: 4px solid #4fa3a8;
+  padding-left: 10px;
+}
+
+.input-icon {
+  position: absolute;
+  left: 16px;
+
+  top: 48px;
+  color: #7d8b91;
+  font-size: 16px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 16px 18px 16px 46px;
+  font-size: 16px;
+  border-radius: 0; /* 移除圓角 */
+  border: 2px solid #d1dee2;
+  background: #f2f6f8;
+  box-sizing: border-box;
+  transition: all 0.25s ease;
+  display: block;
+}
+
+.form-group input:hover {
+  background: #eaf2f3;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #4fa3a8;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(79, 163, 168, 0.2);
+}
+
+/* --- 客製化性別選擇器 --- */
+.gender-selector {
+  display: flex;
+  gap: 10px;
+}
+
+.gender-option {
+  flex: 1;
+  position: relative;
+  border-left: none; /* 覆蓋全域 label 樣式 */
+  padding-left: 0;
+  margin-bottom: 0;
+}
+
+.gender-option input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.gender-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  background: #f2f6f8;
+  border: 2px solid #4fa3a8;
+  color: #7d8b91;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.gender-option input:checked + .gender-btn {
+  background: #4fa3a8;
+  color: white;
+}
+
+.gender-btn i {
+  margin-right: 8px;
+}
+
+/* --- 按鈕 (方角) --- */
+button {
+  width: 100%;
+  padding: 20px;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  border: none;
+  border-radius: 0; /* 移除圓角 */
+  background: #4fa3a8;
+  color: white;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: 0.2s;
+}
+
+button:hover {
+  background: #3c8e93;
+}
+/* =========================
+   QR Code 卡片入口（升級版）
+========================= */
+.qr-entry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 14px;
+  padding: 16px 18px;
+  border: 2px solid #4fa3a8;
+  background: rgba(79, 163, 168, 0.06);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+/* 左側 icon */
+.qr-icon {
+  width: 44px;
+  height: 44px;
+  background: #4fa3a8;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+/* 中間文字 */
+.qr-text {
+  flex: 1;
+  margin-left: 14px;
+  text-align: left;
+}
+
+.qr-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #2f6b7a;
+}
+
+.qr-desc {
+  font-size: 13px;
+  color: #7d8b91;
+  margin-top: 2px;
+}
+
+/* 右箭頭 */
+.qr-arrow {
+  color: #4fa3a8;
+  font-size: 16px;
+}
+
+/* hover 效果 */
+.qr-entry:hover {
+  background: #4fa3a8;
+  transform: translateY(-2px);
+}
+
+.qr-entry:hover .qr-title,
+.qr-entry:hover .qr-desc,
+.qr-entry:hover .qr-arrow {
+  color: white;
+}
+
+.qr-entry:hover .qr-icon {
+  background: white;
+  color: #4fa3a8;
+}

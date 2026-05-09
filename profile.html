@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>基本資料</title>
+    <link rel="stylesheet" href="css/profile.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+  </head>
+
+  <body>
+    <div class="profile-page">
+      <div class="brand">
+        <h1>FongAI</h1>
+        <p>AI Walk Analysis System</p>
+      </div>
+
+      <div class="profile-card">
+        <h2>基本資料填寫</h2>
+
+        <div class="form-group">
+          <label>姓名 Name</label>
+          <i class="fa-regular fa-user input-icon"></i>
+          <input type="text" placeholder="請輸入姓名" />
+        </div>
+
+        <!-- ✅ 新增 Email（選填） -->
+        <div class="form-group">
+          <label> Email（選填） </label>
+          <i class="fa-regular fa-envelope input-icon"></i>
+          <input type="email" placeholder="請輸入 Email（非必填）" />
+        </div>
+
+        <div class="form-group">
+          <label>出生年月日 Birth Date</label>
+          <i class="fa-solid fa-calendar-days input-icon"></i>
+          <input type="date" />
+        </div>
+
+        <div class="form-group">
+          <label>性別 Gender</label>
+          <div class="gender-selector">
+            <label class="gender-option">
+              <input type="radio" name="gender" value="male" checked />
+              <span class="gender-btn">
+                <i class="fa-solid fa-mars"></i> 男生
+              </span>
+            </label>
+            <label class="gender-option">
+              <input type="radio" name="gender" value="female" />
+              <span class="gender-btn">
+                <i class="fa-solid fa-venus"></i> 女生
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <button onclick="location.href = 'walk-test.html'">開始測驗</button>
+        <div class="qr-entry" onclick="handleScanQR()">
+          <div class="qr-icon">
+            <i class="fa-solid fa-qrcode"></i>
+          </div>
+          <div class="qr-text">
+            <div class="qr-title">快速開始</div>
+            <div class="qr-desc">掃描 QRCode 直接帶入資料</div>
+          </div>
+          <div class="qr-arrow">
+            <i class="fa-solid fa-chevron-right"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

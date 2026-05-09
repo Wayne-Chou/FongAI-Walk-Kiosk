@@ -1,0 +1,317 @@
+/* --- 基礎佈局 --- */
+:root {
+  --primary: #4fa3a8;
+  --dark-teal: #2f6b7a;
+  --white: #ffffff;
+  --gray-light: #f2f6f8;
+  --text-dim: #7d8b91;
+  --border-color: rgba(47, 107, 122, 0.15);
+}
+
+body,
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
+  background: #fff;
+}
+
+.dashboard-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  margin: 0 auto;
+  background: #f8fafb;
+}
+
+/* --- 頂部單位列 (Top Bar) --- */
+.top-bar {
+  background: var(--dark-teal);
+  color: white;
+  padding: 14px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.org-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  font-size: 16px;
+}
+
+.org-info i {
+  color: var(--primary);
+  font-size: 18px;
+}
+
+.org-name {
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.logout-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: white;
+  padding: 8px 18px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.logout-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: white;
+}
+
+/* --- 主要內容區 --- */
+.main-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* --- 品牌與 Logo --- */
+.brand {
+  text-align: center;
+  margin-bottom: 40px;
+  color: var(--dark-teal);
+}
+
+.logo-wrapper img {
+  width: 60px;
+  height: 60px;
+  display: block;
+  margin: 0 auto;
+}
+
+.brand h1 {
+  font-size: 52px;
+  margin: 0;
+  letter-spacing: 5px;
+  font-weight: 700;
+}
+
+.brand p {
+  margin: 5px 0 0;
+  font-size: 18px;
+  letter-spacing: 1px;
+  opacity: 0.7;
+}
+
+/* --- 操作卡片 (俐落方角) --- */
+.action-card {
+  width: 100%;
+  max-width: 480px;
+  background: white;
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--border-color);
+  padding: 0;
+}
+
+.card-content {
+  padding: 45px 40px;
+  text-align: center;
+}
+
+.action-card h2 {
+  color: var(--dark-teal);
+  font-size: 26px;
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.action-card p {
+  color: var(--text-dim);
+  line-height: 1.8;
+  font-size: 16px;
+  margin-bottom: 0;
+}
+
+/* --- 大型開始測驗按鈕 --- */
+.start-trigger {
+  width: 100%;
+  border: none;
+  background: var(--primary);
+  color: white;
+  padding: 35px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-inner i {
+  font-size: 42px;
+}
+
+.btn-inner span {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 4px;
+}
+
+.start-trigger:hover {
+  background: #3c8e93;
+}
+
+/* --- 公司基本資訊 Footer --- */
+.company-footer {
+  margin-top: 80px;
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
+}
+
+.footer-line {
+  height: 1px;
+  background: var(--border-color);
+  margin-bottom: 30px;
+}
+
+.info-grid {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-bottom: 20px;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--dark-teal);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.copyright {
+  font-size: 12px;
+  color: var(--text-dim);
+  opacity: 0.6;
+}
+
+/* =========================
+   彈窗
+========================= */
+.lang-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.45);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.lang-box {
+  background: white;
+  padding: 40px 30px;
+  text-align: center;
+  width: 320px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+.lang-box h2 {
+  margin-bottom: 25px;
+  color: #2f6b7a;
+}
+
+.lang-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.lang-options button {
+  padding: 12px;
+  border: 1px solid rgba(47, 107, 122, 0.2);
+  background: white;
+  cursor: pointer;
+  transition: 0.2s;
+  font-weight: 600;
+}
+
+.lang-options button:hover {
+  background: #4fa3a8;
+  color: white;
+}
+/* =========================
+   浮動語系按鈕
+========================= */
+.lang-float {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 1000;
+}
+
+/* 主按鈕 */
+#langToggle {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 14px 18px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  transition: 0.2s;
+}
+
+#langToggle:hover {
+  background: #3c8e93;
+}
+
+/* 選單 */
+.lang-menu {
+  position: absolute;
+  bottom: 60px;
+  right: 0;
+  background: white;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  display: none;
+  flex-direction: column;
+  min-width: 140px;
+}
+
+/* 開啟 */
+.lang-menu.active {
+  display: flex;
+}
+
+/* 選項 */
+.lang-menu button {
+  padding: 12px;
+  border: none;
+  background: white;
+  cursor: pointer;
+  text-align: left;
+  transition: 0.2s;
+}
+
+.lang-menu button:hover {
+  background: var(--primary);
+  color: white;
+}

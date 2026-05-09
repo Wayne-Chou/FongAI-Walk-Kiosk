@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>選擇測驗 - FongAI</title>
+    <link rel="stylesheet" href="css/profile.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+
+    <style>
+      /* 測驗選單容器：改為垂直堆疊或大網格 */
+      .test-menu {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        margin-top: 25px;
+      }
+
+      /* 測驗卡片基礎樣式 */
+      .test-card {
+        display: flex;
+        align-items: center;
+        padding: 30px 24px;
+        border-radius: 20px;
+        text-decoration: none;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .test-card:active {
+        transform: scale(0.96); /* 點擊時的縮回感 */
+      }
+
+      /* --- 行走測驗風格 (藍色系) --- */
+      .card-walk {
+        background: linear-gradient(135deg, #3a7bd5 0%, #00d2ff 100%);
+        box-shadow: 0 10px 20px rgba(58, 123, 213, 0.2);
+      }
+
+      /* --- 心律測驗風格 (粉紅/紅色系) --- */
+      .card-heart {
+        background: linear-gradient(135deg, #f77062 0%, #fe5196 100%);
+        box-shadow: 0 10px 20px rgba(254, 81, 150, 0.2);
+      }
+
+      /* 圖標與文字樣式 */
+      .test-card i {
+        font-size: 48px;
+        color: rgba(255, 255, 255, 0.9);
+        margin-right: 25px;
+      }
+
+      .test-info {
+        color: #fff;
+      }
+
+      .test-info strong {
+        display: block;
+        font-size: 22px;
+        margin-bottom: 4px;
+        letter-spacing: 1px;
+      }
+
+      .test-info p {
+        margin: 0;
+        font-size: 14px;
+        opacity: 0.85;
+      }
+
+      /* 右側箭頭裝飾 */
+      .test-card::after {
+        content: "\f105";
+        font-family: "Font Awesome 6 Free";
+        font-weight: 900;
+        position: absolute;
+        right: 25px;
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 24px;
+      }
+
+      /* 裝飾背景圓圈 (增加設計感) */
+      .test-card::before {
+        content: "";
+        position: absolute;
+        width: 150px;
+        height: 150px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        top: -50px;
+        right: -30px;
+      }
+      .hint-text {
+        text-align: center;
+        /* 顏色改為深灰藍，增加對比度 */
+        color: #475569;
+        /* 字體稍微放大並加粗 */
+        font-size: 16px;
+        font-weight: 500;
+        /* 增加一點字母間距，閱讀更輕鬆 */
+        letter-spacing: 0.5px;
+        margin-bottom: 24px;
+        /* 加入一個淡淡的底線或是小裝飾，讓視覺重心往下引導 */
+        position: relative;
+        display: block;
+      }
+
+      /* 如果想讓提示更明顯，可以在文字下方加個極淡的底線 */
+      .hint-text::after {
+        content: "";
+        display: block;
+        width: 40px;
+        height: 3px;
+        background: #3a7bd5; /* 使用你的品牌藍色 */
+        border-radius: 2px;
+        margin: 8px auto 0;
+        opacity: 0.6;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="profile-page">
+      <div class="brand">
+        <h1>FongAI</h1>
+        <p>AI Walk Analysis System</p>
+      </div>
+
+      <div class="profile-card">
+        <h2 style="text-align: center; margin-bottom: 10px">請選擇測驗項目</h2>
+        <div class="hint-text">點擊下方項目立即開始測驗</div>
+
+        <div class="test-menu">
+          <a href="walk-test-menu.html" class="test-card card-walk">
+            <i class="fa-solid fa-person-walking"></i>
+            <div class="test-info">
+              <strong>行走測驗</strong>
+              <p>步態分析與平衡評估</p>
+            </div>
+          </a>
+
+          <a href="#" class="test-card card-heart">
+            <i class="fa-solid fa-heart-pulse"></i>
+            <div class="test-info">
+              <strong>心律測驗</strong>
+              <p>心率監測與風險分析</p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FongAI Login</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+    <link rel="stylesheet" href="css/login.css" />
+  </head>
+
+  <body>
+    <div class="login-page">
+      <div class="brand">
+        <h1>FongAI</h1>
+        <p>AI Walk Analysis System</p>
+      </div>
+
+      <div class="login-card">
+        <div class="login-card-header">
+          <div class="login-card-img">
+            <img class="login-card-img" src="/assets/logo.png" alt="" />
+          </div>
+          <h2>系統登入</h2>
+        </div>
+
+        <div>
+          <div class="form-group">
+            <i class="fa-regular fa-user input-icon"></i>
+            <input type="text" placeholder="帳號" />
+          </div>
+
+          <div class="form-group password-field">
+            <i class="fa-solid fa-lock input-icon"></i>
+
+            <input type="password" id="password" placeholder="密碼" />
+
+            <i
+              class="fa-solid fa-eye toggle-password"
+              onclick="togglePassword()"
+            ></i>
+          </div>
+
+          <button onclick="location.href = 'profile.html'">登入</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+<script>
+  function togglePassword() {
+    const input = document.getElementById("password");
+    const icon = document.querySelector(".toggle-password");
+
+    if (input.type === "password") {
+      input.type = "text";
+      icon.classList.replace("fa-eye", "fa-eye-slash");
+    } else {
+      input.type = "password";
+      icon.classList.replace("fa-eye-slash", "fa-eye");
+    }
+  }
+</script>

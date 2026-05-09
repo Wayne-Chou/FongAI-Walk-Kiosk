@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FongAI 步態分析結果</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="css/result.css" />
+  </head>
+  <body>
+    <div class="report-wrapper">
+      <div class="report-card">
+        <div class="card-header">
+          <div class="card-brand">
+            <h1><img src="/assets/logo.png" alt="" />Fong<span>AI</span></h1>
+            <p>AI Walk Analysis System</p>
+          </div>
+        </div>
+
+        <div class="main-analysis">
+          <h2 class="form-title">動態核心穩定度分析</h2>
+          <div class="visual-box">
+            <div class="skeleton-display">
+              <img
+                src="/assets/man.png"
+                alt="Analysis Skeleton"
+                class="skeleton-img"
+              />
+            </div>
+            <div class="analysis-summary">
+              <div class="summary-tag">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                檢測結果：劇烈左右晃動
+              </div>
+              <p class="summary-desc">
+                經 AI 影像演算發現，受測者在行走過程中，軀幹中線偏離中心點超過
+                15%，具備顯著跌倒隱憂。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="risk-assessment">
+          <h4 class="sub-label">跌倒風險綜合評估</h4>
+          <div class="risk-display-container">
+            <div class="current-risk-badge level-high">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+              <span>檢測結果：高風險 (High Risk)</span>
+            </div>
+            <div class="risk-bar-group">
+              <div class="bar-segment low"></div>
+              <div class="bar-segment slight-low"></div>
+              <div class="bar-segment medium"></div>
+              <div class="bar-segment high active"></div>
+              <div class="bar-segment danger"></div>
+            </div>
+            <div class="risk-labels">
+              <span>低</span>
+              <span>稍低</span>
+              <span>中</span>
+              <span class="active-label">高</span>
+              <span>危險</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="advice-container">
+          <div class="tabs-grid">
+            <button class="tab-btn active" data-tab="train">建議訓練</button>
+            <button class="tab-btn" data-tab="doctor">潛在風險</button>
+
+            <button class="tab-btn" data-tab="hospital">推薦院所</button>
+          </div>
+
+          <div class="tab-content-area">
+            <div class="tab-content active" id="train">
+              <h5 class="content-title">階段性運動處方</h5>
+              <ul class="styled-list">
+                <li>
+                  <i class="fa-solid fa-person-walking"></i>
+                  <div><strong>單腳站立練習：</strong>強化深層穩定。</div>
+                </li>
+                <li>
+                  <i class="fa-solid fa-arrows-left-right"></i>
+                  <div><strong>重心轉移訓練：</strong>減少行走晃動。</div>
+                </li>
+              </ul>
+            </div>
+
+            <div class="tab-content" id="doctor">
+              <h5 class="content-title">步態異常特徵分析</h5>
+              <ul class="styled-list">
+                <li>
+                  <i class="fa-solid fa-sync"></i>
+                  <div><strong>左右步態不對稱：</strong>左側支撐時間較長。</div>
+                </li>
+                <li>
+                  <i class="fa-solid fa-shoe-prints"></i>
+                  <div><strong>步幅過窄：</strong>增加側向跌倒可能性。</div>
+                </li>
+              </ul>
+            </div>
+
+            <div class="tab-content" id="hospital">
+              <h5 class="content-title">附近專業復健機構</h5>
+
+              <div class="hospital-card">
+                <h6>睦霖復健科診所</h6>
+                <p>
+                  <i class="fa-solid fa-location-dot"></i> 台北市中山區松江路
+                  274 號 2 樓
+                </p>
+              </div>
+
+              <div class="hospital-card">
+                <h6>中山適康復健科診所</h6>
+                <p>
+                  <i class="fa-solid fa-location-dot"></i> 台北市中山區龍江路
+                  268 號
+                </p>
+              </div>
+
+              <div class="hospital-card">
+                <h6>康富物理治療所 (大安所)</h6>
+                <p>
+                  <i class="fa-solid fa-location-dot"></i> 台北市大安區瑞安街
+                  276 巷 16 號 1 樓
+                </p>
+              </div>
+
+              <div class="hospital-card">
+                <h6>非凡復健科診所</h6>
+                <p>
+                  <i class="fa-solid fa-location-dot"></i>
+                  台北市大安區信義路四段 177 號
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="qr-section">
+          <div class="qr-header">
+            <i class="fa-solid fa-qrcode"></i>
+            <span>帶走您的測驗結果</span>
+          </div>
+
+          <div class="qr-box-inline">
+            <img src="/assets/qrcode-demo.png" alt="QR Code" />
+          </div>
+
+          <p class="qr-desc">
+            請使用手機掃描 QRCode，即可查看並保存本次步態分析報告
+          </p>
+        </div>
+        <button class="back-btn" onclick="location.href = 'index.html'">
+          回首頁
+        </button>
+      </div>
+    </div>
+
+    <script>
+      document.querySelectorAll(".tab-btn").forEach((tab) => {
+        tab.addEventListener("click", () => {
+          // 1. 移除所有 active 狀態
+          document
+            .querySelectorAll(".tab-btn")
+            .forEach((btn) => btn.classList.remove("active"));
+          document
+            .querySelectorAll(".tab-content")
+            .forEach((content) => content.classList.remove("active"));
+
+          // 2. 加入當前 active 狀態
+          tab.classList.add("active");
+          const targetId = tab.getAttribute("data-tab");
+          const targetContent = document.getElementById(targetId);
+          if (targetContent) {
+            targetContent.classList.add("active");
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

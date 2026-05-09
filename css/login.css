@@ -1,0 +1,178 @@
+body {
+  margin: 0;
+  font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
+
+  background: linear-gradient(180deg, #4fa3a8, #2f6b7a);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  min-height: 100vh;
+}
+
+/* 整體 */
+
+.login-page {
+  width: 100%;
+  max-width: 500px;
+  padding: 40px 30px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+/* 品牌 */
+
+.brand {
+  color: white;
+  margin-bottom: 20px;
+}
+
+.brand h1 {
+  font-size: 42px;
+  margin: 0;
+  letter-spacing: 2px;
+  font-weight: 600;
+}
+
+.brand p {
+  margin-top: 6px;
+  font-size: 16px;
+  opacity: 0.9;
+}
+
+/* 登入卡 */
+.login-card-img img {
+  width: 50px;
+  height: 50px;
+}
+.login-card {
+  padding: 35px 40px 40px;
+
+  background-image: url("/assets/walk-ai.png");
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.25);
+
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  height: 550px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+/* 插圖 */
+
+.illustration {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.illustration img {
+  width: 200px;
+  height: auto;
+
+  filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.2));
+}
+
+/* title */
+
+.login-card h2 {
+  margin: 0;
+  color: #2f6b7a;
+  font-size: 24px;
+}
+
+/* form */
+
+.form-group {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+/* icon */
+
+.input-icon {
+  position: absolute;
+
+  left: 16px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  color: #7d8b91;
+  font-size: 16px;
+}
+
+/* input */
+
+.form-group input {
+  width: 100%;
+
+  padding: 16px 18px 16px 48px;
+
+  font-size: 16px;
+
+  border: 2px solid #4fa3a8;
+
+  background: #f2f6f8;
+
+  box-sizing: border-box;
+
+  transition: all 0.25s ease;
+}
+
+/* focus */
+
+.form-group input:focus {
+  outline: none;
+
+  border-color: #4fa3a8;
+
+  background: white;
+}
+
+/* 密碼眼睛 */
+
+.password-field .toggle-password {
+  position: absolute;
+
+  right: 16px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  cursor: pointer;
+
+  color: #7d8b91;
+
+  font-size: 16px;
+
+  transition: 0.2s;
+}
+
+.password-field .toggle-password:hover {
+  color: #4fa3a8;
+}
+/* button */
+
+button {
+  width: 100%;
+  padding: 18px;
+
+  font-size: 18px;
+
+  border: none;
+
+  background: #4fa3a8;
+  color: white;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+button:hover {
+  background: #3c8e93;
+}

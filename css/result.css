@@ -1,0 +1,368 @@
+:root {
+  --danger: #ff5757;
+  --high: #ffa203;
+  --medium: #ffd039;
+  --slight-low: #8cff00;
+  --low: #4ffa00;
+  --primary: #4fa3a8;
+  --dark: #2f6b7a;
+  --bg-light: #f2f6f8;
+  --text: #334155;
+  --border: #d1dee2;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Noto Sans TC", sans-serif;
+  background: linear-gradient(180deg, #4fa3a8, #2f6b7a);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 40px 15px;
+  color: var(--text);
+}
+
+.report-wrapper {
+  width: 95%;
+  max-width: 700px;
+}
+
+.report-card {
+  background: white;
+
+  padding: 30px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.25);
+}
+
+.card-header {
+  border-bottom: 2px solid var(--bg-light);
+  padding-bottom: 15px;
+  margin-bottom: 25px;
+}
+.card-brand img {
+  width: 30px;
+  height: 30px;
+}
+.card-brand h1 {
+  display: flex;
+  align-items: center;
+  font-size: 28px;
+  margin: 0;
+  color: var(--primary);
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.card-brand h1 span {
+  color: var(--dark);
+}
+
+.card-brand p {
+  margin: 0;
+  font-size: 11px;
+  color: #94a3b8;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.form-title {
+  margin: 0 0 20px 0;
+  color: var(--dark);
+  font-size: 22px;
+  text-align: center;
+}
+
+/* 分析視覺區 */
+.visual-box {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  background: var(--bg-light);
+  padding: 15px;
+  border: 2px solid var(--border);
+  margin-bottom: 25px;
+}
+
+.skeleton-display {
+  position: relative;
+  background: white;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  height: 180px;
+  text-align: center;
+}
+
+.skeleton-img {
+  height: 100%;
+  width: auto;
+}
+
+.summary-tag {
+  background: var(--danger);
+  color: white;
+  padding: 4px 10px;
+  font-weight: 700;
+  font-size: 12px;
+  margin-bottom: 8px;
+  display: inline-block;
+}
+
+.summary-desc {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--dark);
+  margin: 0;
+}
+
+/* 風險評估區 */
+.sub-label {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: var(--dark);
+  font-weight: 700;
+  margin-bottom: 12px;
+  border-left: 4px solid var(--primary);
+  padding-left: 10px;
+}
+
+.risk-display-container {
+  background: var(--bg-light);
+  padding: 15px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.current-risk-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px;
+  font-size: 18px;
+  font-weight: 800;
+  border-radius: 6px;
+  margin-bottom: 15px;
+  color: white;
+}
+
+.level-high {
+  background: var(--high);
+}
+
+.risk-bar-group {
+  display: flex;
+  gap: 4px;
+  height: 10px;
+  margin-bottom: 8px;
+}
+.bar-segment {
+  flex: 1;
+  background: #e2e8f0;
+  border-radius: 2px;
+}
+.bar-segment.high.active {
+  background: var(--high);
+  height: 14px;
+  transform: translateY(-2px);
+}
+
+.risk-labels {
+  display: flex;
+  justify-content: space-between;
+}
+.risk-labels span {
+  font-size: 11px;
+  color: #94a3b8;
+  flex: 1;
+  text-align: center;
+}
+.risk-labels span.active-label {
+  color: var(--dark);
+  font-weight: 800;
+}
+
+/* Tab 切換區 (改為三欄佈局) */
+.tabs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 這裡改為 3 */
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.tab-btn {
+  padding: 12px 5px;
+  font-size: 14px;
+  font-weight: 700;
+  border: 2px solid var(--primary);
+  background: white;
+  color: var(--primary);
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.tab-btn.active {
+  background: var(--primary);
+  color: white;
+  box-shadow: 0 4px 0px var(--dark);
+  transform: translateY(-2px);
+}
+
+.tab-content-area {
+  border: 2px solid var(--border);
+  padding: 15px;
+  min-height: 180px;
+}
+
+.tab-content {
+  display: none;
+}
+.tab-content.active {
+  display: block;
+  animation: fadeIn 0.3s ease;
+}
+
+.content-title {
+  margin: 0 0 12px 0;
+  font-size: 15px;
+  color: var(--dark);
+  border-bottom: 2px solid var(--bg-light);
+  padding-bottom: 6px;
+}
+
+.styled-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.styled-list li {
+  display: flex;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--bg-light);
+  font-size: 13px;
+}
+.styled-list i {
+  color: var(--primary);
+  margin-top: 3px;
+}
+
+/* 醫院卡片 */
+.hospital-card {
+  background: var(--bg-light);
+  border-left: 4px solid var(--primary);
+  padding: 10px;
+  margin-bottom: 8px;
+}
+.hospital-card h6 {
+  margin: 0;
+  font-size: 14px;
+}
+.hospital-card p {
+  margin: 4px 0 0 0;
+  font-size: 11px;
+  color: #64748b;
+}
+
+.back-btn {
+  width: 100%;
+  padding: 18px;
+  font-size: 16px;
+  font-weight: 700;
+  background: var(--dark);
+  color: white;
+  border: none;
+  margin-top: 25px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+/* =========================
+   QR Code（平板優化 + 醒目版）
+========================= */
+.qr-section {
+  margin-top: 40px;
+  padding: 28px 24px;
+
+  background: #ffffff;
+
+  /* 🔥 重點感（醫療常用） */
+  border: 2px solid var(--primary);
+  border-left: 8px solid var(--primary);
+
+  /* 🔥 結構 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  /* 🔥 微浮起 */
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* =========================
+   標題
+========================= */
+.qr-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  font-size: 18px; /* 🔥 平板放大 */
+  font-weight: 800;
+  color: var(--dark);
+
+  margin-bottom: 18px;
+}
+
+.qr-header i {
+  color: var(--primary);
+  font-size: 20px;
+}
+
+/* =========================
+   QR 外框（重點）
+========================= */
+.qr-box-inline {
+  background: #ffffff;
+  padding: 16px;
+
+  border: 1px solid var(--border);
+
+  margin-bottom: 18px;
+}
+
+/* =========================
+   QR 圖（放大）
+========================= */
+.qr-box-inline img {
+  width: 220px; /* 🔥 平板專用大小 */
+  height: 220px;
+  display: block;
+}
+
+/* =========================
+   說明文字
+========================= */
+.qr-desc {
+  font-size: 15px; /* 🔥 放大 */
+  color: #64748b;
+  margin: 0;
+  line-height: 1.7;
+  max-width: 300px;
+}

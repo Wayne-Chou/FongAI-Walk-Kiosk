@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>行走分析系統 - 控制台</title>
+    <link rel="stylesheet" href="css/walk-test-menu.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+  </head>
+
+  <body>
+    <div class="dashboard-page">
+      <header class="top-bar">
+        <div class="logo-wrapper">
+          <img class="img" src="/assets/logo.png" alt="" />
+        </div>
+
+        <div class="org-info">
+          <span class="org-label">當前登入單位</span>
+          <span class="org-name">台北大同老人服務中心</span>
+        </div>
+
+        <button class="logout-btn" onclick="location.href = 'index.html'">
+          <i class="fa-solid fa-right-from-bracket"></i> 登出系統
+        </button>
+      </header>
+
+      <div class="main-container">
+        <div class="brand">
+          <h1>FongAI</h1>
+          <p>AI Walk Analysis System</p>
+        </div>
+
+        <div class="action-card">
+          <div class="card-content">
+            <h2>步態分析準備</h2>
+            <p>
+              歡迎使用 AI
+              行走分析系統。請確保受測者已準備就緒，點擊下方按鈕開始並進入測試畫面。
+            </p>
+          </div>
+
+          <button
+            class="start-trigger"
+            onclick="location.href = 'profile.html'"
+          >
+            <div class="btn-inner">
+              <i class="fa-solid fa-person-walking-arrow-right"></i>
+              <span>開始鑑測</span>
+            </div>
+          </button>
+        </div>
+
+        <footer class="company-footer">
+          <div class="footer-line"></div>
+          <div class="info-grid">
+            <div class="info-item">
+              <i class="fa-solid fa-shield-halved"></i>
+              <span>建豐健康科技 FongAI Tech</span>
+            </div>
+            <div class="info-item">
+              <i class="fa-solid fa-circle-info"></i>
+              <span>系統版本 v2.4.0</span>
+            </div>
+          </div>
+          <p class="copyright">© 2026 FongAI All Rights Reserved.</p>
+        </footer>
+      </div>
+    </div>
+
+    <!-- ✅ 浮動語系按鈕（改成只開彈窗） -->
+    <div class="lang-float">
+      <button id="langToggle">
+        <i class="fa-solid fa-globe"></i>
+        <span>語系</span>
+      </button>
+    </div>
+
+    <!-- ✅ 語系選擇彈窗 -->
+    <div class="lang-modal" id="langModal">
+      <div class="lang-box">
+        <h2>請選擇語言</h2>
+        <div class="lang-options">
+          <button data-lang="zh">中文</button>
+          <button data-lang="en">English</button>
+          <button data-lang="hak">客家</button>
+          <button data-lang="tw">台語</button>
+          <button data-lang="jp">日本語</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const modal = document.getElementById("langModal");
+      const langToggle = document.getElementById("langToggle");
+
+      // 第一次進來顯示
+      if (!localStorage.getItem("lang")) {
+        modal.style.display = "flex";
+      }
+
+      // 點擊右下角 → 開彈窗（🔥重點）
+      langToggle.addEventListener("click", () => {
+        modal.style.display = "flex";
+      });
+
+      // 彈窗選擇
+      document.querySelectorAll(".lang-options button").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const lang = btn.dataset.lang;
+          localStorage.setItem("lang", lang);
+          modal.style.display = "none";
+        });
+      });
+    </script>
+  </body>
+</html>
