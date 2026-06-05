@@ -2,64 +2,275 @@
 <html lang="zh-TW">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>FongAI Login</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>FongAI - 系統登入</title>
+    <!-- Font Awesome -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
     />
-    <link rel="stylesheet" href="css/login.css" />
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Roboto+Mono&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --base-bg: #ffffff;
+        --page-bg: #f3f4f6;
+        --main-text: #1e293b;
+        --sub-text: #94a3b8;
+        --brand-blue: #2563eb;
+        --border-light: #e5e7eb;
+        --input-focus: #f8fafc;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Noto Sans TC", sans-serif;
+        -webkit-tap-highlight-color: transparent;
+        border-radius: 0 !important; /* 全直角設計 */
+      }
+
+      body {
+        background-color: var(--page-bg);
+        color: var(--main-text);
+        height: 100vh;
+        width: 100vw;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .login-wrapper {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--page-bg);
+      }
+
+      /* 裝飾性裝甲感線條 (工業風格) */
+      .login-wrapper::after {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-image: radial-gradient(
+          circle at 2px 2px,
+          #cbd5e1 1px,
+          transparent 0
+        );
+        background-size: 40px 40px;
+        opacity: 0.3;
+        pointer-events: none;
+      }
+
+      .login-container {
+        width: 440px;
+        background: var(--base-bg);
+        padding: 60px 40px;
+        border: 1px solid var(--border-light);
+        box-shadow: 20px 20px 0px #e5e7eb; /* 塊狀投影，增加立體感 */
+        z-index: 10;
+        position: relative;
+      }
+
+      /* 品牌區 */
+      .brand-header {
+        margin-bottom: 50px;
+        border-left: 5px solid var(--brand-blue);
+        padding-left: 20px;
+      }
+
+      .logo-container {
+        margin-bottom: 15px;
+      }
+
+      .logo-container img {
+        width: 60px;
+        height: auto;
+      }
+
+      .brand-header h1 {
+        font-size: 1.8rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        color: var(--main-text);
+      }
+
+      .brand-header p {
+        color: var(--sub-text);
+        font-size: 0.85rem;
+        font-family: "Roboto Mono", monospace;
+        text-transform: uppercase;
+        margin-top: 4px;
+      }
+
+      /* 表單區 */
+      .form-group {
+        margin-bottom: 30px;
+      }
+
+      .form-group label {
+        display: block;
+        font-size: 0.8rem;
+        color: var(--main-text);
+        margin-bottom: 10px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+      }
+
+      .input-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+
+      .input-wrapper i:not(.toggle-password) {
+        position: absolute;
+        left: 15px;
+        color: var(--sub-text);
+        font-size: 0.9rem;
+      }
+
+      .input-wrapper input {
+        width: 100%;
+        padding: 15px 15px 15px 45px;
+        background: transparent;
+        border: 1px solid var(--border-light);
+        color: var(--main-text);
+        font-size: 1rem;
+        transition: all 0.2s;
+        outline: none;
+      }
+
+      .input-wrapper input:focus {
+        border-color: var(--brand-blue);
+        background-color: var(--input-focus);
+      }
+
+      .toggle-password {
+        position: absolute;
+        right: 0;
+        padding: 15px 20px;
+        cursor: pointer;
+        color: var(--sub-text);
+        font-size: 0.9rem;
+      }
+
+      /* 登入按鈕 - 經典平整風格 */
+      .btn-login {
+        width: 100%;
+        padding: 20px;
+        margin-top: 10px;
+        background: var(--main-text);
+        border: none;
+        color: #ffffff;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        letter-spacing: 2px;
+        transition: all 0.2s;
+      }
+
+      .btn-login:hover {
+        background: var(--brand-blue);
+      }
+
+      .btn-login:active {
+        transform: scale(0.99);
+      }
+
+      .form-footer {
+        margin-top: 40px;
+        text-align: left;
+        color: var(--sub-text);
+      }
+
+      .form-footer p {
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+        font-family: "Roboto Mono", monospace;
+      }
+
+      /* 平板適配 */
+      @media (max-width: 600px) {
+        .login-container {
+          width: 90%;
+          padding: 40px 30px;
+        }
+      }
+    </style>
   </head>
 
   <body>
-    <div class="login-page">
-      <div class="brand">
-        <h1>FongAI</h1>
-        <p>AI Walk Analysis System</p>
-      </div>
-
-      <div class="login-card">
-        <div class="login-card-header">
-          <div class="login-card-img">
-            <img class="login-card-img" src="/assets/logo.png" alt="" />
+    <div class="login-wrapper">
+      <div class="login-container">
+        <!-- 品牌區 -->
+        <div class="brand-header">
+          <div class="logo-container">
+            <img src="/assets/logo.png" alt="FongAI Logo" />
           </div>
-          <h2>系統登入</h2>
+          <h1>FongAI</h1>
+          <p>Walk Analysis System // v2.0</p>
         </div>
 
-        <div>
+        <!-- 表單區 -->
+        <div class="login-form">
           <div class="form-group">
-            <i class="fa-regular fa-user input-icon"></i>
-            <input type="text" placeholder="帳號" />
+            <label>帳號</label>
+            <div class="input-wrapper">
+              <i class="fa-regular fa-user"></i>
+              <input type="text" placeholder="請輸入帳號" />
+            </div>
           </div>
 
-          <div class="form-group password-field">
-            <i class="fa-solid fa-lock input-icon"></i>
-
-            <input type="password" id="password" placeholder="密碼" />
-
-            <i
-              class="fa-solid fa-eye toggle-password"
-              onclick="togglePassword()"
-            ></i>
+          <div class="form-group">
+            <label>密碼</label>
+            <div class="input-wrapper">
+              <i class="fa-solid fa-lock"></i>
+              <input type="password" id="password" placeholder="請輸入密碼" />
+              <i
+                class="fa-solid fa-eye toggle-password"
+                onclick="togglePassword()"
+              ></i>
+            </div>
           </div>
 
-          <button onclick="location.href = 'profile.html'">登入</button>
+          <button class="btn-login" onclick="location.href = 'profile.html'">
+            登入
+          </button>
+        </div>
+
+        <div class="form-footer">
+          <p>© 2026 Fong Health Technology</p>
+          <p>STRICTLY FOR AUTHORIZED PERSONNEL ONLY</p>
         </div>
       </div>
     </div>
+
+    <script>
+      function togglePassword() {
+        const input = document.getElementById("password");
+        const icon = document.querySelector(".toggle-password");
+
+        if (input.type === "password") {
+          input.type = "text";
+          icon.classList.replace("fa-eye", "fa-eye-slash");
+        } else {
+          input.type = "password";
+          icon.classList.replace("fa-eye-slash", "fa-eye");
+        }
+      }
+    </script>
   </body>
 </html>
-<script>
-  function togglePassword() {
-    const input = document.getElementById("password");
-    const icon = document.querySelector(".toggle-password");
-
-    if (input.type === "password") {
-      input.type = "text";
-      icon.classList.replace("fa-eye", "fa-eye-slash");
-    } else {
-      input.type = "password";
-      icon.classList.replace("fa-eye-slash", "fa-eye");
-    }
-  }
-</script>

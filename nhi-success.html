@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>行走分析系統 - 健保卡登入</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Roboto+Mono&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --base-bg: #ffffff;
+        --page-bg: #f3f4f6;
+        --main-text: #1e293b;
+        --sub-text: #94a3b8;
+        --brand-blue: #2563eb;
+        --border-light: #e5e7eb;
+        --dark-bar: #1e293b;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Noto Sans TC", sans-serif;
+        -webkit-tap-highlight-color: transparent;
+        border-radius: 0 !important;
+      }
+      body {
+        background-color: var(--page-bg);
+        color: var(--main-text);
+        height: 100vh;
+        width: 100vw;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .top-bar {
+        height: 56px;
+        background: var(--dark-bar);
+        color: white;
+        display: flex;
+        align-items: center;
+        padding: 0 5%;
+        justify-content: space-between;
+        z-index: 100;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        flex-shrink: 0;
+      }
+      .logo-wrapper {
+        flex: 1;
+        display: flex;
+        align-items: center;
+      }
+      .logo-wrapper img {
+        height: 35px;
+        width: auto;
+      }
+      .top-center-coop {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+      }
+      .gov-logo-zone {
+        height: 40px;
+        display: flex;
+        align-items: center;
+        padding: 4px 12px;
+      }
+      .gov-logo-zone img {
+        height: 44px;
+        width: auto;
+        object-fit: contain;
+      }
+
+      .main-container {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px 40px;
+        position: relative;
+      }
+      .main-container::after {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-image: radial-gradient(
+          circle at 2px 2px,
+          #cbd5e1 1px,
+          transparent 0
+        );
+        background-size: 40px 40px;
+        opacity: 0.3;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .action-card {
+        width: 720px;
+        background: var(--base-bg);
+        border: 1px solid var(--border-light);
+        box-shadow: 20px 20px 0px #e5e7eb;
+        padding: 50px;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 32px;
+      }
+
+      .card-header {
+        text-align: center;
+        width: 100%;
+      }
+      .card-header h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        margin-bottom: 10px;
+      }
+      .card-header p {
+        color: var(--sub-text);
+        font-size: 0.92rem;
+        line-height: 1.8;
+      }
+
+      /* 成功圖示 */
+      .success-icon-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+      }
+      .success-circle {
+        width: 80px;
+        height: 80px;
+        background: #f0fdf4;
+        border: 2px solid #bbf7d0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .success-circle i {
+        font-size: 2.2rem;
+        color: #16a34a;
+      }
+
+      /* 健保卡提醒 */
+      .card-reminder {
+        width: 100%;
+        background: #fffbeb;
+        border: 1.5px solid #fde68a;
+        padding: 20px 24px;
+        display: flex;
+        align-items: center;
+        gap: 18px;
+      }
+      .reminder-icon {
+        flex-shrink: 0;
+        width: 48px;
+        height: 48px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .reminder-icon i {
+        font-size: 1.4rem;
+        color: #d97706;
+      }
+      .reminder-content {
+        flex: 1;
+      }
+      .reminder-title {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #92400e;
+        letter-spacing: 0.5px;
+        margin-bottom: 4px;
+      }
+      .reminder-desc {
+        font-size: 0.85rem;
+        color: #b45309;
+        line-height: 1.6;
+      }
+
+      /* 倒數列 */
+      .countdown-bar {
+        width: 100%;
+        background: #f0fdf4;
+        border: 1px solid #bbf7d0;
+        padding: 12px 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .countdown-text {
+        font-size: 0.82rem;
+        color: #15803d;
+        font-family: "Roboto Mono", monospace;
+      }
+      .countdown-num {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #15803d;
+        font-family: "Roboto Mono", monospace;
+      }
+
+      .company-footer {
+        margin-top: auto;
+        padding-top: 20px;
+        width: 100%;
+        text-align: center;
+        z-index: 1;
+      }
+      .info-grid {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        margin-bottom: 10px;
+      }
+      .info-item {
+        color: var(--sub-text);
+        font-size: 0.75rem;
+        font-family: "Roboto Mono", monospace;
+      }
+      .copyright {
+        font-size: 0.65rem;
+        color: var(--sub-text);
+        letter-spacing: 1px;
+      }
+
+      @media (max-width: 768px) {
+        .action-card {
+          width: 90%;
+          padding: 30px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="top-bar">
+      <div class="logo-wrapper">
+        <img src="assets/logo.png" alt="FongAI Logo" />
+      </div>
+      <div class="top-center-coop">
+        <div class="gov-logo-zone">
+          <img src="assets/NTPC_Health.png" alt="新北市政府衛生局" />
+        </div>
+      </div>
+    </header>
+
+    <div class="main-container">
+      <div class="action-card">
+        <div class="card-header">
+          <h2>身份驗證成功</h2>
+          <p>健保卡讀取完成，即將自動進入系統。</p>
+        </div>
+
+        <div class="success-icon-wrap">
+          <div class="success-circle">
+            <i class="fa-solid fa-circle-check"></i>
+          </div>
+        </div>
+
+        <div class="card-reminder">
+          <div class="reminder-icon">
+            <i class="fa-solid fa-id-card"></i>
+          </div>
+          <div class="reminder-content">
+            <div class="reminder-title">請記得取回您的健保卡</div>
+            <div class="reminder-desc">
+              讀卡完成，請將健保卡從讀卡機取出並妥善收好，避免遺忘。
+            </div>
+          </div>
+        </div>
+
+        <div class="countdown-bar">
+          <span class="countdown-text">即將自動進入系統</span>
+          <span class="countdown-num" id="countdownNum">5</span>
+        </div>
+      </div>
+
+      <footer class="company-footer">
+        <div class="info-grid">
+          <div class="info-item">
+            <i class="fa-solid fa-shield-halved"></i>
+            <span>建豐健康科技 FongAI Tech</span>
+          </div>
+          <div class="info-item">
+            <i class="fa-solid fa-circle-info"></i> <span>SYSTEM v2.4.0</span>
+          </div>
+        </div>
+        <p class="copyright">© 2026 FongAI All Rights Reserved.</p>
+      </footer>
+    </div>
+
+    <script>
+      let sec = 5;
+      const el = document.getElementById("countdownNum");
+      const timer = setInterval(() => {
+        sec--;
+        el.textContent = sec;
+        if (sec <= 0) clearInterval(timer);
+      }, 1000);
+    </script>
+  </body>
+</html>

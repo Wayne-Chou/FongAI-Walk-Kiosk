@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FongAI - AI步態分析</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+
+    <style>
+      :root {
+        --bg: #f1f5f9;
+
+        --blue: #2563eb;
+        --blue-light: #eff6ff;
+
+        --green: #16a34a;
+        --green-light: #f0fdf4;
+
+        --cyan: #0891b2;
+        --cyan-light: #ecfeff;
+
+        --red: #dc2626;
+        --red-light: #fef2f2;
+
+        --text: #1e293b;
+        --border: #dbe4ee;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Noto Sans TC", sans-serif;
+      }
+
+      body {
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        background: var(--bg);
+      }
+
+      /* ===================
+         頂部狀態列
+      =================== */
+
+      .top-bar {
+        position: absolute;
+        top: 0;
+        left: 220px;
+        right: 220px;
+
+        height: 72px;
+
+        background: rgba(255, 255, 255, 0.95);
+
+        border-bottom: 2px solid var(--border);
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        padding: 0 32px;
+
+        z-index: 50;
+      }
+
+      .test-title {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: var(--text);
+
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .status-box {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        padding: 12px 20px;
+
+        border-radius: 999px;
+
+        font-size: 1rem;
+        font-weight: 800;
+
+        transition: all 0.3s ease;
+      }
+
+      .status-dot {
+        width: 12px;
+        height: 12px;
+
+        border-radius: 50%;
+      }
+
+      /* 等待開始 */
+
+      .status-waiting {
+        background: #fff7ed;
+        color: #c2410c;
+        border: 2px solid #fdba74;
+      }
+
+      .status-waiting .status-dot {
+        background: #f59e0b;
+      }
+
+      /* 已就位 */
+
+      .status-ready {
+        background: #f0fdf4;
+        color: #166534;
+        border: 2px solid #86efac;
+      }
+
+      .status-ready .status-dot {
+        background: #22c55e;
+      }
+
+      /* 測試進行中 */
+
+      .status-running {
+        background: #eff6ff;
+        color: #1d4ed8;
+        border: 2px solid #93c5fd;
+      }
+
+      .status-running .status-dot {
+        background: #2563eb;
+        animation: pulse 1.5s infinite;
+      }
+
+      /* 完成 */
+
+      .status-complete {
+        background: #ecfdf5;
+        color: #047857;
+        border: 2px solid #6ee7b7;
+      }
+
+      .status-complete .status-dot {
+        background: #10b981;
+      }
+
+      /* 異常 */
+
+      .status-error {
+        background: #fef2f2;
+        color: #b91c1c;
+        border: 2px solid #fca5a5;
+      }
+
+      .status-error .status-dot {
+        background: #ef4444;
+      }
+
+      .status-dot {
+        width: 12px;
+        height: 12px;
+
+        border-radius: 50%;
+
+        background: #f59e0b;
+      }
+
+      /* ===================
+         鏡頭區
+      =================== */
+
+      .camera-area {
+        width: 100%;
+        height: 100%;
+
+        background: linear-gradient(135deg, #cbd5e1, #e2e8f0, #cbd5e1);
+
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+      }
+
+      .camera-guide {
+        margin-bottom: 40px;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        gap: 24px;
+      }
+
+      .human-frame {
+        width: 260px;
+        height: 420px;
+
+        border: 4px dashed rgba(37, 99, 235, 0.6);
+        border-radius: 32px;
+
+        background: rgba(255, 255, 255, 0.25);
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .human-frame i {
+        font-size: 8rem;
+        color: rgba(37, 99, 235, 0.45);
+      }
+
+      .guide-text {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #334155;
+      }
+
+      /* ===================
+         側邊面板
+      =================== */
+
+      .side-panel {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+
+        width: 220px;
+
+        padding: 28px 20px;
+
+        display: flex;
+        flex-direction: column;
+
+        z-index: 20;
+      }
+      .left-panel,
+      .right-panel {
+        background: rgba(255, 255, 255, 0.9);
+
+        backdrop-filter: blur(10px);
+      }
+      .left-panel {
+        left: 0;
+        border-right: 1px solid #e2e8f0;
+      }
+
+      .right-panel {
+        right: 0;
+        border-left: 1px solid #e2e8f0;
+      }
+
+      /* ===================
+         標題
+      =================== */
+
+      .button-group {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+
+      .button-group.bottom {
+        margin-top: auto;
+      }
+
+      /* ===================
+         按鈕
+      =================== */
+
+      .action-btn {
+        width: 100%;
+        height: 96px;
+
+        border-radius: 18px;
+        border: 3px solid;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        gap: 8px;
+
+        cursor: pointer;
+
+        font-size: 1.15rem;
+        font-weight: 800;
+
+        transition: all 0.2s ease;
+
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      }
+
+      .action-btn:hover {
+        transform: translateY(-3px);
+      }
+
+      .action-btn:active {
+        transform: scale(0.96);
+      }
+
+      .action-btn i {
+        font-size: 1.8rem;
+      }
+
+      /* 藍色按鈕 */
+
+      .btn-blue {
+        background: white;
+        color: var(--blue);
+        border-color: var(--blue);
+      }
+
+      /* 開始測試 */
+
+      .btn-start {
+        height: 140px;
+
+        background: var(--green);
+        color: white;
+        border-color: var(--green);
+
+        font-size: 1.4rem;
+
+        box-shadow: 0 12px 30px rgba(22, 163, 74, 0.35);
+      }
+
+      .btn-start i {
+        font-size: 2.2rem;
+      }
+
+      /* 下一項 */
+
+      .btn-next {
+        background: var(--cyan-light);
+        color: var(--cyan);
+        border-color: var(--cyan);
+      }
+
+      /* 返回首頁 */
+
+      .btn-exit {
+        background: var(--red-light);
+        color: var(--red);
+        border-color: var(--red);
+      }
+
+      .guide-zone {
+        width: 420px;
+        height: 90px;
+
+        border: 4px solid rgba(37, 99, 235, 0.8);
+
+        background: rgba(37, 99, 235, 0.08);
+
+        box-shadow:
+          0 0 0 8px rgba(37, 99, 235, 0.08),
+          0 0 40px rgba(37, 99, 235, 0.2);
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- 頂部狀態列 -->
+
+    <header class="top-bar">
+      <div class="test-title">起坐測試</div>
+
+      <div class="status-box status-waiting">
+        <span class="status-dot"></span>
+        請就定位
+      </div>
+      <div class="status-box status-ready">
+        <span class="status-dot"></span>
+        已偵測到受測者
+      </div>
+      <div class="status-box status-running">
+        <span class="status-dot"></span>
+        起坐進行中｜已完成 2 / 5
+      </div>
+      <div class="status-box status-complete">
+        <span class="status-dot"></span>
+        起坐測試完成
+      </div>
+      <div class="status-box status-error">
+        <span class="status-dot"></span>
+        無法偵測
+      </div>
+    </header>
+
+    <!-- 鏡頭畫面 -->
+
+    <main class="camera-area">
+      <div class="camera-guide">
+        <div class="guide-zone"></div>
+      </div>
+    </main>
+
+    <!-- 左側 -->
+
+    <aside class="side-panel left-panel">
+      <div class="button-group">
+        <button class="action-btn btn-blue">
+          <i class="fa-solid fa-book-open"></i>
+          查看教學
+        </button>
+
+        <button class="action-btn btn-blue">
+          <i class="fa-solid fa-rotate-left"></i>
+          重新開始
+        </button>
+      </div>
+    </aside>
+
+    <!-- 右側 -->
+
+    <aside class="side-panel right-panel">
+      <div class="button-group bottom">
+        <button class="action-btn btn-exit">
+          <i class="fa-solid fa-house"></i>
+          返回首頁
+        </button>
+
+        <button class="action-btn btn-start">
+          <i class="fa-solid fa-play"></i>
+          開始測試
+        </button>
+
+        <button class="action-btn btn-next">
+          <i class="fa-solid fa-arrow-right"></i>
+          下一項測試
+        </button>
+      </div>
+    </aside>
+  </body>
+</html>

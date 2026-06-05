@@ -107,7 +107,7 @@
         text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
       }
 
-      /* --- 教學彈窗強化版 --- */
+      /* 教學彈窗 */
       .modal-overlay {
         position: fixed;
         inset: 0;
@@ -120,15 +120,16 @@
       }
       .modal-content {
         background: var(--modal-bg);
-        /* width: 800px; */
         padding: 40px;
         border-radius: 30px;
         border: 1px solid #444;
         box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8);
+        width: 500px; /* 寬度稍微縮小適合上下排版 */
+        max-width: 90vw;
       }
       .modal-header {
         text-align: center;
-        margin-bottom: 30px;
+        margin-bottom: 25px;
       }
       .modal-header h3 {
         font-size: 32px;
@@ -136,11 +137,10 @@
         margin: 0;
       }
 
-      /* 圖文對照區 */
       .tutorial-container {
         display: grid;
-        grid-template-columns: 1fr 1.2fr;
-        gap: 30px;
+        grid-template-columns: 1fr; /* 改為單欄上下排 */
+        gap: 25px;
         margin-bottom: 30px;
       }
 
@@ -150,12 +150,12 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        /* height: 300px; */
         border: 2px solid #333;
         position: relative;
+
+        overflow: hidden;
       }
 
-      /* 模擬圖片的佔位符 (你之後可以換成 <img>) */
       .visual-placeholder {
         width: 100%;
         height: 100%;
@@ -166,25 +166,28 @@
         color: var(--accent-blue);
       }
       .visual-placeholder img {
+        height: 100%;
         width: 100%;
-        height: auto;
+        object-fit: cover;
       }
       .tutorial-steps {
         display: flex;
         flex-direction: column;
         justify-content: center;
+        padding: 0 10px;
       }
       .t-step {
-        margin-bottom: 18px;
-        font-size: 50px;
+        margin-bottom: 12px;
+        font-size: 20px;
         display: flex;
         align-items: flex-start;
         color: #ddd;
+        line-height: 1.4;
       }
       .t-step b {
         color: var(--accent-blue);
         margin-right: 12px;
-        font-size: 50px;
+        font-size: 24px;
       }
 
       .modal-footer {
@@ -193,7 +196,6 @@
         text-align: center;
       }
 
-      /* 下方按鈕與勾選 */
       .checkbox-container {
         margin-top: 15px;
         display: flex;
@@ -225,14 +227,17 @@
 
       .floor-target {
         position: absolute;
-        bottom: 80px;
-        width: 420px;
-        height: 170px;
-        border: 5px dashed rgba(255, 255, 255, 0.3);
+        top: 15%;
+        width: 320px;
+        height: 120px;
+        border: 5px solid var(--accent-red);
         border-radius: 50%;
         transform: rotateX(60deg);
         transition: all 0.5s ease;
+        opacity: 0.8;
+        box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
       }
+
       .floor-target.correct {
         border-color: var(--accent-green);
         border-style: solid;
@@ -245,22 +250,24 @@
           0 0 40px var(--accent-green),
           inset 0 0 20px var(--accent-green);
         animation: breathe 2s infinite ease-in-out;
+        opacity: 1;
       }
+
       @keyframes breathe {
         0%,
         100% {
-          opacity: 0.6;
           transform: rotateX(60deg) scale(1);
+          filter: brightness(1);
         }
         50% {
-          opacity: 1;
           transform: rotateX(60deg) scale(1.05);
+          filter: brightness(1.3);
         }
       }
 
       .finish-line {
         position: absolute;
-        top: 25%;
+        bottom: 80px;
         width: 500px;
         height: 60px;
         background: linear-gradient(to top, var(--accent-green), transparent);
@@ -331,120 +338,6 @@
       .btn-modal {
         width: 300px;
       }
-      .result-btn {
-        position: relative;
-
-        width: 100%;
-        margin-bottom: 20px;
-
-        padding: 22px;
-
-        font-size: 24px;
-        font-weight: bold;
-
-        border: none;
-        border-radius: 18px;
-
-        cursor: pointer;
-
-        color: white;
-
-        background: linear-gradient(135deg, #22c55e, #16a34a);
-
-        box-shadow: 0 10px 30px rgba(34, 197, 94, 0.3);
-
-        transition: all 0.3s ease;
-
-        overflow: visible;
-      }
-
-      /* Hover */
-      .result-btn:hover {
-        transform: translateY(-2px);
-      }
-
-      /* 手指 */
-      .result-btn::before {
-        content: "👆";
-
-        position: absolute;
-
-        right: -55px;
-        top: 50%;
-
-        font-size: 46px;
-
-        transform: translateY(-50%);
-
-        animation: fingerClick 1.2s infinite ease-in-out;
-
-        pointer-events: none;
-      }
-
-      /* 點擊波紋 */
-      .result-btn::after {
-        content: "";
-
-        position: absolute;
-
-        right: 18px;
-        top: 50%;
-
-        width: 18px;
-        height: 18px;
-
-        border-radius: 50%;
-
-        background: rgba(255, 255, 255, 0.8);
-
-        transform: translateY(-50%) scale(0);
-
-        animation: clickRipple 1.2s infinite;
-
-        pointer-events: none;
-      }
-
-      /* 手指點擊動畫 */
-      @keyframes fingerClick {
-        0% {
-          transform: translateY(-50%) translateX(0);
-        }
-
-        40% {
-          transform: translateY(-50%) translateX(-18px);
-        }
-
-        55% {
-          transform: translateY(-50%) translateX(-18px) scale(0.92);
-        }
-
-        100% {
-          transform: translateY(-50%) translateX(0);
-        }
-      }
-
-      /* 波紋動畫 */
-      @keyframes clickRipple {
-        0% {
-          opacity: 0;
-          transform: translateY(-50%) scale(0);
-        }
-
-        40% {
-          opacity: 0;
-          transform: translateY(-50%) scale(0);
-        }
-
-        55% {
-          opacity: 0.8;
-          transform: translateY(-50%) scale(1);
-        }
-
-        100% {
-          opacity: 0;
-          transform: translateY(-50%) scale(3);
-        }
-      }
 
       .hidden {
         display: none !important;
@@ -452,7 +345,6 @@
     </style>
   </head>
   <body>
-    <!-- 教學彈窗：左圖右文 -->
     <div class="modal-overlay" id="tutorialModal">
       <div class="modal-content">
         <div class="modal-header">
@@ -460,19 +352,19 @@
         </div>
 
         <div class="tutorial-container">
-          <!-- 左側：示意圖區 -->
+          <!-- 上方區域：視覺圖 -->
           <div class="tutorial-visual">
             <div class="visual-placeholder">
-              <img src="./assets/teach.png" alt="" />
+              <img src="./assets/teach-2.png" alt="教學圖示" />
             </div>
           </div>
 
-          <!-- 右側：文字說明 -->
+          <!-- 下方區域：文字步驟 -->
           <div class="tutorial-steps">
-            <div class="t-step"><b>1</b> 站入地面的虛線圓圈內。</div>
+            <div class="t-step"><b>1</b> 站入遠處紅色圓圈內。</div>
             <div class="t-step"><b>2</b> 當圓圈轉為綠色，請保持不動。</div>
             <div class="t-step"><b>3</b> 倒數結束後，請正常向前直走。</div>
-            <div class="t-step"><b>4</b> 走到遠處綠線位置即完成測試。</div>
+            <div class="t-step"><b>4</b> 走到近處綠線位置即完成測試。</div>
           </div>
         </div>
 
@@ -487,7 +379,6 @@
       </div>
     </div>
 
-    <!-- 主 UI 面板 -->
     <div class="left-panel">
       <h2>操作流程</h2>
       <div class="step-list">
@@ -508,7 +399,6 @@
           行走測試
         </div>
       </div>
-      <button class="result-btn hidden" id="resultBtn">查看結果</button>
       <button class="btn btn-full" id="startBtn">開始測試</button>
     </div>
 
@@ -554,8 +444,7 @@
       const cd = document.getElementById("cd");
       const cameraView = document.getElementById("cameraView");
       const modal = document.getElementById("tutorialModal");
-      const resultBtn = document.getElementById("resultBtn");
-      // 載入檢查
+
       window.onload = () => {
         if (localStorage.getItem("fongai_skip_tutorial") === "true") {
           modal.classList.add("hidden");
@@ -580,7 +469,6 @@
       async function startFlow() {
         btn.disabled = true;
         btn.innerText = "請照指示操作";
-        resultBtn.classList.add("hidden");
         setStep(1);
         statusVal.innerText = "對位中";
         guideCard.style.display = "block";
@@ -618,21 +506,19 @@
 
         cameraView.classList.remove("is-recording");
         finishLine.classList.remove("show");
-        statusVal.innerText = "測試完成";
-        resultBtn.classList.remove("hidden");
-        statusVal.style.color = "var(--accent-green)";
-        guideVal.innerText = "請回到螢幕前方";
-
-        btn.disabled = false;
-        btn.innerText = "重新開始";
-
         target.classList.remove("correct");
+        statusVal.innerText = "測試完成";
+        statusVal.style.color = "var(--accent-green)";
+        guideVal.innerText = "正在分析數據...";
 
-        await new Promise((r) => setTimeout(r, 4000));
+        await new Promise((r) => setTimeout(r, 3000));
+
         setStep(0);
         guideCard.style.display = "none";
         statusVal.innerText = "待機中";
         statusVal.style.color = "var(--accent-blue)";
+        btn.disabled = false;
+        btn.innerText = "開始測試";
       }
 
       btn.onclick = startFlow;

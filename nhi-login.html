@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>行走分析系統 - 健保卡登入</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Roboto+Mono&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --base-bg: #ffffff;
+        --page-bg: #f3f4f6;
+        --main-text: #1e293b;
+        --sub-text: #94a3b8;
+        --brand-blue: #2563eb;
+        --border-light: #e5e7eb;
+        --dark-bar: #1e293b;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Noto Sans TC", sans-serif;
+        -webkit-tap-highlight-color: transparent;
+        border-radius: 0 !important;
+      }
+
+      body {
+        background-color: var(--page-bg);
+        color: var(--main-text);
+        height: 100vh;
+        width: 100vw;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* ── Header ── */
+      .top-bar {
+        height: 56px;
+        background: var(--dark-bar);
+        color: white;
+        display: flex;
+        align-items: center;
+        padding: 0 5%;
+        justify-content: space-between;
+        z-index: 100;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        flex-shrink: 0;
+      }
+
+      .logo-wrapper {
+        flex: 1;
+        display: flex;
+        align-items: center;
+      }
+
+      .logo-wrapper img {
+        height: 35px;
+        width: auto;
+      }
+
+      .top-center-coop {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+      }
+
+      .gov-logo-zone {
+        height: 40px;
+        display: flex;
+        align-items: center;
+        padding: 4px 12px;
+      }
+
+      .gov-logo-zone img {
+        height: 44px;
+        width: auto;
+        object-fit: contain;
+      }
+
+      /* ── Main ── */
+      .main-container {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px 40px;
+        position: relative;
+      }
+
+      .main-container::after {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-image: radial-gradient(
+          circle at 2px 2px,
+          #cbd5e1 1px,
+          transparent 0
+        );
+        background-size: 40px 40px;
+        opacity: 0.3;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      /* ── 卡片 ── */
+      .action-card {
+        width: 720px;
+        background: var(--base-bg);
+        border: 1px solid var(--border-light);
+        box-shadow: 20px 20px 0px #e5e7eb;
+        padding: 50px;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 40px;
+      }
+
+      /* ── 上方標題區 ── */
+      .card-header {
+        text-align: center;
+      }
+
+      .card-header h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        margin-bottom: 10px;
+      }
+
+      .card-header p {
+        color: var(--sub-text);
+        font-size: 0.92rem;
+        line-height: 1.8;
+      }
+
+      /* ── 插卡示意圖區 ── */
+      .card-visual {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 32px;
+      }
+
+      /* 健保卡圖形 */
+      .nhi-card-illustration {
+        width: 160px;
+        height: 102px;
+        background: var(--base-bg);
+        border: 2px solid var(--main-text);
+        box-shadow: 6px 6px 0px var(--main-text);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 12px 14px;
+        flex-shrink: 0;
+        animation: cardFloat 2.4s ease-in-out infinite;
+      }
+
+      @keyframes cardFloat {
+        0%,
+        100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-6px);
+        }
+      }
+
+      .nhi-card-top {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .nhi-chip {
+        width: 22px;
+        height: 16px;
+        background: #d4a843;
+        border: 1px solid #b8922e;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-rows: 1fr 1fr 1fr;
+        gap: 1px;
+        padding: 2px;
+      }
+
+      .nhi-chip span {
+        background: #b8922e;
+        display: block;
+      }
+
+      .nhi-card-label {
+        font-size: 0.55rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        color: var(--main-text);
+        font-family: "Roboto Mono", monospace;
+      }
+
+      .nhi-card-lines {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      .nhi-line {
+        height: 4px;
+        background: var(--border-light);
+      }
+
+      .nhi-line.short {
+        width: 55%;
+      }
+      .nhi-line.long {
+        width: 85%;
+      }
+
+      /* 箭頭動畫 */
+      .insert-arrow {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .arrow-track {
+        display: flex;
+        gap: 6px;
+      }
+
+      .arrow-dot {
+        width: 8px;
+        height: 8px;
+        border-right: 2px solid var(--brand-blue);
+        border-bottom: 2px solid var(--brand-blue);
+        transform: rotate(-45deg);
+        opacity: 0;
+        animation: arrowFlow 1.4s ease-in-out infinite;
+      }
+
+      .arrow-dot:nth-child(1) {
+        animation-delay: 0s;
+      }
+      .arrow-dot:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      .arrow-dot:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+
+      @keyframes arrowFlow {
+        0% {
+          opacity: 0;
+        }
+        30%,
+        60% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+        }
+      }
+
+      .arrow-label {
+        font-size: 0.65rem;
+        font-family: "Roboto Mono", monospace;
+        color: var(--brand-blue);
+        letter-spacing: 1px;
+      }
+
+      /* 讀卡槽圖形 */
+      .slot-illustration {
+        width: 56px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        flex-shrink: 0;
+      }
+
+      .slot-body {
+        width: 50px;
+        height: 102px;
+        border: 2px solid var(--main-text);
+        background: var(--page-bg);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding-top: 10px;
+        position: relative;
+        box-shadow: 4px 4px 0px var(--main-text);
+      }
+
+      .slot-opening {
+        width: 32px;
+        height: 6px;
+        background: var(--main-text);
+      }
+
+      .slot-indicator {
+        width: 8px;
+        height: 8px;
+        background: #16a34a;
+        margin-top: 14px;
+        animation: indicatorBlink 1.6s ease-in-out infinite;
+      }
+
+      @keyframes indicatorBlink {
+        0%,
+        100% {
+          opacity: 1;
+          background: #16a34a;
+        }
+        50% {
+          opacity: 0.3;
+          background: #16a34a;
+        }
+      }
+
+      .slot-label {
+        font-size: 0.6rem;
+        color: var(--sub-text);
+        font-family: "Roboto Mono", monospace;
+        letter-spacing: 0.5px;
+        text-align: center;
+      }
+
+      /* ── 狀態列 ── */
+      .status-bar {
+        width: 100%;
+        border: 1px solid var(--border-light);
+        background: var(--page-bg);
+        padding: 16px 24px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .status-dot {
+        width: 10px;
+        height: 10px;
+        background: #16a34a;
+        flex-shrink: 0;
+        animation: indicatorBlink 1.6s ease-in-out infinite;
+      }
+
+      .status-text {
+        font-size: 0.85rem;
+        color: var(--main-text);
+        font-family: "Roboto Mono", monospace;
+        letter-spacing: 0.5px;
+      }
+
+      .status-text span {
+        color: var(--sub-text);
+        font-size: 0.78rem;
+        margin-left: 10px;
+      }
+
+      /* ── 返回按鈕 ── */
+      .back-btn {
+        align-self: flex-start;
+        padding: 12px 24px;
+        background: transparent;
+        border: 1px solid var(--main-text);
+        color: var(--main-text);
+        font-size: 0.85rem;
+        font-weight: 500;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        letter-spacing: 1px;
+        transition: all 0.3s;
+      }
+
+      .back-btn:hover {
+        background: var(--main-text);
+        color: white;
+      }
+
+      /* ── Footer ── */
+      .company-footer {
+        margin-top: auto;
+        padding-top: 20px;
+        width: 100%;
+        text-align: center;
+        z-index: 1;
+      }
+
+      .info-grid {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        margin-bottom: 10px;
+      }
+
+      .info-item {
+        color: var(--sub-text);
+        font-size: 0.75rem;
+        font-family: "Roboto Mono", monospace;
+      }
+
+      .copyright {
+        font-size: 0.65rem;
+        color: var(--sub-text);
+        letter-spacing: 1px;
+      }
+
+      @media (max-width: 768px) {
+        .action-card {
+          width: 90%;
+          padding: 30px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <header class="top-bar">
+      <div class="logo-wrapper">
+        <img src="assets/logo.png" alt="FongAI Logo" />
+      </div>
+      <div class="top-center-coop">
+        <div class="gov-logo-zone">
+          <img src="assets/NTPC_Health.png" alt="新北市政府衛生局" />
+        </div>
+      </div>
+    </header>
+
+    <div class="main-container">
+      <div class="action-card">
+        <div class="card-header">
+          <h2>健保卡登入</h2>
+          <p>
+            請將健保卡晶片朝上，插入機台右側讀卡槽<br />系統將自動讀取您的身份資料
+          </p>
+        </div>
+
+        <!-- 插卡示意圖 -->
+        <div class="card-visual">
+          <div class="nhi-card-illustration">
+            <div class="nhi-card-top">
+              <div class="nhi-chip">
+                <span></span><span></span><span></span> <span></span
+                ><span></span><span></span> <span></span><span></span
+                ><span></span>
+              </div>
+              <span class="nhi-card-label">健保卡</span>
+            </div>
+            <div class="nhi-card-lines">
+              <div class="nhi-line long"></div>
+              <div class="nhi-line short"></div>
+            </div>
+          </div>
+
+          <div class="insert-arrow">
+            <div class="arrow-track">
+              <div class="arrow-dot"></div>
+              <div class="arrow-dot"></div>
+              <div class="arrow-dot"></div>
+            </div>
+            <span class="arrow-label">INSERT</span>
+          </div>
+
+          <div class="slot-illustration">
+            <div class="slot-body">
+              <div class="slot-opening"></div>
+              <div class="slot-indicator"></div>
+            </div>
+            <span class="slot-label">讀卡槽</span>
+          </div>
+        </div>
+
+        <!-- 讀卡機狀態 -->
+        <div class="status-bar">
+          <div class="status-dot"></div>
+          <div class="status-text">讀卡機讀取中</div>
+        </div>
+
+        <!-- 返回 -->
+        <button
+          class="back-btn"
+          onclick="location.href = 'walk-test-menu.html'"
+        >
+          <i class="fa-solid fa-arrow-left"></i>
+          返回首頁
+        </button>
+      </div>
+
+      <footer class="company-footer">
+        <div class="info-grid">
+          <div class="info-item">
+            <i class="fa-solid fa-shield-halved"></i>
+            <span>建豐健康科技 FongAI Tech</span>
+          </div>
+          <div class="info-item">
+            <i class="fa-solid fa-circle-info"></i>
+            <span>SYSTEM v2.4.0</span>
+          </div>
+        </div>
+        <p class="copyright">© 2026 FongAI All Rights Reserved.</p>
+      </footer>
+    </div>
+  </body>
+</html>

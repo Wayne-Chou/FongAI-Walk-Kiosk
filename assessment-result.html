@@ -1,0 +1,871 @@
+<!doctype html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>跌倒風險評估報告</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=IBM+Plex+Mono:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background: #f2f2f2;
+        font-family: "Noto Sans TC", sans-serif;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        padding: 24px 14px 56px;
+        color: #111;
+      }
+      .page {
+        width: 100%;
+        max-width: 530px;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+
+        overflow: hidden;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+      }
+      .hd {
+        background: #1a73e8;
+        padding: 22px 22px 18px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+      }
+
+      .hd-name {
+        font-size: 22px;
+        font-weight: 900;
+        color: #fff;
+        letter-spacing: -0.01em;
+      }
+      .hd-right {
+        text-align: right;
+      }
+      .hd-date-lbl {
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.6);
+        margin-bottom: 3px;
+      }
+      .hd-date {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 13px;
+        color: #fff;
+        font-weight: 500;
+      }
+      .risk-main {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        background: #fff7ed;
+        border: 2px solid #fdba74;
+        border-radius: 14px;
+        padding: 16px 18px;
+        margin-bottom: 14px;
+      }
+      .risk-icon-wrap {
+        width: 52px;
+        height: 52px;
+        border-radius: 12px;
+        background: #fb923c;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .risk-icon-wrap i {
+        font-size: 24px;
+        color: #fff;
+      }
+      .risk-text-main {
+        font-size: 22px;
+        font-weight: 900;
+        color: #c2410c;
+        line-height: 1.1;
+      }
+      .risk-text-sub {
+        font-size: 13px;
+        color: #9a3412;
+        margin-top: 3px;
+        font-weight: 400;
+      }
+      .spectrum-wrap {
+      }
+      .spectrum-label-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 6px;
+      }
+      .spectrum-label-row span {
+        font-size: 11px;
+        font-weight: 700;
+        color: #888;
+      }
+      .spectrum-bar {
+        height: 14px;
+        border-radius: 10px;
+        background: linear-gradient(
+          90deg,
+          #ef4444 0%,
+          #f97316 25%,
+          #eab308 50%,
+          #84cc16 75%,
+          #22c55e 100%
+        );
+        position: relative;
+        margin-bottom: 6px;
+      }
+      .spectrum-thumb {
+        position: absolute;
+        top: 50%;
+        left: 75%;
+        transform: translate(-50%, -50%);
+        width: 22px;
+        height: 22px;
+        background: #fff;
+        border: 3px solid #1a1410;
+        border-radius: 50%;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+      }
+      .spectrum-bottom {
+        display: flex;
+        justify-content: space-between;
+      }
+      .spectrum-bottom span {
+        font-size: 11px;
+        color: #aaa;
+        font-family: "IBM Plex Mono", monospace;
+      }
+      .gauge-band {
+        background: #fff;
+        padding: 20px 22px 14px;
+        border-bottom: 2px solid #f2f2f2;
+      }
+
+      .gauge-wrap {
+        height: 260px;
+        position: relative;
+      }
+      .gauge-wrap canvas {
+        width: 100% !important;
+        height: 100% !important;
+      }
+
+      /* ── RISK LEVEL TAG ── */
+      .gauge-risk-tag {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 14px;
+        padding: 12px 16px;
+        border-radius: 12px;
+        border: 2px solid;
+      }
+      .gauge-risk-tag-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+      .gauge-risk-tag-text {
+        font-size: 16px;
+        font-weight: 900;
+        letter-spacing: 0.02em;
+      }
+
+      .sppb-band {
+        background: #fff;
+        padding: 20px 22px;
+        border-bottom: 2px solid #f2f2f2;
+      }
+      .sppb-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 16px;
+      }
+      .sppb-left {
+      }
+      .sppb-num {
+        font-size: 64px;
+        font-weight: 900;
+        line-height: 1;
+        color: #111;
+        letter-spacing: -0.05em;
+      }
+      .sppb-num span {
+        font-size: 24px;
+        font-weight: 500;
+        color: #bbb;
+      }
+      .sppb-unit {
+        font-size: 13px;
+        color: #888;
+        margin-top: 2px;
+        font-weight: 400;
+      }
+      .sppb-badge {
+        background: #dcfce7;
+        border: 2px solid #86efac;
+        color: #15803d;
+        border-radius: 10px;
+        padding: 10px 14px;
+        text-align: center;
+      }
+      .sppb-badge-num {
+        font-size: 22px;
+        font-weight: 900;
+        color: #15803d;
+        line-height: 1;
+      }
+      .sppb-badge-txt {
+        font-size: 11px;
+        color: #166534;
+        margin-top: 3px;
+        font-weight: 500;
+      }
+      .ruler-track {
+        height: 6px;
+        background: #eee;
+        border-radius: 10px;
+        position: relative;
+        margin-bottom: 8px;
+      }
+      .ruler-fill {
+        position: absolute;
+        height: 100%;
+        width: 50%;
+        background: #1a73e8;
+        border-radius: 10px;
+        opacity: 0.25;
+      }
+      .ruler-dot {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 16px;
+        height: 16px;
+        background: #1a73e8;
+        border: 3px solid #fff;
+        border-radius: 50%;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+      }
+      .ruler-labs {
+        display: flex;
+        justify-content: space-between;
+        font-size: 11px;
+        color: #aaa;
+        font-family: "IBM Plex Mono", monospace;
+      }
+      .analysis-band {
+        background: #fff;
+        padding: 20px 22px;
+        border-bottom: 2px solid #f2f2f2;
+      }
+      .band-hdr {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 16px;
+      }
+      .seg {
+        display: flex;
+        background: #f2f2f2;
+        border-radius: 10px;
+        padding: 4px;
+        gap: 3px;
+      }
+      .seg-btn {
+        border: none;
+        background: transparent;
+        font-size: 13px;
+        font-weight: 700;
+        padding: 7px 16px;
+        border-radius: 7px;
+        color: #888;
+        cursor: pointer;
+        transition: all 0.15s;
+        font-family: "Noto Sans TC", sans-serif;
+      }
+      .seg-btn.on {
+        background: #1a73e8;
+        color: #fff;
+      }
+      .radar-view {
+        display: flex;
+        gap: 12px;
+        align-items: stretch;
+      }
+      .radar-box {
+        width: 120px;
+        height: 120px;
+        background: #f8faff;
+        border: 2px solid #e0ecff;
+        border-radius: 12px;
+        padding: 7px;
+        flex-shrink: 0;
+      }
+      .leg-col {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+      }
+      .leg-row {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 0 12px;
+        border-radius: 10px;
+        border: 1.5px solid #e5e5e5;
+        background: #fafafa;
+      }
+      .leg-ico {
+        width: 30px;
+        height: 30px;
+        border-radius: 8px;
+        background: #1a73e8;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .leg-ico i {
+        font-size: 14px;
+        color: #fff;
+      }
+      .leg-txt {
+        flex: 1;
+      }
+      .leg-name {
+        font-size: 13px;
+        font-weight: 700;
+        color: #111;
+        display: block;
+      }
+      .leg-desc {
+        font-size: 11px;
+        color: #888;
+        display: block;
+      }
+      .leg-score {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 13px;
+        font-weight: 500;
+        color: #1a73e8;
+        background: #e8f0fe;
+        padding: 3px 8px;
+        border-radius: 6px;
+        white-space: nowrap;
+      }
+      .data-view {
+        display: none;
+      }
+      .drow {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 13px 0;
+        border-bottom: 1.5px solid #f0f0f0;
+      }
+      .drow:last-child {
+        border-bottom: none;
+      }
+      .drow-l {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .drow-ico {
+        width: 32px;
+        height: 32px;
+        background: #f0f4ff;
+        border-radius: 9px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .drow-ico i {
+        font-size: 14px;
+        color: #1a73e8;
+      }
+      .drow-lbl {
+        font-size: 13px;
+        color: #444;
+        font-weight: 500;
+      }
+      .drow-val {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 14px;
+        font-weight: 500;
+        color: #111;
+      }
+      .result-band {
+        background: #1a1410;
+        padding: 20px 22px;
+        display: flex;
+        align-items: center;
+        gap: 18px;
+      }
+      .result-grade {
+        width: 70px;
+        height: 70px;
+        border-radius: 14px;
+        background: #1a73e8;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        gap: 0;
+      }
+      .result-grade-lbl {
+        font-size: 9px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.6);
+        margin-bottom: 1px;
+      }
+      .result-grade-val {
+        font-size: 40px;
+        font-weight: 900;
+        color: #fff;
+        line-height: 1;
+        letter-spacing: -0.04em;
+      }
+      .result-body {
+      }
+      .result-tag {
+        font-size: 11px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.45);
+        margin-bottom: 4px;
+      }
+      .result-title {
+        font-size: 18px;
+        font-weight: 900;
+        color: #fff;
+        margin-bottom: 4px;
+      }
+      /* 中度風險 */
+
+      .risk-mid {
+        background: #fefce8;
+        border-color: #fde047;
+      }
+
+      .risk-mid .gauge-risk-tag-dot {
+        background: #ffd039;
+      }
+
+      .risk-mid .gauge-risk-tag-text {
+        color: #854d0e;
+      }
+
+      .peer-mid {
+        background: #fefce8;
+        border-color: #fde047;
+      }
+
+      .peer-mid .sppb-badge-num {
+        color: #854d0e;
+      }
+
+      .peer-mid .sppb-badge-txt {
+        color: #a16207;
+      }
+      /* 危險 */
+
+      .risk-danger {
+        background: #fef2f2;
+        border-color: #fca5a5;
+      }
+
+      .risk-danger .gauge-risk-tag-dot {
+        background: #ff5757;
+      }
+
+      .risk-danger .gauge-risk-tag-text {
+        color: #b91c1c;
+      }
+
+      .peer-danger {
+        background: #fef2f2;
+        border-color: #fca5a5;
+      }
+
+      .peer-danger .sppb-badge-num {
+        color: #b91c1c;
+      }
+
+      .peer-danger .sppb-badge-txt {
+        color: #dc2626;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <div class="hd">
+        <div>
+          <div class="hd-name">王小明 先生</div>
+        </div>
+        <div class="hd-right">
+          <div class="hd-date-lbl">檢測日期</div>
+          <div class="hd-date">2024-10-24</div>
+        </div>
+      </div>
+
+      <div class="gauge-band">
+        <div class="gauge-wrap"><canvas id="gaugeChart"></canvas></div>
+        <div class="gauge-risk-tag" id="riskTag">
+          <div class="gauge-risk-tag-dot" id="riskDot"></div>
+          <div class="gauge-risk-tag-text" id="riskText"></div>
+        </div>
+        <div class="gauge-risk-tag risk-mid">
+          <div class="gauge-risk-tag-dot"></div>
+          <div class="gauge-risk-tag-text">
+            目前風險等級：中度風險　跌倒風險中等，持續關注為佳
+          </div>
+        </div>
+        <div class="gauge-risk-tag risk-danger">
+          <div class="gauge-risk-tag-dot"></div>
+          <div class="gauge-risk-tag-text">
+            目前風險等級：危險　目前跌倒風險偏高，請特別注意
+          </div>
+        </div>
+      </div>
+
+      <div class="sppb-band">
+        <div class="band-label">SPPB 總分指標</div>
+        <div class="sppb-row">
+          <div class="sppb-left">
+            <div class="sppb-num">9<span>/12</span></div>
+            <div class="sppb-unit">滿分 12 分</div>
+          </div>
+          <div class="sppb-badge">
+            <div class="sppb-badge-num">50%</div>
+            <div class="sppb-badge-txt">優於同齡長者</div>
+          </div>
+          <div class="sppb-badge peer-mid">
+            <div class="sppb-badge-num">50%</div>
+            <div class="sppb-badge-txt">優於同齡長者</div>
+          </div>
+          <div class="sppb-badge peer-danger">
+            <div class="sppb-badge-num">20%</div>
+            <div class="sppb-badge-txt">低於同齡長者</div>
+          </div>
+        </div>
+        <div class="ruler-track">
+          <div class="ruler-fill"></div>
+          <div class="ruler-dot"></div>
+        </div>
+        <div class="ruler-labs">
+          <span>0 分</span><span>6 分（中間）</span><span>12 分</span>
+        </div>
+      </div>
+
+      <div class="analysis-band">
+        <div class="band-hdr">
+          <div class="band-label" style="margin: 0">三項體能測驗</div>
+          <div class="seg">
+            <button class="seg-btn on" id="btnRadar" onclick="sw('radar')">
+              圖表
+            </button>
+            <button class="seg-btn" id="btnData" onclick="sw('data')">
+              數據
+            </button>
+          </div>
+        </div>
+        <div id="radarView" class="radar-view">
+          <div class="radar-box"><canvas id="radarChart"></canvas></div>
+          <div class="leg-col">
+            <div class="leg-row">
+              <div class="leg-ico"><i class="fa-solid fa-person-rays"></i></div>
+              <div class="leg-txt">
+                <b class="leg-name">平衡</b
+                ><span class="leg-desc">靜態站立穩定度佳</span>
+              </div>
+              <span class="leg-score">3/4</span>
+            </div>
+            <div class="leg-row">
+              <div class="leg-ico"><i class="fa-solid fa-chair"></i></div>
+              <div class="leg-txt">
+                <b class="leg-name">起坐</b
+                ><span class="leg-desc">下肢肌力表現正常</span>
+              </div>
+              <span class="leg-score">3/4</span>
+            </div>
+            <div class="leg-row">
+              <div class="leg-ico">
+                <i class="fa-solid fa-person-walking"></i>
+              </div>
+              <div class="leg-txt">
+                <b class="leg-name">步行</b
+                ><span class="leg-desc">步態穩健且速度快</span>
+              </div>
+              <span class="leg-score">3/4</span>
+            </div>
+          </div>
+        </div>
+        <div id="dataView" class="data-view">
+          <div class="drow">
+            <div class="drow-l">
+              <div class="drow-ico">
+                <i class="fa-solid fa-person-walking"></i>
+              </div>
+              <span class="drow-lbl">步行速度</span>
+            </div>
+            <span class="drow-val">4.82 秒</span>
+          </div>
+          <div class="drow">
+            <div class="drow-l">
+              <div class="drow-ico"><i class="fa-solid fa-chair"></i></div>
+              <span class="drow-lbl">五次起坐測試</span>
+            </div>
+            <span class="drow-val">12.5 秒</span>
+          </div>
+          <div class="drow">
+            <div class="drow-l">
+              <div class="drow-ico">
+                <i class="fa-solid fa-shoe-prints"></i>
+              </div>
+              <span class="drow-lbl">並排站立</span>
+            </div>
+            <span class="drow-val">10 秒</span>
+          </div>
+          <div class="drow">
+            <div class="drow-l">
+              <div class="drow-ico">
+                <i class="fa-solid fa-shoe-prints" style="opacity: 0.6"></i>
+              </div>
+              <span class="drow-lbl">半並排</span>
+            </div>
+            <span class="drow-val">10 秒</span>
+          </div>
+          <div class="drow">
+            <div class="drow-l">
+              <div class="drow-ico">
+                <i
+                  class="fa-solid fa-shoe-prints"
+                  style="transform: rotate(90deg)"
+                ></i>
+              </div>
+              <span class="drow-lbl">直線站立</span>
+            </div>
+            <span class="drow-val">10 秒</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="result-band">
+        <div class="result-grade">
+          <div class="result-grade-lbl">等級</div>
+          <div class="result-grade-val">C</div>
+        </div>
+        <div class="result-body">
+          <div class="result-tag">綜合評估結論</div>
+          <div class="result-title">VIVIFRAIL 等級</div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      function sw(type) {
+        const rv = document.getElementById("radarView"),
+          dv = document.getElementById("dataView");
+        const br = document.getElementById("btnRadar"),
+          bd = document.getElementById("btnData");
+        if (type === "radar") {
+          rv.style.display = "flex";
+          dv.style.display = "none";
+          br.classList.add("on");
+          bd.classList.remove("on");
+        } else {
+          rv.style.display = "none";
+          dv.style.display = "block";
+          br.classList.remove("on");
+          bd.classList.add("on");
+        }
+      }
+      const score = 9;
+      const RC = {
+        danger: "#ff5757",
+        high: "#ffa203",
+        mid: "#ffd039",
+        low: "#8cff00",
+        vlow: "#4ffa00",
+      };
+      const bgMap = {
+        danger: "#fef2f2",
+        high: "#fff7ed",
+        mid: "#fefce8",
+        low: "#f7fee7",
+        vlow: "#f0fdf4",
+      };
+      const borderMap = {
+        danger: "#fca5a5",
+        high: "#fdba74",
+        mid: "#fde047",
+        low: "#bef264",
+        vlow: "#86efac",
+      };
+      const textMap = {
+        danger: "#b91c1c",
+        high: "#c2410c",
+        mid: "#854d0e",
+        low: "#3f6212",
+        vlow: "#166534",
+      };
+      const labelMap = {
+        danger: "目前跌倒風險偏高，請特別注意",
+        high: "跌倒風險較高，建議積極改善",
+        mid: "跌倒風險中等，持續關注為佳",
+        low: "跌倒風險稍低，狀況良好",
+        vlow: "跌倒風險低，體能表現優異",
+      };
+
+      function getLevel(v) {
+        if (v <= 2) return { key: "danger", text: "危險", color: RC.danger };
+        if (v <= 5) return { key: "high", text: "高風險", color: RC.high };
+        if (v <= 8) return { key: "mid", text: "中度風險", color: RC.mid };
+        if (v <= 11) return { key: "low", text: "稍低風險", color: RC.low };
+        return { key: "vlow", text: "低風險", color: RC.vlow };
+      }
+      const lv = getLevel(score);
+
+      // render risk tag
+      const tag = document.getElementById("riskTag");
+      const dot = document.getElementById("riskDot");
+      const txt = document.getElementById("riskText");
+      tag.style.background = bgMap[lv.key];
+      tag.style.borderColor = borderMap[lv.key];
+      dot.style.background = lv.color;
+      txt.style.color = textMap[lv.key];
+      txt.textContent = "目前風險等級：" + lv.text + "　" + labelMap[lv.key];
+
+      new Chart(document.getElementById("gaugeChart"), {
+        type: "doughnut",
+        data: {
+          datasets: [
+            {
+              data: [1, 1, 1, 1, 1],
+              backgroundColor: [RC.danger, RC.high, RC.mid, RC.low, RC.vlow],
+              circumference: 180,
+              rotation: 270,
+              borderWidth: 4,
+              borderColor: "#fff",
+              cutout: "72%",
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          layout: { padding: { top: 20, left: 22, right: 22, bottom: 0 } },
+          plugins: { legend: { display: false }, tooltip: { enabled: false } },
+        },
+        plugins: [
+          {
+            id: "g",
+            afterDraw(chart) {
+              const { ctx, chartArea } = chart;
+              const cx = (chartArea.left + chartArea.right) / 2,
+                cy = chartArea.bottom - 10;
+              const ir = chart.getDatasetMeta(0).controller.innerRadius;
+              ctx.save();
+              const ang = Math.PI + Math.PI * (score / 12);
+              const tx = cx + Math.cos(ang) * (ir - 5),
+                ty = cy + Math.sin(ang) * (ir - 5);
+              const sx = cx + Math.cos(ang) * 10,
+                sy = cy + Math.sin(ang) * 10;
+              ctx.beginPath();
+              ctx.moveTo(sx, sy);
+              ctx.lineTo(tx, ty);
+              ctx.strokeStyle = "#111";
+              ctx.lineWidth = 3;
+              ctx.lineCap = "round";
+              ctx.stroke();
+              const ba = 0.38;
+              ctx.beginPath();
+              ctx.moveTo(tx, ty);
+              ctx.lineTo(
+                tx - 9 * Math.cos(ang - ba),
+                ty - 9 * Math.sin(ang - ba),
+              );
+              ctx.lineTo(
+                tx - 9 * Math.cos(ang + ba),
+                ty - 9 * Math.sin(ang + ba),
+              );
+              ctx.closePath();
+              ctx.fillStyle = "#111";
+              ctx.fill();
+              ctx.beginPath();
+              ctx.arc(cx, cy, 8, 0, Math.PI * 2);
+              ctx.fillStyle = "#111";
+              ctx.fill();
+              ctx.beginPath();
+              ctx.arc(cx, cy, 4, 0, Math.PI * 2);
+              ctx.fillStyle = "#fff";
+              ctx.fill();
+              ctx.font = '700 15px "Noto Sans TC",sans-serif';
+              ctx.fillStyle = "#111";
+              ctx.textAlign = "center";
+              ctx.textBaseline = "top";
+              ctx.fillText("風險等級：" + lv.text, cx, cy + 14);
+              ctx.restore();
+            },
+          },
+        ],
+      });
+
+      new Chart(document.getElementById("radarChart"), {
+        type: "radar",
+        data: {
+          labels: ["平衡", "起坐", "步行"],
+          datasets: [
+            {
+              data: [3, 3, 3],
+              backgroundColor: "rgba(26,115,232,0.12)",
+              borderColor: "#1a73e8",
+              borderWidth: 2.5,
+              pointRadius: 4,
+              pointBackgroundColor: "#1a73e8",
+            },
+          ],
+        },
+        options: {
+          scales: {
+            r: {
+              min: 0,
+              max: 4,
+              ticks: { display: false },
+              pointLabels: { display: false },
+              grid: { color: "rgba(26,115,232,0.15)" },
+              angleLines: { color: "rgba(26,115,232,0.15)" },
+            },
+          },
+          plugins: { legend: { display: false } },
+        },
+      });
+    </script>
+  </body>
+</html>

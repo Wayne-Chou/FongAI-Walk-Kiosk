@@ -2,189 +2,853 @@
 <html lang="zh-TW">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <title>FongAI 步態分析結果</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-    <link rel="stylesheet" href="css/result.css" />
-  </head>
-  <body>
-    <div class="report-wrapper">
-      <div class="report-card">
-        <div class="card-header">
-          <div class="card-brand">
-            <h1><img src="/assets/logo.png" alt="" />Fong<span>AI</span></h1>
-            <p>AI Walk Analysis System</p>
-          </div>
-        </div>
 
-        <div class="main-analysis">
-          <h2 class="form-title">動態核心穩定度分析</h2>
-          <div class="visual-box">
-            <div class="skeleton-display">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Roboto+Mono:wght@700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --base-bg: #ffffff;
+        --page-bg: #f1f5f9;
+        --main-text: #1e293b;
+        --sub-text: #64748b;
+        --brand-blue: #3b82f6;
+        --border-color: #cbd5e1;
+        --color-danger: #ff5757;
+        --color-high: #ffa203;
+        --color-medium: #ffd039;
+        --color-low: #8cff00;
+        --color-low2: #4ffa00;
+        --nav-dark: #111827;
+        --action-green: #10b981;
+        --secondary-gray: #475569;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Noto Sans TC", sans-serif;
+        -webkit-tap-highlight-color: transparent;
+        border-radius: 0 !important;
+        scroll-behavior: smooth;
+      }
+
+      body {
+        background: var(--page-bg);
+        color: var(--main-text);
+        line-height: 1.6;
+        overflow-x: hidden;
+      }
+      .logo-wrapper img {
+        height: 35px;
+        width: auto;
+      }
+
+      /* TOP NAV */
+      .top-nav {
+        height: 70px;
+        background: var(--nav-dark);
+        color: white;
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: center;
+        padding: 0 5%;
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1000;
+      }
+      .nav-brand {
+        font-size: 1.3rem;
+        font-weight: 900;
+        letter-spacing: 2px;
+      }
+      .nav-brand span {
+        color: #3b82f6;
+      }
+
+      /* 外層最大容器：左右兩欄 6:4 */
+      .layout-container {
+        margin: 90px auto 0;
+        padding: 20px 20px 0;
+        display: grid;
+        grid-template-columns: 6fr 4fr;
+        gap: 30px;
+        align-items: start;
+      }
+
+      /* 左欄：主內容 + footer 堆疊 */
+      .left-col {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+      }
+
+      /* 右欄：campaign card */
+      .right-col {
+        position: sticky;
+        top: 90px;
+      }
+
+      /* FLOW CARD */
+      .flow-card {
+        background: white;
+        border: 1px solid var(--border-color);
+        display: flex;
+        flex-direction: column;
+        scroll-margin-top: 140px;
+      }
+      .flow-step-head {
+        background: #f8fafc;
+        border-bottom: 1px solid var(--border-color);
+        padding: 15px 30px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+      .flow-step-head .step-label {
+        font-weight: 900;
+        color: var(--sub-text);
+        letter-spacing: 1px;
+        font-size: 0.9rem;
+      }
+
+      /* HEADER SECTION */
+      .report-header {
+        background: white;
+        padding: 25px 40px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+      }
+      .report-header h1 {
+        font-size: 2.2rem;
+        font-weight: 900;
+      }
+
+      .flow-content {
+        padding: 0px 40px 40px 40px;
+      }
+
+      /* 跌倒風險等級標題區塊 */
+      .risk-level-header {
+        margin-top: 30px;
+        padding: 16px 20px;
+        background: #f8fafc;
+        border: 1px solid var(--border-color);
+        border-left: 5px solid var(--color-high);
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .risk-level-header i {
+        font-size: 1.3rem;
+        color: var(--color-high);
+      }
+      .risk-level-header-text {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .risk-level-header-label {
+        font-size: 0.72rem;
+        font-weight: 900;
+        letter-spacing: 2px;
+        color: var(--sub-text);
+      }
+      .risk-level-header-title {
+        font-size: 1.1rem;
+        font-weight: 900;
+        color: var(--main-text);
+      }
+
+      /* 細項網格 */
+      .skeletal-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 16px;
+        margin-top: 15px;
+      }
+      .skeletal-item {
+        background: #ffffff;
+        border: 1px solid var(--border-color);
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      }
+      .skeletal-label {
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: #374151;
+        display: block;
+        margin-bottom: 5px;
+      }
+      .skeletal-val {
+        font-family: "Roboto Mono";
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: #111827;
+      }
+      .skeletal-status {
+        font-size: 0.85rem;
+        font-weight: 500;
+        margin-left: 8px;
+        padding: 4px 10px;
+      }
+      .status-normal {
+        background: #dcfce7;
+        color: #22c55e;
+      }
+
+      /* leaderboard */
+      .leaderboard-showcase {
+        margin-top: 30px;
+        border: 2px solid var(--border-color);
+        padding: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 30px;
+        position: relative;
+        transition: all 0.3s ease;
+      }
+      .leader-badge-left {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+      .leader-icon-box {
+        width: 70px;
+        height: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.2rem;
+        color: white;
+      }
+      .leader-main-data {
+        display: flex;
+        flex-direction: column;
+      }
+      .leader-title {
+        font-size: 0.95rem;
+        font-weight: 900;
+        letter-spacing: 1px;
+      }
+      .leader-num-group {
+        display: flex;
+        align-items: baseline;
+        gap: 2px;
+        margin-top: -5px;
+      }
+      .leader-big-num {
+        font-family: "Roboto Mono", sans-serif;
+        font-size: 3.8rem;
+        font-weight: 900;
+      }
+      .leader-unit {
+        font-size: 1.4rem;
+        font-weight: 900;
+      }
+      .leader-stats-right {
+        flex-grow: 1;
+        max-width: 420px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .progress-container {
+        width: 100%;
+        height: 14px;
+        background: #e2e8f0;
+        border: 1px solid #cbd5e1;
+        overflow: hidden;
+      }
+      .progress-fill {
+        height: 100%;
+        transition: width 0.5s ease-in-out;
+      }
+      .leader-comment {
+        font-size: 0.95rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        line-height: 1.4;
+      }
+
+      .leaderboard-showcase.status-excellent {
+        background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+        border-color: #bbf7d0;
+      }
+      .status-excellent .leader-icon-box {
+        background: #16a34a;
+      }
+      .status-excellent .leader-title {
+        color: #14532d;
+      }
+      .status-excellent .leader-big-num,
+      .status-excellent .leader-unit {
+        color: #16a34a;
+      }
+      .status-excellent .progress-fill {
+        background: linear-gradient(90deg, #4ade80 0%, #16a34a 100%);
+        width: 85%;
+      }
+      .status-excellent .leader-comment {
+        color: #166534;
+      }
+      .status-excellent .leader-comment i {
+        color: #16a34a;
+      }
+
+      .leaderboard-showcase.status-warning {
+        background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+        border-color: #fca5a5;
+      }
+      .status-warning .leader-icon-box {
+        background: #f97316;
+      }
+      .status-warning .leader-title {
+        color: #7c2d12;
+      }
+      .status-warning .leader-big-num,
+      .status-warning .leader-unit {
+        color: #ea580c;
+      }
+      .status-warning .progress-fill {
+        background: linear-gradient(90deg, #fb923c 0%, #f97316 100%);
+        width: 45%;
+      }
+      .status-warning .leader-comment {
+        color: #9a3412;
+      }
+      .status-warning .leader-comment i {
+        color: #ea580c;
+      }
+
+      .leaderboard-showcase.status-danger {
+        background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+        border-color: #fca5a5;
+      }
+      .status-danger .leader-icon-box {
+        background: #ef4444;
+      }
+      .status-danger .leader-title {
+        color: #7f1d1d;
+      }
+      .status-danger .leader-big-num,
+      .status-danger .leader-unit {
+        color: #dc2626;
+      }
+      .status-danger .progress-fill {
+        background: linear-gradient(90deg, #f87171 0%, #ef4444 100%);
+        width: 20%;
+      }
+      .status-danger .leader-comment {
+        color: #991b1b;
+      }
+      .status-danger .leader-comment i {
+        color: #dc2626;
+      }
+
+      /* RISK METER */
+      .risk-meter {
+        margin-top: 80px;
+        position: relative;
+        padding: 0 10px;
+        margin-bottom: 40px;
+      }
+      .risk-bar {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 10px;
+        height: 30px;
+      }
+      .risk-seg.low2 {
+        background: var(--color-low2);
+      }
+      .risk-seg.low {
+        background: var(--color-low);
+      }
+      .risk-seg.medium {
+        background: var(--color-medium);
+      }
+      .risk-seg.high {
+        background: var(--color-high);
+      }
+      .risk-seg.danger {
+        background: var(--color-danger);
+      }
+      .risk-seg.active {
+        opacity: 1;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+      .risk-labels {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        text-align: center;
+        margin-top: 15px;
+        color: var(--sub-text);
+        font-weight: 800;
+      }
+      .risk-indicator {
+        position: absolute;
+        top: -55px;
+        left: 30%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .risk-indicator span {
+        background: var(--color-low);
+        color: white;
+        padding: 5px 12px;
+        font-weight: 900;
+        font-size: 0.85rem;
+        margin-bottom: 5px;
+      }
+
+      /* CAMPAIGN CARD（右欄） */
+      .campaign-card {
+        background: white;
+        border: 1px solid var(--border-color);
+        padding: 28px 30px;
+      }
+      .campaign-head {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 18px;
+      }
+      .campaign-icon {
+        width: 42px;
+        height: 42px;
+        background: var(--brand-blue);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .campaign-icon i {
+        font-size: 1.1rem;
+        color: white;
+      }
+      .campaign-tag {
+        display: block;
+        font-size: 0.7rem;
+        font-weight: 900;
+        letter-spacing: 2px;
+        color: var(--brand-blue);
+        margin-bottom: 3px;
+      }
+      .campaign-title {
+        font-size: 1.1rem;
+        font-weight: 900;
+        color: var(--main-text);
+        margin: 0;
+        line-height: 1.4;
+      }
+      .campaign-divider {
+        height: 1px;
+        background: var(--border-color);
+        margin-bottom: 18px;
+      }
+      .campaign-content p {
+        font-size: 0.95rem;
+        color: var(--sub-text);
+        line-height: 1.8;
+        margin: 0;
+      }
+      .campaign-content p + p {
+        margin-top: 8px;
+      }
+
+      /* 醫療機構推薦 */
+      .hospital-section {
+        background: white;
+        border: 1px solid var(--border-color);
+        padding: 20px 22px;
+        margin-top: 20px;
+      }
+      .hospital-section-tag {
+        font-size: 0.75rem;
+        font-weight: 400;
+        color: var(--sub-text);
+        display: block;
+        margin-bottom: 14px;
+        letter-spacing: 0;
+      }
+      .hospital-section-title {
+        font-size: 1rem;
+        font-weight: 900;
+        color: var(--main-text);
+        margin-bottom: 14px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid var(--border-color);
+      }
+      .hospital-card {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        padding: 14px 16px;
+        gap: 12px;
+        background: #fff;
+      }
+      .hospital-info {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .hospital-name {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--main-text);
+      }
+      .hospital-area {
+        font-size: 0.82rem;
+        color: var(--sub-text);
+        font-weight: 400;
+      }
+      .hospital-dept {
+        font-size: 0.82rem;
+        color: var(--main-text);
+        font-weight: 400;
+        margin-top: 4px;
+      }
+      .hospital-qr {
+        width: 80px;
+        height: 80px;
+        flex-shrink: 0;
+        object-fit: cover;
+        background: #f8fafc;
+      }
+
+      /* FOOTER */
+      .btn-group {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-bottom: 40px;
+      }
+      .btn {
+        padding: 25px;
+        font-size: 1.1rem;
+        font-weight: 900;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        border: none;
+      }
+      .btn-outline {
+        background: white;
+        border: 2px solid var(--nav-dark);
+        color: var(--nav-dark);
+      }
+      .btn-main {
+        background: var(--nav-dark);
+        color: white;
+      }
+
+      @media (max-width: 900px) {
+        .layout-container {
+          grid-template-columns: 1fr;
+        }
+        .right-col {
+          position: static;
+        }
+      }
+      @media (max-width: 600px) {
+        .leaderboard-showcase {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 20px;
+        }
+        .leader-stats-right {
+          width: 100%;
+          max-width: 100%;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav class="top-nav">
+      <div class="logo-wrapper">
+        <img src="/assets/logo.png" alt="FongAI Logo" />
+      </div>
+      <div class="nav-brand" style="text-align: center">
+        Fong<span>AI</span> 步態分析系統
+      </div>
+      <div
+        class="nav-partner"
+        style="
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          height: 100%;
+          justify-self: end;
+        "
+      >
+        <img
+          src="/assets/NTPC_Health.png"
+          alt="新北市衛生局"
+          style="
+            height: 60px;
+            width: auto;
+            filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));
+          "
+        />
+      </div>
+    </nav>
+
+    <div class="layout-container">
+      <!-- 左欄：主內容 + footer -->
+      <div class="left-col">
+        <section class="flow-card" id="step01">
+          <header class="report-header">
+            <div>
+              <small
+                style="
+                  letter-spacing: 2px;
+                  color: var(--sub-text);
+                  font-weight: 900;
+                  display: block;
+                  margin-bottom: 10px;
+                "
+                >WALK ANALYSIS REPORT</small
+              >
+              <h1>步態穩定性分析結果</h1>
+            </div>
+            <div style="text-align: center">
+              <div
+                style="
+                  font-size: 0.85rem;
+                  color: var(--sub-text);
+                  margin-bottom: 5px;
+                "
+              >
+                掃碼看詳細資訊
+              </div>
               <img
-                src="/assets/man.png"
-                alt="Analysis Skeleton"
-                class="skeleton-img"
+                style="width: 120px"
+                src="/assets/qrcode-demo.png"
+                alt="QR Code"
               />
             </div>
-            <div class="analysis-summary">
-              <div class="summary-tag">
-                <i class="fa-solid fa-circle-exclamation"></i>
-                檢測結果：劇烈左右晃動
-              </div>
-              <p class="summary-desc">
-                經 AI 影像演算發現，受測者在行走過程中，軀幹中線偏離中心點超過
-                15%，具備顯著跌倒隱憂。
-              </p>
-            </div>
-          </div>
-        </div>
+          </header>
 
-        <div class="risk-assessment">
-          <h4 class="sub-label">跌倒風險綜合評估</h4>
-          <div class="risk-display-container">
-            <div class="current-risk-badge level-high">
+          <div class="flow-content">
+            <!-- 跌倒風險等級標題區塊 -->
+            <div class="risk-level-header">
               <i class="fa-solid fa-triangle-exclamation"></i>
-              <span>檢測結果：高風險 (High Risk)</span>
+              <div class="risk-level-header-text">
+                <span class="risk-level-header-label"
+                  >FALL RISK ASSESSMENT</span
+                >
+                <span class="risk-level-header-title">跌倒風險等級評估</span>
+              </div>
             </div>
-            <div class="risk-bar-group">
-              <div class="bar-segment low"></div>
-              <div class="bar-segment slight-low"></div>
-              <div class="bar-segment medium"></div>
-              <div class="bar-segment high active"></div>
-              <div class="bar-segment danger"></div>
+
+            <div class="risk-meter">
+              <div class="risk-indicator">
+                <span>您目前的程度</span>
+                <i class="fa-solid fa-caret-down"></i>
+              </div>
+              <div class="risk-bar">
+                <div class="risk-seg low2"></div>
+                <div class="risk-seg low"></div>
+                <div class="risk-seg medium"></div>
+                <div class="risk-seg high active"></div>
+                <div class="risk-seg danger"></div>
+              </div>
+              <div class="risk-labels">
+                <span>低</span><span>中低</span><span>中</span><span>高</span
+                ><span>危險</span>
+              </div>
             </div>
-            <div class="risk-labels">
-              <span>低</span>
-              <span>稍低</span>
-              <span>中</span>
-              <span class="active-label">高</span>
-              <span>危險</span>
+
+            <h2 style="margin-bottom: 5px; font-weight: 900">步態數據指標</h2>
+
+            <div class="skeletal-grid">
+              <div class="skeletal-item">
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                  "
+                >
+                  <span class="skeletal-label">步行速度</span>
+                  <div style="display: flex; align-items: center; gap: 8px">
+                    <span class="skeletal-val">90cm/s</span>
+                    <span
+                      class="skeletal-status status-normal"
+                      style="background: #f0fdf4; color: #16a34a"
+                      >正常</span
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="skeletal-item">
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                  "
+                >
+                  <span class="skeletal-label">身體晃動程度</span>
+                  <div style="display: flex; align-items: center; gap: 8px">
+                    <span class="skeletal-val">輕微</span>
+                    <span
+                      class="skeletal-status status-normal"
+                      style="background: #f0fdf4; color: #16a34a"
+                      >正常</span
+                    >
+                  </div>
+                </div>
+              </div>
             </div>
+
+            <div class="leaderboard-showcase status-excellent">
+              <div class="leader-badge-left">
+                <div class="leader-icon-box">
+                  <i class="fa-solid fa-medal"></i>
+                </div>
+                <div class="leader-main-data">
+                  <span class="leader-title">超越同齡層用戶</span>
+                  <div class="leader-num-group">
+                    <span class="leader-big-num">85</span>
+                    <span class="leader-unit">%</span>
+                  </div>
+                </div>
+              </div>
+              <div class="leader-stats-right">
+                <div class="progress-container">
+                  <div class="progress-fill"></div>
+                </div>
+                <div class="leader-comment">
+                  <i class="fa-solid fa-circle-check"></i>
+                  <span>您的下肢力量與平衡感在同齡群體中名列前茅！</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="leaderboard-showcase status-warning">
+              <div class="leader-badge-left">
+                <div class="leader-icon-box">
+                  <i class="fa-solid fa-medal"></i>
+                </div>
+                <div class="leader-main-data">
+                  <span class="leader-title">超越同齡層用戶</span>
+                  <div class="leader-num-group">
+                    <span class="leader-big-num">85</span>
+                    <span class="leader-unit">%</span>
+                  </div>
+                </div>
+              </div>
+              <div class="leader-stats-right">
+                <div class="progress-container">
+                  <div class="progress-fill"></div>
+                </div>
+                <div class="leader-comment">
+                  <i class="fa-solid fa-circle-check"></i>
+                  <span>您的下肢力量與平衡感在同齡群體中名列前茅！</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="leaderboard-showcase status-danger">
+              <div class="leader-badge-left">
+                <div class="leader-icon-box">
+                  <i class="fa-solid fa-medal"></i>
+                </div>
+                <div class="leader-main-data">
+                  <span class="leader-title">超越同齡層用戶</span>
+                  <div class="leader-num-group">
+                    <span class="leader-big-num">85</span>
+                    <span class="leader-unit">%</span>
+                  </div>
+                </div>
+              </div>
+              <div class="leader-stats-right">
+                <div class="progress-container">
+                  <div class="progress-fill"></div>
+                </div>
+                <div class="leader-comment">
+                  <i class="fa-solid fa-circle-check"></i>
+                  <span>您的下肢力量與平衡感在同齡群體中名列前茅！</span>
+                </div>
+              </div>
+            </div>
+            <!-- 推薦醫療機構 -->
+            <div class="hospital-section">
+              <span class="hospital-section-tag"
+                >專業諮詢建議 / MEDICAL GUIDANCE</span
+              >
+              <div class="hospital-section-title">推薦醫療機構</div>
+              <div class="hospital-card">
+                <div class="hospital-info">
+                  <div class="hospital-name">板橋區衛生所</div>
+                  <div class="hospital-area">（板橋區）</div>
+                  <div class="hospital-dept">建議科別：家醫科</div>
+                </div>
+                <img
+                  class="hospital-qr"
+                  src="/assets/qrcode-demo.png"
+                  alt="板橋區衛生所 QR Code"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- footer 在左欄最下面 -->
+        <div class="btn-group">
+          <button class="btn btn-outline">重新檢測</button>
+          <button class="btn btn-main">回首頁</button>
+        </div>
+      </div>
+
+      <!-- 右欄：campaign card  -->
+      <div class="right-col">
+        <div class="campaign-card">
+          <div class="campaign-head">
+            <div class="campaign-icon">
+              <i class="fa-solid fa-clipboard-check"></i>
+            </div>
+            <div class="campaign-head-text">
+              <span class="campaign-tag">最新消息</span>
+              <h3 class="campaign-title">下一步：完成 ICOPE 檢測</h3>
+            </div>
+          </div>
+          <div class="campaign-divider"></div>
+          <div class="campaign-content">
+            <p>
+              行動力只是健康的一部分，同時掌握視力、聽力、認知、行動、營養與心理狀態，及早發現衰弱風險。
+            </p>
+            <p>新北市 65 歲以上長者可洽衛生所參加活動。</p>
           </div>
         </div>
-
-        <div class="advice-container">
-          <div class="tabs-grid">
-            <button class="tab-btn active" data-tab="train">建議訓練</button>
-            <button class="tab-btn" data-tab="doctor">潛在風險</button>
-
-            <button class="tab-btn" data-tab="hospital">推薦院所</button>
-          </div>
-
-          <div class="tab-content-area">
-            <div class="tab-content active" id="train">
-              <h5 class="content-title">階段性運動處方</h5>
-              <ul class="styled-list">
-                <li>
-                  <i class="fa-solid fa-person-walking"></i>
-                  <div><strong>單腳站立練習：</strong>強化深層穩定。</div>
-                </li>
-                <li>
-                  <i class="fa-solid fa-arrows-left-right"></i>
-                  <div><strong>重心轉移訓練：</strong>減少行走晃動。</div>
-                </li>
-              </ul>
-            </div>
-
-            <div class="tab-content" id="doctor">
-              <h5 class="content-title">步態異常特徵分析</h5>
-              <ul class="styled-list">
-                <li>
-                  <i class="fa-solid fa-sync"></i>
-                  <div><strong>左右步態不對稱：</strong>左側支撐時間較長。</div>
-                </li>
-                <li>
-                  <i class="fa-solid fa-shoe-prints"></i>
-                  <div><strong>步幅過窄：</strong>增加側向跌倒可能性。</div>
-                </li>
-              </ul>
-            </div>
-
-            <div class="tab-content" id="hospital">
-              <h5 class="content-title">附近專業復健機構</h5>
-
-              <div class="hospital-card">
-                <h6>睦霖復健科診所</h6>
-                <p>
-                  <i class="fa-solid fa-location-dot"></i> 台北市中山區松江路
-                  274 號 2 樓
-                </p>
-              </div>
-
-              <div class="hospital-card">
-                <h6>中山適康復健科診所</h6>
-                <p>
-                  <i class="fa-solid fa-location-dot"></i> 台北市中山區龍江路
-                  268 號
-                </p>
-              </div>
-
-              <div class="hospital-card">
-                <h6>康富物理治療所 (大安所)</h6>
-                <p>
-                  <i class="fa-solid fa-location-dot"></i> 台北市大安區瑞安街
-                  276 巷 16 號 1 樓
-                </p>
-              </div>
-
-              <div class="hospital-card">
-                <h6>非凡復健科診所</h6>
-                <p>
-                  <i class="fa-solid fa-location-dot"></i>
-                  台北市大安區信義路四段 177 號
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="qr-section">
-          <div class="qr-header">
-            <i class="fa-solid fa-qrcode"></i>
-            <span>帶走您的測驗結果</span>
-          </div>
-
-          <div class="qr-box-inline">
-            <img src="/assets/qrcode-demo.png" alt="QR Code" />
-          </div>
-
-          <p class="qr-desc">
-            請使用手機掃描 QRCode，即可查看並保存本次步態分析報告
-          </p>
-        </div>
-        <button class="back-btn" onclick="location.href = 'index.html'">
-          回首頁
-        </button>
       </div>
     </div>
-
-    <script>
-      document.querySelectorAll(".tab-btn").forEach((tab) => {
-        tab.addEventListener("click", () => {
-          // 1. 移除所有 active 狀態
-          document
-            .querySelectorAll(".tab-btn")
-            .forEach((btn) => btn.classList.remove("active"));
-          document
-            .querySelectorAll(".tab-content")
-            .forEach((content) => content.classList.remove("active"));
-
-          // 2. 加入當前 active 狀態
-          tab.classList.add("active");
-          const targetId = tab.getAttribute("data-tab");
-          const targetContent = document.getElementById(targetId);
-          if (targetContent) {
-            targetContent.classList.add("active");
-          }
-        });
-      });
-    </script>
   </body>
 </html>
