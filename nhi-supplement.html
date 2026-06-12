@@ -6,7 +6,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
-    <title>行走分析系統 - 身份驗證成功</title>
+    <title>行走分析系統 - 補充聯絡資訊</title>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
@@ -23,6 +23,7 @@
         --sub-text: #94a3b8;
         --border-light: #e5e7eb;
         --dark-bar: #1e293b;
+        --brand-blue: #2563eb;
       }
       * {
         margin: 0;
@@ -102,24 +103,23 @@
         z-index: 0;
       }
 
-      /* 過場卡片：淡入後自動跳轉 */
       .action-card {
         width: 720px;
         background: var(--base-bg);
         border: 1px solid var(--border-light);
         box-shadow: 20px 20px 0px #e5e7eb;
-        padding: 60px 50px;
+        padding: 50px;
         z-index: 1;
         display: flex;
         flex-direction: column;
         align-items: center;
         gap: 28px;
-        animation: fadeInUp 0.5s ease both;
+        animation: fadeInUp 0.4s ease both;
       }
       @keyframes fadeInUp {
         from {
           opacity: 0;
-          transform: translateY(16px);
+          transform: translateY(14px);
         }
         to {
           opacity: 1;
@@ -127,89 +127,151 @@
         }
       }
 
+      /* 標題區 */
       .card-header {
         text-align: center;
+        width: 100%;
       }
       .card-header h2 {
         font-size: 1.6rem;
         font-weight: 700;
         letter-spacing: 1px;
-        margin-bottom: 10px;
+        margin-bottom: 12px;
       }
+      /* 說明文字加大加深，高對比 */
       .card-header p {
-        color: var(--sub-text);
-        font-size: 0.95rem;
-        line-height: 1.8;
+        color: #374151;
+        font-size: 1rem;
+        line-height: 1.9;
+        font-weight: 500;
       }
 
-      /* 大圓圈打勾 */
-      .success-icon-wrap {
+      /* 表單 */
+      .form-block {
+        width: 100%;
         display: flex;
         flex-direction: column;
-        align-items: center;
-        gap: 14px;
+        gap: 20px;
       }
-      .success-circle {
-        width: 96px;
-        height: 96px;
-        background: #f0fdf4;
-        border: 3px solid #bbf7d0;
+      .form-field {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .form-label {
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: var(--main-text);
         display: flex;
         align-items: center;
-        justify-content: center;
-        animation: popIn 0.4s 0.4s ease both;
+        gap: 10px;
       }
-      @keyframes popIn {
-        from {
-          transform: scale(0.6);
-          opacity: 0;
-        }
-        to {
-          transform: scale(1);
-          opacity: 1;
-        }
-      }
-      .success-circle i {
-        font-size: 2.8rem;
-        color: #16a34a;
+      .form-label i {
+        font-size: 1rem;
+        color: var(--brand-blue);
       }
 
-      /* 取卡提醒 */
-      .card-reminder {
+      /* 選填標籤：藍色描邊 */
+      .opt-tag {
+        display: inline-flex;
+        align-items: center;
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: #2563eb;
+        background: #fff;
+        border: 1.5px solid #2563eb;
+        padding: 3px 10px;
+        letter-spacing: 1px;
+      }
+
+      /* 輸入框加高，字放大 */
+      .form-input {
         width: 100%;
-        background: #fffbeb;
-        border: 1.5px solid #fde68a;
-        padding: 20px 24px;
+        height: 64px;
+        border: 2px solid var(--border-light);
+        background: #f8fafc;
+        padding: 0 20px;
+        font-size: 1.1rem;
+        color: var(--main-text);
+        outline: none;
+        transition:
+          border-color 0.2s,
+          background 0.2s;
+        font-family: "Roboto Mono", monospace;
+      }
+      .form-input::placeholder {
+        color: #9ca3af;
+        font-family: "Noto Sans TC", sans-serif;
+        font-size: 0.95rem;
+      }
+      .form-input:focus {
+        border-color: var(--brand-blue);
+        background: #fff;
+      }
+
+      /* 倒數提示 */
+      .countdown-bar {
+        width: 100%;
+        background: #f0f9ff;
+        border: 1px solid #bae6fd;
+        padding: 14px 20px;
         display: flex;
         align-items: center;
-        gap: 18px;
+        justify-content: space-between;
+        gap: 12px;
       }
-      .reminder-icon {
-        flex-shrink: 0;
-        width: 48px;
-        height: 48px;
+      .countdown-left {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.9rem;
+        color: #0369a1;
+        font-family: "Roboto Mono", monospace;
+      }
+      .countdown-left i {
+        font-size: 0.9rem;
+      }
+      .countdown-num {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #0369a1;
+        font-family: "Roboto Mono", monospace;
+        min-width: 28px;
+        text-align: right;
+      }
+
+      /* 按鈕列：兩個都夠大，跳過也清楚 */
+      .btn-row {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+      .btn {
+        height: 68px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
-      }
-      .reminder-icon i {
-        font-size: 1.5rem;
-        color: #d97706;
-      }
-      .reminder-content {
-        flex: 1;
-      }
-      .reminder-title {
-        font-size: 1rem;
-        font-weight: 700;
-        color: #92400e;
+        gap: 10px;
+        border: none;
         letter-spacing: 0.5px;
-        margin-bottom: 4px;
+        transition: opacity 0.2s;
       }
-      .reminder-desc {
-        font-size: 0.85rem;
-        color: #b45309;
-        line-height: 1.6;
+      .btn:active {
+        opacity: 0.8;
+      }
+      .btn-skip {
+        background: white;
+        border: 2.5px solid var(--dark-bar);
+        color: var(--dark-bar);
+        font-size: 1.05rem;
+      }
+      .btn-confirm {
+        background: var(--dark-bar);
+        color: white;
       }
 
       .company-footer {
@@ -241,6 +303,9 @@
           width: 90%;
           padding: 30px;
         }
+        .btn-row {
+          grid-template-columns: 1fr;
+        }
       }
     </style>
   </head>
@@ -259,26 +324,59 @@
     <div class="main-container">
       <div class="action-card">
         <div class="card-header">
-          <h2>身份驗證成功</h2>
-          <p>健保卡讀取完成，正在進入下一步。</p>
+          <h2>補充聯絡資訊</h2>
+          <p>
+            以下資訊為選填，填寫後可方便後續報告通知聯繫。<br />不填寫可直接按下方「跳過」進入系統。
+          </p>
         </div>
 
-        <div class="success-icon-wrap">
-          <div class="success-circle">
-            <i class="fa-solid fa-circle-check"></i>
+        <div class="form-block">
+          <div class="form-field">
+            <label class="form-label">
+              <i class="fa-solid fa-phone"></i>
+              聯絡電話
+              <span class="opt-tag">選填，可不填</span>
+            </label>
+            <input
+              class="form-input"
+              type="tel"
+              id="phone"
+              placeholder="可不填｜例如 0912-345-678"
+              inputmode="tel"
+            />
+          </div>
+          <div class="form-field">
+            <label class="form-label">
+              <i class="fa-solid fa-envelope"></i>
+              電子郵件
+              <span class="opt-tag">選填，可不填</span>
+            </label>
+            <input
+              class="form-input"
+              type="email"
+              id="email"
+              placeholder="可不填｜例如 example@mail.com"
+              inputmode="email"
+            />
           </div>
         </div>
 
-        <div class="card-reminder">
-          <div class="reminder-icon">
-            <i class="fa-solid fa-id-card"></i>
+        <!-- 倒數：15 秒無操作自動跳過 -->
+        <div class="countdown-bar">
+          <div class="countdown-left">
+            <i class="fa-solid fa-clock"></i>
+            <span>無操作將自動跳過</span>
           </div>
-          <div class="reminder-content">
-            <div class="reminder-title">請記得取回您的健保卡</div>
-            <div class="reminder-desc">
-              讀卡完成，請將健保卡從讀卡機取出並妥善收好，避免遺忘。
-            </div>
-          </div>
+          <span class="countdown-num" id="countdownNum">15</span>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-skip" onclick="goNext()">
+            <i class="fa-solid fa-forward"></i>跳過
+          </button>
+          <button class="btn btn-confirm" onclick="goNext()">
+            <i class="fa-solid fa-circle-check"></i>確認送出
+          </button>
         </div>
       </div>
 

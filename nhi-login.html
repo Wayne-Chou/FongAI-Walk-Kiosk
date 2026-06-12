@@ -149,39 +149,6 @@
         line-height: 1.8;
       }
 
-      /* ── 插卡示意圖區 ── */
-      .card-visual {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 32px;
-      }
-
-      /* 健保卡圖形 */
-      .nhi-card-illustration {
-        width: 160px;
-        height: 102px;
-        background: var(--base-bg);
-        border: 2px solid var(--main-text);
-        box-shadow: 6px 6px 0px var(--main-text);
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        padding: 12px 14px;
-        flex-shrink: 0;
-        animation: cardFloat 2.4s ease-in-out infinite;
-      }
-
-      @keyframes cardFloat {
-        0%,
-        100% {
-          transform: translateY(0px);
-        }
-        50% {
-          transform: translateY(-6px);
-        }
-      }
-
       .nhi-card-top {
         display: flex;
         align-items: center;
@@ -430,6 +397,16 @@
           padding: 30px;
         }
       }
+      .card-visual {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .card-visual img {
+        width: 360px;
+        height: auto;
+        display: block;
+      }
     </style>
   </head>
 
@@ -456,37 +433,7 @@
 
         <!-- 插卡示意圖 -->
         <div class="card-visual">
-          <div class="nhi-card-illustration">
-            <div class="nhi-card-top">
-              <div class="nhi-chip">
-                <span></span><span></span><span></span> <span></span
-                ><span></span><span></span> <span></span><span></span
-                ><span></span>
-              </div>
-              <span class="nhi-card-label">健保卡</span>
-            </div>
-            <div class="nhi-card-lines">
-              <div class="nhi-line long"></div>
-              <div class="nhi-line short"></div>
-            </div>
-          </div>
-
-          <div class="insert-arrow">
-            <div class="arrow-track">
-              <div class="arrow-dot"></div>
-              <div class="arrow-dot"></div>
-              <div class="arrow-dot"></div>
-            </div>
-            <span class="arrow-label">INSERT</span>
-          </div>
-
-          <div class="slot-illustration">
-            <div class="slot-body">
-              <div class="slot-opening"></div>
-              <div class="slot-indicator"></div>
-            </div>
-            <span class="slot-label">讀卡槽</span>
-          </div>
+          <img src="assets/insert-nhi-card.png" alt="請插入健保卡示意圖" />
         </div>
 
         <!-- 讀卡機狀態 -->

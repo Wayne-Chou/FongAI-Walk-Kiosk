@@ -1,0 +1,1632 @@
+<!doctype html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>步態分析詳細報告</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Roboto+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+    <style>
+      :root {
+        --blue-50: #eff6ff;
+        --blue-100: #dbeafe;
+        --blue-200: #bfdbfe;
+        --blue-500: #3b82f6;
+        --blue-600: #2563eb;
+        --blue-700: #1d4ed8;
+        --blue-900: #1e3a8a;
+        --gray-50: #f8fafc;
+        --gray-100: #f1f5f9;
+        --gray-200: #e2e8f0;
+        --gray-400: #94a3b8;
+        --gray-600: #475569;
+        --gray-900: #0f172a;
+        --green-50: #f0fdf4;
+        --green-500: #22c55e;
+        --green-600: #16a34a;
+        --orange-500: #f97316;
+        --red-500: #ef4444;
+        /* ① 更新配色 */
+        --color-low2: #4ffa00;
+        --color-low: #8cff00;
+        --color-medium: #ffd039;
+        --color-high: #ffa203;
+        --color-danger: #ff5757;
+      }
+
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        background: var(--gray-100);
+        color: var(--gray-900);
+        font-family: "Noto Sans TC", sans-serif;
+        font-size: 16px;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* ══ TOP NAV ══ */
+      .top-nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 64px;
+        background: var(--gray-900);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 24px;
+        z-index: 100;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+      }
+      .nav-logo img {
+        height: 32px;
+        width: auto;
+        display: block;
+      }
+      .nav-title {
+        font-size: 1rem;
+        font-weight: 900;
+        color: white;
+        letter-spacing: 1px;
+        text-align: center;
+      }
+      .nav-title span {
+        color: var(--blue-500);
+      }
+      .nav-partner img {
+        height: 44px;
+        width: auto;
+        filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4));
+      }
+
+      /* ══ PAGE WRAPPER ══ */
+      .page {
+        max-width: 1280px;
+        margin: 64px auto 0;
+        padding: 28px 24px 56px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      /* ══ HERO ══ */
+      .report-hero {
+        background: linear-gradient(
+          135deg,
+          var(--blue-900) 0%,
+          var(--blue-700) 100%
+        );
+        border-radius: 20px;
+        padding: 32px 36px;
+        color: white;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 24px;
+      }
+      .report-hero::before {
+        content: "";
+        position: absolute;
+        top: -50px;
+        right: -50px;
+        width: 260px;
+        height: 260px;
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 50%;
+      }
+      .report-hero::after {
+        content: "";
+        position: absolute;
+        bottom: -80px;
+        right: 200px;
+        width: 320px;
+        height: 320px;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 50%;
+      }
+      .hero-left {
+        flex: 1;
+        position: relative;
+        z-index: 1;
+      }
+      .hero-eyebrow {
+        font-size: 0.7rem;
+        font-weight: 900;
+        letter-spacing: 3px;
+        color: var(--blue-200);
+        margin-bottom: 8px;
+      }
+      .hero-title {
+        font-size: 2.2rem;
+        font-weight: 900;
+        line-height: 1.15;
+        margin-bottom: 16px;
+      }
+      .hero-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 24px;
+      }
+      .hero-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 100px;
+        padding: 5px 14px;
+        font-size: 0.82rem;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.9);
+        font-family: "Roboto Mono", monospace;
+      }
+      .hero-chip i {
+        font-size: 0.78rem;
+        color: var(--blue-200);
+      }
+
+      .hero-save-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        background: white;
+        color: var(--blue-700);
+        border: none;
+        cursor: pointer;
+        padding: 16px 28px;
+        border-radius: 14px;
+        font-size: 1.25rem;
+        font-weight: 900;
+        font-family: "Noto Sans TC", sans-serif;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        animation: pulse 2s ease-in-out infinite;
+        position: relative;
+        z-index: 1;
+        transition:
+          transform 0.15s,
+          box-shadow 0.15s;
+      }
+      .hero-save-btn:hover {
+        transform: scale(1.03);
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
+      }
+      .hero-save-btn:active {
+        transform: scale(0.97);
+      }
+      .hero-save-btn i {
+        font-size: 1.3rem;
+        color: var(--blue-600);
+      }
+      .hero-save-btn .btn-sub {
+        display: block;
+        font-size: 0.88rem;
+        font-weight: 500;
+        color: var(--gray-400);
+        margin-top: 2px;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          box-shadow:
+            0 4px 20px rgba(0, 0, 0, 0.2),
+            0 0 0 0 rgba(255, 255, 255, 0.4);
+        }
+        50% {
+          box-shadow:
+            0 4px 20px rgba(0, 0, 0, 0.2),
+            0 0 0 10px rgba(255, 255, 255, 0);
+        }
+      }
+
+      /* ══ SECTION LABEL ══ */
+      .section-label {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.95rem;
+        font-weight: 900;
+        letter-spacing: 1px;
+        color: var(--gray-600);
+        margin-bottom: -6px;
+      }
+      .section-label::before {
+        content: "";
+        display: block;
+        width: 4px;
+        height: 18px;
+        background: var(--blue-500);
+        border-radius: 2px;
+        flex-shrink: 0;
+      }
+
+      /* ══ CARD ══ */
+      .card {
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow:
+          0 1px 4px rgba(0, 0, 0, 0.06),
+          0 4px 16px rgba(0, 0, 0, 0.04);
+      }
+      .card-title-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 18px 22px 16px;
+        border-bottom: 1px solid var(--gray-100);
+      }
+      .card-title-icon {
+        width: 38px;
+        height: 38px;
+        background: var(--blue-50);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .card-title-icon i {
+        font-size: 1.05rem;
+        color: var(--blue-600);
+      }
+      .ct-label {
+        font-size: 0.65rem;
+        font-weight: 900;
+        letter-spacing: 2px;
+        color: var(--gray-400);
+      }
+      .ct-title {
+        font-size: 1.05rem;
+        font-weight: 900;
+        color: var(--gray-900);
+        line-height: 1.2;
+      }
+      .card-body {
+        padding: 22px;
+      }
+
+      /* ══ 桌機兩欄 ══ */
+      .two-col {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      /* ══ ② 基本資料＋骨架圖合併 card ══ */
+      .profile-skeleton-body {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0;
+      }
+      .profile-skeleton-left {
+        padding: 22px;
+        border-right: 1px solid var(--gray-100);
+      }
+      .profile-skeleton-right {
+        padding: 22px;
+      }
+      .profile-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+      .profile-item {
+        background: var(--gray-50);
+        border-radius: 12px;
+        padding: 14px 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .pi-label {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--gray-400);
+        letter-spacing: 1px;
+      }
+      .pi-val {
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: var(--gray-900);
+        font-family: "Roboto Mono", monospace;
+      }
+      .pi-val.name-val {
+        font-family: "Noto Sans TC", sans-serif;
+        font-size: 1.15rem;
+      }
+
+      .skeleton-ph {
+        background: var(--gray-50);
+        border-radius: 12px;
+        border: 2px dashed var(--gray-200);
+        min-height: 200px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 28px;
+        height: 100%;
+      }
+      .skeleton-ph i {
+        font-size: 3rem;
+        color: var(--gray-200);
+      }
+      .sph-title {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--gray-400);
+      }
+      .sph-sub {
+        font-size: 0.82rem;
+        color: var(--gray-400);
+        text-align: center;
+        line-height: 1.7;
+      }
+
+      /* ══ 風險等級 ══ */
+      .risk-badge-row {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 16px 20px;
+        background: #fff7ed;
+        border-radius: 12px;
+        border: 1px solid #fed7aa;
+        margin-bottom: 28px;
+      }
+      .risk-badge-icon {
+        width: 46px;
+        height: 46px;
+        background: var(--color-high);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .risk-badge-icon i {
+        font-size: 1.3rem;
+        color: white;
+      }
+      .risk-badge-label {
+        font-size: 0.72rem;
+        font-weight: 900;
+        letter-spacing: 1px;
+        color: #9a3412;
+      }
+      .risk-badge-title {
+        font-size: 1.05rem;
+        font-weight: 900;
+        color: #7c2d12;
+      }
+      .risk-meter {
+        position: relative;
+        padding: 0 4px;
+        margin-top: 56px;
+        margin-bottom: 8px;
+      }
+      .risk-bar {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 6px;
+        height: 26px;
+        border-radius: 6px;
+        overflow: hidden;
+      }
+      .risk-seg {
+        opacity: 0.35;
+        transition: opacity 0.3s;
+      }
+      .risk-seg.low2 {
+        background: var(--color-low2);
+      }
+      .risk-seg.low {
+        background: var(--color-low);
+      }
+      .risk-seg.medium {
+        background: var(--color-medium);
+      }
+      .risk-seg.high {
+        background: var(--color-high);
+      }
+      .risk-seg.danger {
+        background: var(--color-danger);
+      }
+      .risk-seg.active {
+        opacity: 1;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      }
+      .risk-labels {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        text-align: center;
+        margin-top: 10px;
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: var(--gray-400);
+      }
+      .risk-labels span.active-label {
+        color: var(--gray-900);
+        font-weight: 900;
+      }
+      .risk-indicator {
+        position: absolute;
+        top: -50px;
+        left: 70%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+      }
+      .risk-indicator-pill {
+        background: var(--color-high);
+        color: white;
+        font-size: 0.8rem;
+        font-weight: 900;
+        padding: 4px 14px;
+        border-radius: 100px;
+        white-space: nowrap;
+      }
+      .risk-indicator i {
+        color: var(--color-high);
+        font-size: 1rem;
+      }
+
+      /* ══ 步態數據 ══ */
+      .gait-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      @media (min-width: 1024px) {
+        .gait-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media (max-width: 480px) {
+        .gait-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .gait-item {
+        background: var(--gray-50);
+        border-radius: 12px;
+        padding: 18px;
+      }
+      .gait-item-label {
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: var(--gray-400);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 10px;
+      }
+      .gait-big-val {
+        font-family: "Roboto Mono", monospace;
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--gray-900);
+        line-height: 1;
+        margin-bottom: 10px;
+      }
+      .gait-big-val .unit {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--gray-400);
+        margin-left: 2px;
+      }
+      .gait-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        padding: 4px 12px;
+        border-radius: 100px;
+      }
+      .gait-pill.good {
+        background: var(--green-50);
+        color: var(--green-600);
+      }
+      .gait-pill.warning {
+        background: #fff7ed;
+        color: var(--orange-500);
+      }
+      .gait-pill.bad {
+        background: #fef2f2;
+        color: var(--red-500);
+      }
+      .sway-track {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 4px;
+        height: 6px;
+        border-radius: 3px;
+        overflow: hidden;
+        margin: 10px 0 6px;
+      }
+      .sway-seg {
+        background: var(--gray-200);
+        border-radius: 3px;
+      }
+      .sway-seg.s-low {
+        background: var(--green-500);
+      }
+      .sway-seg.s-medium {
+        background: var(--orange-500);
+      }
+      .sway-seg.s-high {
+        background: var(--red-500);
+      }
+      .sway-labels {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: var(--gray-400);
+        text-align: center;
+        margin-bottom: 8px;
+      }
+      .sway-labels .sl-low {
+        color: var(--green-600);
+      }
+      .sway-labels .sl-medium {
+        color: var(--orange-500);
+      }
+      .sway-labels .sl-high {
+        color: var(--red-500);
+      }
+
+      /* ══ ③ 合併：行動建議 + 衛教 ══ */
+      /* 行動建議改為 tabs 依風險等級切換 */
+      .risk-tabs {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        margin-bottom: 18px;
+      }
+      .risk-tab {
+        padding: 6px 16px;
+        border-radius: 100px;
+        font-size: 0.82rem;
+        font-weight: 700;
+        border: 2px solid transparent;
+        cursor: pointer;
+        transition: all 0.15s;
+        font-family: "Noto Sans TC", sans-serif;
+      }
+      .risk-tab[data-level="low2"] {
+        background: #e8fff0;
+        color: #1a7a00;
+        border-color: var(--color-low2);
+      }
+      .risk-tab[data-level="low"] {
+        background: #f0ffe0;
+        color: #3a7000;
+        border-color: var(--color-low);
+      }
+      .risk-tab[data-level="medium"] {
+        background: #fff9e0;
+        color: #7a5800;
+        border-color: var(--color-medium);
+      }
+      .risk-tab[data-level="high"] {
+        background: #fff3e0;
+        color: #7a3800;
+        border-color: var(--color-high);
+      }
+      .risk-tab[data-level="danger"] {
+        background: #fff0f0;
+        color: #7a0000;
+        border-color: var(--color-danger);
+      }
+      .risk-tab.active[data-level="low2"] {
+        background: var(--color-low2);
+        color: #1a4a00;
+      }
+      .risk-tab.active[data-level="low"] {
+        background: var(--color-low);
+        color: #2a5000;
+      }
+      .risk-tab.active[data-level="medium"] {
+        background: var(--color-medium);
+        color: #5a3a00;
+      }
+      .risk-tab.active[data-level="high"] {
+        background: var(--color-high);
+        color: white;
+      }
+      .risk-tab.active[data-level="danger"] {
+        background: var(--color-danger);
+        color: white;
+      }
+
+      .action-panel {
+        display: none;
+      }
+      .action-panel.active {
+        display: block;
+      }
+
+      .action-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .action-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        background: var(--gray-50);
+        border-radius: 12px;
+        padding: 16px;
+        border-left: 3px solid var(--blue-500);
+      }
+      .action-item.level-low2 {
+        border-left-color: var(--color-low2);
+      }
+      .action-item.level-low {
+        border-left-color: var(--color-low);
+      }
+      .action-item.level-medium {
+        border-left-color: var(--color-medium);
+      }
+      .action-item.level-high {
+        border-left-color: var(--color-high);
+      }
+      .action-item.level-danger {
+        border-left-color: var(--color-danger);
+      }
+      .action-num {
+        flex-shrink: 0;
+        width: 30px;
+        height: 30px;
+        background: var(--blue-600);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.78rem;
+        font-weight: 900;
+        color: white;
+        font-family: "Roboto Mono", monospace;
+      }
+      .action-title {
+        font-size: 0.95rem;
+        font-weight: 900;
+        color: var(--gray-900);
+        margin-bottom: 3px;
+      }
+      .action-desc {
+        font-size: 0.85rem;
+        color: var(--gray-600);
+        line-height: 1.65;
+      }
+
+      /* 衛教（在同一個 card 內） */
+      .card-divider {
+        height: 1px;
+        background: var(--gray-100);
+        margin: 24px 0;
+      }
+      .card-sub-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.88rem;
+        font-weight: 900;
+        color: var(--gray-600);
+        letter-spacing: 1px;
+        margin-bottom: 14px;
+      }
+      .card-sub-title i {
+        color: var(--blue-500);
+      }
+
+      .edu-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 16px;
+      }
+      .edu-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        padding: 14px 16px;
+        background: var(--gray-50);
+        border-radius: 12px;
+      }
+      .edu-icon {
+        width: 38px;
+        height: 38px;
+        flex-shrink: 0;
+        background: var(--blue-50);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .edu-icon i {
+        font-size: 1rem;
+        color: var(--blue-600);
+      }
+      .edu-title {
+        font-size: 0.92rem;
+        font-weight: 900;
+        color: var(--gray-900);
+        margin-bottom: 2px;
+      }
+      .edu-desc {
+        font-size: 0.83rem;
+        color: var(--gray-600);
+        line-height: 1.65;
+      }
+      .closing {
+        background: var(--blue-50);
+        border-radius: 12px;
+        border-left: 4px solid var(--blue-500);
+        padding: 16px 18px;
+        font-size: 0.9rem;
+        color: #1e40af;
+        line-height: 1.8;
+        font-weight: 500;
+      }
+
+      /* ══ MODAL ══ */
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.65);
+        backdrop-filter: blur(4px);
+        z-index: 200;
+        display: none;
+        align-items: flex-end;
+        justify-content: center;
+        animation: overlayIn 0.25s ease;
+      }
+      .modal-overlay.show {
+        display: flex;
+      }
+      @keyframes overlayIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      .modal-sheet {
+        background: white;
+        width: 100%;
+        max-width: 680px;
+        border-radius: 24px 24px 0 0;
+        padding: 12px 28px 44px;
+        animation: sheetUp 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      @keyframes sheetUp {
+        from {
+          transform: translateY(100%);
+        }
+        to {
+          transform: translateY(0);
+        }
+      }
+      .modal-handle {
+        width: 40px;
+        height: 4px;
+        background: var(--gray-200);
+        border-radius: 2px;
+        margin: 0 auto 22px;
+      }
+      .modal-icon-wrap {
+        width: 76px;
+        height: 76px;
+        background: var(--blue-50);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 16px;
+      }
+      .modal-icon-wrap i {
+        font-size: 2.2rem;
+        color: var(--blue-600);
+      }
+      .modal-title {
+        font-size: 1.35rem;
+        font-weight: 900;
+        color: var(--gray-900);
+        text-align: center;
+        margin-bottom: 8px;
+      }
+      .modal-desc {
+        font-size: 0.95rem;
+        color: var(--gray-600);
+        text-align: center;
+        line-height: 1.75;
+        margin-bottom: 6px;
+      }
+      .modal-hint {
+        font-size: 0.8rem;
+        color: var(--gray-400);
+        text-align: center;
+        margin-bottom: 28px;
+        line-height: 1.6;
+      }
+      .modal-btn-group {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .modal-btn {
+        height: 58px;
+        border-radius: 14px;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        border: none;
+        font-family: "Noto Sans TC", sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: opacity 0.15s;
+      }
+      .modal-btn:active {
+        opacity: 0.8;
+      }
+      .modal-btn-save {
+        background: var(--blue-600);
+        color: white;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+      }
+      .modal-btn-cancel {
+        background: var(--gray-100);
+        color: var(--gray-600);
+      }
+
+      /* ══ RWD ══ */
+      @media (min-width: 768px) {
+        .page {
+          padding: 32px 32px 60px;
+        }
+        .hero-title {
+          font-size: 2.4rem;
+        }
+        /* 平板：profile-grid 固定 2欄 */
+        .profile-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        /* 平板：基本資料+骨架圖 card 維持左右分欄 */
+        .profile-skeleton-body {
+          grid-template-columns: 1fr 1fr;
+        }
+        .profile-skeleton-left {
+          border-right: 1px solid var(--gray-100);
+          border-bottom: none;
+        }
+        .modal-sheet {
+          border-radius: 24px 24px 0 0;
+        }
+        .modal-overlay {
+          align-items: flex-end;
+        }
+      }
+      @media (min-width: 1024px) {
+        .page {
+          padding: 36px 48px 72px;
+        }
+        .two-col {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 24px;
+          align-items: start;
+        }
+        .two-col-left {
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+        }
+        .two-col-right {
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+        }
+        .two-col .section-label {
+          margin-bottom: -6px;
+        }
+        /* 桌機：profile-grid 固定 2欄 */
+        .profile-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .modal-overlay {
+          align-items: center;
+        }
+        .modal-sheet {
+          border-radius: 24px;
+          max-width: 500px;
+          padding-bottom: 32px;
+        }
+      }
+      /* 手機：基本資料+骨架圖 上下堆疊 */
+      @media (max-width: 767px) {
+        .profile-skeleton-body {
+          grid-template-columns: 1fr;
+        }
+        .profile-skeleton-left {
+          border-right: none;
+          border-bottom: 1px solid var(--gray-100);
+        }
+        /* 手機：profile-grid 1欄 */
+        .profile-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media (max-width: 480px) {
+        .report-hero {
+          flex-direction: column;
+          padding: 24px 20px;
+        }
+        .hero-title {
+          font-size: 1.7rem;
+        }
+        .gait-grid {
+          grid-template-columns: 1fr;
+        }
+        .flow-content {
+          padding: 0 16px 28px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ── MODAL ── -->
+    <div class="modal-overlay show" id="saveModal">
+      <div class="modal-sheet">
+        <div class="modal-handle"></div>
+        <div class="modal-icon-wrap"><i class="fa-solid fa-images"></i></div>
+        <div class="modal-title">儲存分析報告</div>
+        <div class="modal-desc">
+          是否將此份<strong>步態分析報告</strong>儲存為圖片？
+        </div>
+        <div class="modal-hint">
+          報告將以圖檔方式存入您的相簿，<br />方便日後查閱或與家人分享。
+        </div>
+        <div class="modal-btn-group">
+          <button class="modal-btn modal-btn-save" onclick="saveReport()">
+            <i class="fa-solid fa-download"></i>儲存至相簿
+          </button>
+          <button class="modal-btn modal-btn-cancel" onclick="closeModal()">
+            略過，直接查看報告
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TOP NAV ── -->
+    <nav class="top-nav">
+      <div class="nav-logo"><img src="/assets/logo.png" alt="FongAI" /></div>
+      <div class="nav-title">Fong<span>AI</span> 步態分析</div>
+      <div class="nav-partner">
+        <img src="/assets/NTPC_Health.png" alt="新北市衛生局" />
+      </div>
+    </nav>
+
+    <div class="page">
+      <!-- ① HERO -->
+      <div class="report-hero">
+        <div class="hero-left">
+          <div class="hero-eyebrow">DETAILED WALK ANALYSIS REPORT</div>
+          <div class="hero-title">步態分析<br />詳細報告</div>
+          <div class="hero-meta">
+            <span class="hero-chip"
+              ><i class="fa-solid fa-calendar-days"></i>2026.06.09</span
+            >
+          </div>
+          <button class="hero-save-btn" onclick="triggerSave()">
+            <i class="fa-solid fa-download"></i>
+            <span>
+              儲存此報告
+              <span class="btn-sub">點擊儲存圖片至相簿</span>
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ② 基本資料 + 骨架圖（同一 card，左右分欄） -->
+      <div class="section-label">個人資訊與骨架分析</div>
+      <div class="card">
+        <div class="card-title-row">
+          <div class="card-title-icon"><i class="fa-solid fa-id-card"></i></div>
+          <div>
+            <div class="ct-label">PERSONAL INFO & SKELETAL ANALYSIS</div>
+            <div class="ct-title">基本資料與骨架分析圖</div>
+          </div>
+        </div>
+        <div class="profile-skeleton-body">
+          <!-- 左：基本資料 -->
+          <div class="profile-skeleton-left">
+            <div class="profile-grid">
+              <div class="profile-item">
+                <div class="pi-label">姓名</div>
+                <div class="pi-val name-val">王小明</div>
+              </div>
+              <div class="profile-item">
+                <div class="pi-label">性別</div>
+                <div class="pi-val">女性</div>
+              </div>
+              <div class="profile-item">
+                <div class="pi-label">出生年月日</div>
+                <div class="pi-val">1938.05.12</div>
+              </div>
+              <div class="profile-item">
+                <div class="pi-label">檢測日期</div>
+                <div class="pi-val">2026.06.09</div>
+              </div>
+            </div>
+          </div>
+          <!-- 右：骨架圖 -->
+          <div class="profile-skeleton-right">
+            <div class="skeleton-ph">
+              <i class="fa-solid fa-person-rays"></i>
+              <div class="sph-title">骨架分析圖顯示區域</div>
+              <div class="sph-sub">
+                此區塊將顯示 AI 動態骨架偵測結果<br />包含關節角度、重心分布與步態軌跡
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 風險評估（全寬） -->
+      <div class="section-label">風險評估</div>
+      <div class="card">
+        <div class="card-title-row">
+          <div class="card-title-icon">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+          </div>
+          <div>
+            <div class="ct-label">FALL RISK ASSESSMENT</div>
+            <div class="ct-title">跌倒風險等級評估</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="risk-badge-row">
+            <div class="risk-badge-icon">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <div>
+              <div class="risk-badge-label">CURRENT LEVEL</div>
+              <div class="risk-badge-title">目前風險等級：高風險</div>
+            </div>
+          </div>
+          <div class="risk-meter">
+            <div class="risk-indicator">
+              <div class="risk-indicator-pill">您目前的程度</div>
+              <i class="fa-solid fa-caret-down"></i>
+            </div>
+            <div class="risk-bar">
+              <div class="risk-seg low2"></div>
+              <div class="risk-seg low"></div>
+              <div class="risk-seg medium"></div>
+              <div class="risk-seg high active"></div>
+              <div class="risk-seg danger"></div>
+            </div>
+            <div class="risk-labels">
+              <span>低</span><span>中低</span><span>中</span>
+              <span class="active-label">高</span><span>危險</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 步態指標（全寬） -->
+      <div class="section-label">步態指標</div>
+      <div class="card">
+        <div class="card-title-row">
+          <div class="card-title-icon">
+            <i class="fa-solid fa-person-walking"></i>
+          </div>
+          <div>
+            <div class="ct-label">GAIT METRICS</div>
+            <div class="ct-title">步態數據指標</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="gait-grid">
+            <!-- 步行速度 -->
+            <div class="gait-item">
+              <div class="gait-item-label">
+                <i class="fa-solid fa-gauge-high"></i>步行速度
+              </div>
+              <div class="gait-big-val">90<span class="unit">cm/s</span></div>
+              <div class="gait-pill good">
+                <i class="fa-solid fa-circle-check"></i>正常範圍
+              </div>
+            </div>
+            <!-- 身體晃動：輕微 -->
+            <div class="gait-item">
+              <div class="gait-item-label">
+                <i class="fa-solid fa-arrows-left-right"></i>身體晃動程度 ──
+                輕微
+              </div>
+              <div
+                class="gait-big-val"
+                style="
+                  font-size: 1.5rem;
+                  font-family: &quot;Noto Sans TC&quot;, sans-serif;
+                "
+              >
+                輕微
+              </div>
+              <div class="sway-track">
+                <div class="sway-seg s-low"></div>
+                <div class="sway-seg"></div>
+                <div class="sway-seg"></div>
+              </div>
+              <div class="sway-labels">
+                <span class="sl-low">輕微 ✓</span><span>中</span><span>高</span>
+              </div>
+              <div class="gait-pill good">
+                <i class="fa-solid fa-circle-check"></i>良好
+              </div>
+            </div>
+            <!-- 身體晃動：中 -->
+            <div class="gait-item">
+              <div class="gait-item-label">
+                <i class="fa-solid fa-arrows-left-right"></i>身體晃動程度 ── 中
+              </div>
+              <div
+                class="gait-big-val"
+                style="
+                  font-size: 1.5rem;
+                  font-family: &quot;Noto Sans TC&quot;, sans-serif;
+                "
+              >
+                中
+              </div>
+              <div class="sway-track">
+                <div class="sway-seg"></div>
+                <div class="sway-seg s-medium"></div>
+                <div class="sway-seg"></div>
+              </div>
+              <div class="sway-labels">
+                <span>輕微</span><span class="sl-medium">中 ✓</span
+                ><span>高</span>
+              </div>
+              <div class="gait-pill warning">
+                <i class="fa-solid fa-triangle-exclamation"></i>需注意
+              </div>
+            </div>
+            <!-- 身體晃動：高 -->
+            <div class="gait-item">
+              <div class="gait-item-label">
+                <i class="fa-solid fa-arrows-left-right"></i>身體晃動程度 ── 高
+              </div>
+              <div
+                class="gait-big-val"
+                style="
+                  font-size: 1.5rem;
+                  font-family: &quot;Noto Sans TC&quot;, sans-serif;
+                "
+              >
+                高
+              </div>
+              <div class="sway-track">
+                <div class="sway-seg"></div>
+                <div class="sway-seg"></div>
+                <div class="sway-seg s-high"></div>
+              </div>
+              <div class="sway-labels">
+                <span>輕微</span><span>中</span
+                ><span class="sl-high">高 ✓</span>
+              </div>
+              <div class="gait-pill bad">
+                <i class="fa-solid fa-circle-exclamation"></i>危險
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 行動建議與衛教資訊（全寬獨立區塊） -->
+      <div class="section-label">行動建議與衛教資訊</div>
+      <div class="card">
+        <div class="card-title-row">
+          <div class="card-title-icon">
+            <i class="fa-solid fa-list-check"></i>
+          </div>
+          <div>
+            <div class="ct-label">NEXT STEPS & HEALTH EDUCATION</div>
+            <div class="ct-title">下一步行動建議與衛教資訊</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <!-- ── 行動建議（依風險等級 tabs）── -->
+          <div class="card-sub-title">
+            <i class="fa-solid fa-list-check"></i>依風險等級查看行動建議
+          </div>
+          <div class="risk-tabs">
+            <button
+              class="risk-tab"
+              data-level="low2"
+              onclick="switchTab('low2')"
+            >
+              低
+            </button>
+            <button
+              class="risk-tab"
+              data-level="low"
+              onclick="switchTab('low')"
+            >
+              中低
+            </button>
+            <button
+              class="risk-tab"
+              data-level="medium"
+              onclick="switchTab('medium')"
+            >
+              中
+            </button>
+            <button
+              class="risk-tab active"
+              data-level="high"
+              onclick="switchTab('high')"
+            >
+              高
+            </button>
+            <button
+              class="risk-tab"
+              data-level="danger"
+              onclick="switchTab('danger')"
+            >
+              危險
+            </button>
+          </div>
+
+          <!-- 低風險 -->
+          <div class="action-panel" id="panel-low2">
+            <div class="action-list">
+              <div class="action-item level-low2">
+                <div class="action-num">1</div>
+                <div>
+                  <div class="action-title">維持良好的日常活動</div>
+                  <div class="action-desc">
+                    目前步態表現優異，建議持續每日散步 30
+                    分鐘以上，維持肌力與心肺功能。
+                  </div>
+                </div>
+              </div>
+              <div class="action-item level-low2">
+                <div class="action-num">2</div>
+                <div>
+                  <div class="action-title">定期自我健康檢測</div>
+                  <div class="action-desc">
+                    每 3 個月進行一次步態分析，追蹤身體機能變化，做到早期預防。
+                  </div>
+                </div>
+              </div>
+              <div class="action-item level-low2">
+                <div class="action-num">3</div>
+                <div>
+                  <div class="action-title">參加社區健康促進課程</div>
+                  <div class="action-desc">
+                    可加入社區長者健康課程或舞蹈、太極等活動，增進社交互動與身體協調性。
+                  </div>
+                </div>
+              </div>
+              <div class="action-item level-low2">
+                <div class="action-num">4</div>
+                <div>
+                  <div class="action-title">持續均衡飲食與補充營養</div>
+                  <div class="action-desc">
+                    攝取足夠蛋白質、鈣質與維生素
+                    D，鞏固骨骼與肌肉基礎，為長期健康提供支撐。
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 中低風險 -->
+          <div class="action-panel" id="panel-low">
+            <div class="action-list">
+              <div class="action-item level-low">
+                <div class="action-num">1</div>
+                <div>
+                  <div class="action-title">開始預防性平衡訓練</div>
+                  <div class="action-desc">
+                    每日進行 10
+                    分鐘平衡練習，如扶椅站立、踮腳尖等，可有效提升穩定性。
+                  </div>
+                </div>
+              </div>
+              <div class="action-item level-low">
+                <div class="action-num">2</div>
+                <div>
+                  <div class="action-title">諮詢物理治療師</div>
+                  <div class="action-desc">
+                    建議安排一次物理治療評估，了解個人弱點，制定客製化訓練計畫。
+                  </div>
+                </div>
+              </div>
+              <div class="action-item level-low">
+                <div class="action-num">3</div>
+                <div>
+                  <div class="action-title">檢視居家環境</div>
+                  <div class="action-desc">
+                    確認常用動線的照明與防滑狀況，浴室建議加裝扶手，減少潛在跌倒風險。
+                  </div>
+                </div>
+              </div>
+              <div class="action-item level-low">
+                <div class="action-num">4</div>
+                <div>
+                  <div class="action-title">每 2 個月追蹤步態變化</div>
+                  <div class="action-desc">
+                    定期回測可即時察覺功能退化趨勢，提早介入避免風險等級上升。
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 中風險 -->
+          <div class="action-panel" id="panel-medium">
+            <div class="action-list">
+              <div class="action-item level-medium">
+                <div class="action-num">1</div>
+                <div>
+                  <div class="action-title">安排物理治療課程</div>
+                  <div class="action-desc">
+                    建議每週接受 1～2
+                    次物理治療，針對下肢肌力、平衡感與步態穩定進行系統訓練。
+                  </div>
+                </div>
+              </div>
+              <div class="action-item level-medium">
+                <div class="action-num">2</div>
+                <div>
+                  <div class="action-title">考慮使用輔助器具</div>
+                  <div class="action-desc">
+                    外出時可依需求使用手杖或助行器，降低長途行走時的不穩定風險。
+                  </div>
+                </div>
+              </div>
+              <div class="action-item level-medium">
+                <div class="action-num">3</div>
+                <div>
+                  <div class="action-title">進行居家安全改造</div>
+                  <div class="action-desc">
+                    浴室、走廊、床邊加裝扶手，移除地面障礙物，夜間保持足夠照明。
+                  </div>
+                </div>
+              </div>
+              <div class="action-item level-medium">
+                <div class="action-num">4</div>
+                <div>
+                  <div class="action-title">前往家醫科進行評估</div>
+                  <div class="action-desc">
+                    請醫師全面審視目前慢性病用藥、視力與骨質狀況，排除可矯正的跌倒危險因子。
+                  </div>
+                </div>
+              </div>
+              <div class="action-item level-medium">
+                <div class="action-num">5</div>
+                <div>
+                  <div class="action-title">每 4～6 週追蹤步態</div>
+                  <div class="action-desc">
+                    持續監測步態數據，調整訓練方向，確認介入成效。
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 高風險（預設顯示） -->
+          <div class="action-panel active" id="panel-high">
+            <div class="action-list">
+              <div class="action-item level-high">
+                <div class="action-num">1</div>
+                <div>
+                  <div class="action-title">儘速安排醫療諮詢</div>
+                  <div class="action-desc">
+                    建議於兩週內前往板橋區衛生所家醫科，攜帶本報告讓醫師進行專業評估與建議。
+                  </div>
+                </div>
+              </div>
+              <div class="action-item level-high">
+                <div class="action-num">2</div>
+                <div>
+                  <div class="action-title">開始居家平衡訓練</div>
+                  <div class="action-desc">
+                    每日進行 10～15
+                    分鐘平衡與下肢肌力訓練，可從扶椅站立、單腳站立等簡單動作開始。
+                  </div>
+                </div>
+              </div>
+              <div class="action-item level-high">
+                <div class="action-num">3</div>
+                <div>
+                  <div class="action-title">改善居家環境安全</div>
+                  <div class="action-desc">
+                    檢視浴室、走廊、床邊是否有扶手，移除地面障礙物，確保照明充足以降低跌倒風險。
+                  </div>
+                </div>
+              </div>
+              <div class="action-item level-high">
+                <div class="action-num">4</div>
+                <div>
+                  <div class="action-title">定期回測追蹤進步</div>
+                  <div class="action-desc">
+                    建議每 4～6
+                    週回來進行一次步態分析，追蹤改善成效，及早調整訓練計畫。
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 危險 -->
+          <div class="action-panel" id="panel-danger">
+            <div class="action-list">
+              <div class="action-item level-danger">
+                <div class="action-num">1</div>
+                <div>
+                  <div class="action-title">立即安排醫療評估</div>
+                  <div class="action-desc">
+                    請勿延誤，本週內攜帶此報告至醫院老年醫學科或神經科進行完整評估，確認跌倒根本原因。
+                  </div>
+                </div>
+              </div>
+              <div class="action-item level-danger">
+                <div class="action-num">2</div>
+                <div>
+                  <div class="action-title">全天候使用輔助器具</div>
+                  <div class="action-desc">
+                    室內外行走均建議使用手杖或助行器，並告知家人目前狀況，避免獨自進行高風險活動。
+                  </div>
+                </div>
+              </div>
+              <div class="action-item level-danger">
+                <div class="action-num">3</div>
+                <div>
+                  <div class="action-title">立即進行居家全面安全改造</div>
+                  <div class="action-desc">
+                    馬桶旁、浴缸旁、床邊、樓梯均需加裝扶手；移除所有地面障礙物（地毯、電線）；全室夜間保持夜燈照明。
+                  </div>
+                </div>
+              </div>
+              <div class="action-item level-danger">
+                <div class="action-num">4</div>
+                <div>
+                  <div class="action-title">規劃專業復健療程</div>
+                  <div class="action-desc">
+                    由物理治療師每週指導 2～3
+                    次密集復健，優先改善平衡、步態穩定與下肢肌力。
+                  </div>
+                </div>
+              </div>
+              <div class="action-item level-danger">
+                <div class="action-num">5</div>
+                <div>
+                  <div class="action-title">建立緊急聯絡機制</div>
+                  <div class="action-desc">
+                    設定緊急呼叫裝置或手機一鍵撥號，並告知家人或鄰居每日確認安全，避免跌倒後無人即時協助。
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 分隔線 -->
+          <div class="card-divider"></div>
+
+          <!-- ── 衛教資訊 ── -->
+          <div class="card-sub-title">
+            <i class="fa-solid fa-heart-pulse"></i>衛教資訊
+          </div>
+          <div class="edu-list">
+            <div class="edu-item">
+              <div class="edu-icon">
+                <i class="fa-solid fa-shoe-prints"></i>
+              </div>
+              <div>
+                <div class="edu-title">穿著合適鞋具</div>
+                <div class="edu-desc">
+                  選擇防滑、包覆性佳的鞋子，避免穿拖鞋或高跟鞋外出，可有效減少跌倒發生。
+                </div>
+              </div>
+            </div>
+            <div class="edu-item">
+              <div class="edu-icon"><i class="fa-solid fa-pills"></i></div>
+              <div>
+                <div class="edu-title">定期審視用藥</div>
+                <div class="edu-desc">
+                  部分藥物可能影響平衡感與反應力，請定期與醫師討論目前用藥是否需要調整。
+                </div>
+              </div>
+            </div>
+            <div class="edu-item">
+              <div class="edu-icon">
+                <i class="fa-solid fa-apple-whole"></i>
+              </div>
+              <div>
+                <div class="edu-title">均衡營養補充</div>
+                <div class="edu-desc">
+                  攝取足夠的鈣質、維生素 D
+                  與蛋白質，有助於維持骨骼強度與肌肉量，降低骨折風險。
+                </div>
+              </div>
+            </div>
+            <div class="edu-item">
+              <div class="edu-icon"><i class="fa-solid fa-eye"></i></div>
+              <div>
+                <div class="edu-title">定期視力檢查</div>
+                <div class="edu-desc">
+                  視力退化是跌倒的重要風險因子之一，建議每年進行視力檢查，確認眼鏡度數是否合適。
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="closing">
+            <i class="fa-solid fa-circle-info" style="margin-right: 6px"></i>
+            本報告由 FongAI
+            步態分析系統自動產生，僅供健康參考使用，不作為醫療診斷依據。如有任何疑問，請洽專業醫療人員進行進一步評估。感謝您使用
+            FongAI 健康服務，祝您身體健康、步伐穩健！
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /page -->
+
+    <script>
+      function closeModal() {
+        document.getElementById("saveModal").classList.remove("show");
+      }
+      function saveReport() {
+        closeModal();
+        alert("報告已儲存至相簿！");
+      }
+      function triggerSave() {
+        document.getElementById("saveModal").classList.add("show");
+      }
+      function switchTab(level) {
+        document
+          .querySelectorAll(".risk-tab")
+          .forEach((t) => t.classList.remove("active"));
+        document
+          .querySelectorAll(".action-panel")
+          .forEach((p) => p.classList.remove("active"));
+        document
+          .querySelector(`.risk-tab[data-level="${level}"]`)
+          .classList.add("active");
+        document.getElementById(`panel-${level}`).classList.add("active");
+      }
+    </script>
+  </body>
+</html>
