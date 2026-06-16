@@ -372,25 +372,30 @@
         line-height: 1.7;
       }
 
+      /* ── 風險評估 ── */
       .risk-badge-row {
         display: flex;
         align-items: center;
         gap: 14px;
         padding: 16px 20px;
-        background: #fff7ed;
         border-radius: 12px;
         border: 1px solid #fed7aa;
         margin-bottom: 28px;
+        background: #fff7ed;
+        transition:
+          background 0.2s,
+          border-color 0.2s;
       }
       .risk-badge-icon {
         width: 46px;
         height: 46px;
-        background: var(--color-high);
         border-radius: 12px;
         display: flex;
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
+        background: var(--color-high);
+        transition: background 0.2s;
       }
       .risk-badge-icon i {
         font-size: 1.3rem;
@@ -406,7 +411,61 @@
         font-size: 1.05rem;
         font-weight: 900;
         color: #7c2d12;
+        transition: color 0.2s;
       }
+
+      /* 風險等級切換按鈕 */
+      .risk-level-switcher {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+      }
+      .risk-level-btn {
+        flex: 1;
+        min-width: 52px;
+        padding: 7px 6px;
+        border-radius: 8px;
+        border: 2px solid var(--gray-200);
+        background: white;
+        font-size: 0.8rem;
+        font-weight: 700;
+        font-family: "Noto Sans TC", sans-serif;
+        cursor: pointer;
+        color: var(--gray-600);
+        text-align: center;
+        transition: all 0.15s;
+      }
+      .risk-level-btn:hover {
+        border-color: var(--gray-400);
+        color: var(--gray-900);
+      }
+      .risk-level-btn.active[data-level="low2"] {
+        background: var(--color-low2);
+        border-color: var(--color-low2);
+        color: #1a4a00;
+      }
+      .risk-level-btn.active[data-level="low"] {
+        background: var(--color-low);
+        border-color: var(--color-low);
+        color: #2a5000;
+      }
+      .risk-level-btn.active[data-level="medium"] {
+        background: var(--color-medium);
+        border-color: var(--color-medium);
+        color: #5a3a00;
+      }
+      .risk-level-btn.active[data-level="high"] {
+        background: var(--color-high);
+        border-color: var(--color-high);
+        color: white;
+      }
+      .risk-level-btn.active[data-level="danger"] {
+        background: var(--color-danger);
+        border-color: var(--color-danger);
+        color: white;
+      }
+
       .risk-meter {
         position: relative;
         padding: 0 4px;
@@ -421,9 +480,9 @@
         border-radius: 6px;
         overflow: hidden;
       }
+      /* ── 移除 opacity，色塊全部完整顯示 ── */
       .risk-seg {
-        opacity: 0.35;
-        transition: opacity 0.3s;
+        transition: box-shadow 0.2s;
       }
       .risk-seg.low2 {
         background: var(--color-low2);
@@ -441,8 +500,7 @@
         background: var(--color-danger);
       }
       .risk-seg.active {
-        opacity: 1;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.25) inset;
       }
       .risk-labels {
         display: grid;
@@ -460,27 +518,31 @@
       .risk-indicator {
         position: absolute;
         top: -50px;
-        left: 70%;
+        left: 10%;
         transform: translateX(-50%);
         display: flex;
         flex-direction: column;
         align-items: center;
         gap: 4px;
+        transition: left 0.3s;
       }
       .risk-indicator-pill {
-        background: var(--color-high);
         color: white;
         font-size: 0.8rem;
         font-weight: 900;
         padding: 4px 14px;
         border-radius: 100px;
         white-space: nowrap;
+        background: var(--color-low2);
+        transition: background 0.2s;
       }
       .risk-indicator i {
-        color: var(--color-high);
         font-size: 1rem;
+        color: var(--color-low2);
+        transition: color 0.2s;
       }
 
+      /* ── 步態數據 ── */
       .gait-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -873,7 +935,6 @@
         display: block;
       }
 
-      /* ── 三種排版方案 CSS ── */
       .img-ph {
         width: 100%;
         height: 160px;
@@ -974,7 +1035,6 @@
         line-height: 1.8;
         font-weight: 500;
       }
-
       .email-block {
         margin-top: 20px;
         background: var(--gray-50);
@@ -1377,30 +1437,76 @@
           </div>
         </div>
         <div class="card-body">
-          <div class="risk-badge-row">
-            <div class="risk-badge-icon">
+          <!-- 5 個切換按鈕 -->
+          <div class="risk-level-switcher">
+            <button
+              class="risk-level-btn"
+              data-level="low2"
+              onclick="switchRiskLevel('low2')"
+            >
+              低
+            </button>
+            <button
+              class="risk-level-btn"
+              data-level="low"
+              onclick="switchRiskLevel('low')"
+            >
+              中低
+            </button>
+            <button
+              class="risk-level-btn"
+              data-level="medium"
+              onclick="switchRiskLevel('medium')"
+            >
+              中
+            </button>
+            <button
+              class="risk-level-btn active"
+              data-level="high"
+              onclick="switchRiskLevel('high')"
+            >
+              高
+            </button>
+            <button
+              class="risk-level-btn"
+              data-level="danger"
+              onclick="switchRiskLevel('danger')"
+            >
+              危險
+            </button>
+          </div>
+
+          <div class="risk-badge-row" id="riskBadgeRow">
+            <div class="risk-badge-icon" id="riskBadgeIcon">
               <i class="fa-solid fa-triangle-exclamation"></i>
             </div>
             <div>
               <div class="risk-badge-label">CURRENT LEVEL</div>
-              <div class="risk-badge-title">目前風險等級：高風險</div>
+              <div class="risk-badge-title" id="riskBadgeTitle">
+                目前風險等級：高風險
+              </div>
             </div>
           </div>
           <div class="risk-meter">
-            <div class="risk-indicator">
-              <div class="risk-indicator-pill">您目前的程度</div>
-              <i class="fa-solid fa-caret-down"></i>
+            <div class="risk-indicator" id="riskIndicator">
+              <div class="risk-indicator-pill" id="riskIndicatorPill">
+                您目前的程度
+              </div>
+              <i class="fa-solid fa-caret-down" id="riskIndicatorArrow"></i>
             </div>
             <div class="risk-bar">
-              <div class="risk-seg low2"></div>
-              <div class="risk-seg low"></div>
-              <div class="risk-seg medium"></div>
-              <div class="risk-seg high active"></div>
-              <div class="risk-seg danger"></div>
+              <div class="risk-seg low2" id="rseg-low2"></div>
+              <div class="risk-seg low" id="rseg-low"></div>
+              <div class="risk-seg medium" id="rseg-medium"></div>
+              <div class="risk-seg high active" id="rseg-high"></div>
+              <div class="risk-seg danger" id="rseg-danger"></div>
             </div>
             <div class="risk-labels">
-              <span>低</span><span>中低</span><span>中</span
-              ><span class="active-label">高</span><span>危險</span>
+              <span id="rlbl-low2">低</span>
+              <span id="rlbl-low">中低</span>
+              <span id="rlbl-medium">中</span>
+              <span class="active-label" id="rlbl-high">高</span>
+              <span id="rlbl-danger">危險</span>
             </div>
           </div>
         </div>
@@ -2177,6 +2283,92 @@
     </div>
 
     <script>
+      /* ── 風險等級設定 ── */
+      const riskConfig = {
+        low2: {
+          label: "目前風險等級：低風險",
+          color: "var(--color-low2)",
+          badgeBg: "#f0fff4",
+          badgeBorder: "#86efac",
+          indicatorLeft: "10%",
+          labelId: "rlbl-low2",
+        },
+        low: {
+          label: "目前風險等級：中低風險",
+          color: "var(--color-low)",
+          badgeBg: "#f0ffe0",
+          badgeBorder: "#a3e635",
+          indicatorLeft: "30%",
+          labelId: "rlbl-low",
+        },
+        medium: {
+          label: "目前風險等級：中度風險",
+          color: "var(--color-medium)",
+          badgeBg: "#fffbeb",
+          badgeBorder: "#fde68a",
+          indicatorLeft: "50%",
+          labelId: "rlbl-medium",
+        },
+        high: {
+          label: "目前風險等級：高風險",
+          color: "var(--color-high)",
+          badgeBg: "#fff7ed",
+          badgeBorder: "#fed7aa",
+          indicatorLeft: "70%",
+          labelId: "rlbl-high",
+        },
+        danger: {
+          label: "目前風險等級：危險",
+          color: "var(--color-danger)",
+          badgeBg: "#fef2f2",
+          badgeBorder: "#fecaca",
+          indicatorLeft: "90%",
+          labelId: "rlbl-danger",
+        },
+      };
+
+      function switchRiskLevel(level) {
+        const cfg = riskConfig[level];
+
+        /* 按鈕 active */
+        document
+          .querySelectorAll(".risk-level-btn")
+          .forEach((b) => b.classList.remove("active"));
+        document
+          .querySelector(`.risk-level-btn[data-level="${level}"]`)
+          .classList.add("active");
+
+        /* badge 更新 */
+        const row = document.getElementById("riskBadgeRow");
+        row.style.background = cfg.badgeBg;
+        row.style.borderColor = cfg.badgeBorder;
+        document.getElementById("riskBadgeIcon").style.background = cfg.color;
+        document.getElementById("riskBadgeTitle").textContent = cfg.label;
+
+        /* 色條 active */
+        document
+          .querySelectorAll(".risk-seg")
+          .forEach((s) => s.classList.remove("active"));
+        document.getElementById("rseg-" + level).classList.add("active");
+
+        /* labels active */
+        document
+          .querySelectorAll(".risk-labels span")
+          .forEach((s) => s.classList.remove("active-label"));
+        document.getElementById(cfg.labelId).classList.add("active-label");
+
+        /* 指針位置與顏色 */
+        const indicator = document.getElementById("riskIndicator");
+        const pill = document.getElementById("riskIndicatorPill");
+        const arrow = document.getElementById("riskIndicatorArrow");
+        indicator.style.left = cfg.indicatorLeft;
+        pill.style.background = cfg.color;
+        arrow.style.color = cfg.color;
+      }
+
+      /* 初始化為高風險 */
+      switchRiskLevel("high");
+
       function closeModal() {
         document.getElementById("saveModal").classList.remove("show");
       }
@@ -2187,6 +2379,7 @@
       function triggerSave() {
         document.getElementById("saveModal").classList.add("show");
       }
+
       function switchTab(level) {
         document
           .querySelectorAll(".risk-tab")
@@ -2199,6 +2392,7 @@
           .classList.add("active");
         document.getElementById("panel-" + level).classList.add("active");
       }
+
       function sendReportEmail() {
         const input = document.getElementById("reportEmail");
         const status = document.getElementById("emailStatus");
@@ -2218,6 +2412,7 @@
         status.className = "email-status ok";
         input.value = "";
       }
+
       function switchSway(btn, level) {
         const container = btn.closest(".gait-item");
         container
@@ -2231,6 +2426,7 @@
         btn.classList.add("active-" + level);
         container.querySelector("#sway-" + level).classList.add("active");
       }
+
       function switchSppb(btn, score) {
         const container = btn.closest(".gait-item");
         container
