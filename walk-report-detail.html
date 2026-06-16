@@ -32,14 +32,12 @@
         --green-600: #16a34a;
         --orange-500: #f97316;
         --red-500: #ef4444;
-        /* ① 更新配色 */
         --color-low2: #4ffa00;
         --color-low: #8cff00;
         --color-medium: #ffd039;
         --color-high: #ffa203;
         --color-danger: #ff5757;
       }
-
       *,
       *::before,
       *::after {
@@ -60,7 +58,6 @@
         -webkit-font-smoothing: antialiased;
       }
 
-      /* ══ TOP NAV ══ */
       .top-nav {
         position: fixed;
         top: 0;
@@ -96,7 +93,6 @@
         filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4));
       }
 
-      /* ══ PAGE WRAPPER ══ */
       .page {
         max-width: 1280px;
         margin: 64px auto 0;
@@ -106,7 +102,6 @@
         gap: 20px;
       }
 
-      /* ══ HERO ══ */
       .report-hero {
         background: linear-gradient(
           135deg,
@@ -184,7 +179,6 @@
         font-size: 0.78rem;
         color: var(--blue-200);
       }
-
       .hero-save-btn {
         display: inline-flex;
         align-items: center;
@@ -238,7 +232,6 @@
         }
       }
 
-      /* ══ SECTION LABEL ══ */
       .section-label {
         display: flex;
         align-items: center;
@@ -259,7 +252,6 @@
         flex-shrink: 0;
       }
 
-      /* ══ CARD ══ */
       .card {
         background: white;
         border-radius: 16px;
@@ -305,14 +297,11 @@
         padding: 22px;
       }
 
-      /* ══ 桌機兩欄 ══ */
       .two-col {
         display: grid;
         grid-template-columns: 1fr;
         gap: 20px;
       }
-
-      /* ══ ② 基本資料＋骨架圖合併 card ══ */
       .profile-skeleton-body {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -354,7 +343,6 @@
         font-family: "Noto Sans TC", sans-serif;
         font-size: 1.15rem;
       }
-
       .skeleton-ph {
         background: var(--gray-50);
         border-radius: 12px;
@@ -384,7 +372,6 @@
         line-height: 1.7;
       }
 
-      /* ══ 風險等級 ══ */
       .risk-badge-row {
         display: flex;
         align-items: center;
@@ -494,16 +481,10 @@
         font-size: 1rem;
       }
 
-      /* ══ 步態數據 ══ */
       .gait-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 12px;
-      }
-      @media (min-width: 1024px) {
-        .gait-grid {
-          grid-template-columns: repeat(2, 1fr);
-        }
       }
       @media (max-width: 480px) {
         .gait-grid {
@@ -599,9 +580,114 @@
       .sway-labels .sl-high {
         color: var(--red-500);
       }
+      .gait-desc {
+        font-size: 0.82rem;
+        color: var(--gray-600);
+        line-height: 1.65;
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px solid var(--gray-200);
+      }
 
-      /* ══ ③ 合併：行動建議 + 衛教 ══ */
-      /* 行動建議改為 tabs 依風險等級切換 */
+      .sway-switcher {
+        display: flex;
+        gap: 6px;
+        margin-bottom: 14px;
+      }
+      .sway-btn {
+        flex: 1;
+        padding: 7px 0;
+        border-radius: 8px;
+        border: 2px solid var(--gray-200);
+        background: white;
+        font-size: 0.82rem;
+        font-weight: 700;
+        font-family: "Noto Sans TC", sans-serif;
+        cursor: pointer;
+        color: var(--gray-600);
+        transition: all 0.15s;
+      }
+      .sway-btn:hover {
+        border-color: var(--gray-400);
+        color: var(--gray-900);
+      }
+      .sway-btn.active-low {
+        background: var(--green-50);
+        border-color: var(--green-500);
+        color: var(--green-600);
+      }
+      .sway-btn.active-medium {
+        background: #fff7ed;
+        border-color: var(--orange-500);
+        color: var(--orange-500);
+      }
+      .sway-btn.active-high {
+        background: #fef2f2;
+        border-color: var(--red-500);
+        color: var(--red-500);
+      }
+      .sway-panel {
+        display: none;
+      }
+      .sway-panel.active {
+        display: block;
+      }
+
+      .sppb-switcher {
+        display: flex;
+        gap: 5px;
+        margin-bottom: 14px;
+      }
+      .sppb-btn {
+        flex: 1;
+        padding: 7px 4px;
+        border-radius: 8px;
+        border: 2px solid var(--gray-200);
+        background: white;
+        font-size: 0.8rem;
+        font-weight: 700;
+        font-family: "Noto Sans TC", sans-serif;
+        cursor: pointer;
+        color: var(--gray-600);
+        text-align: center;
+        transition: all 0.15s;
+      }
+      .sppb-btn:hover {
+        border-color: var(--gray-400);
+        color: var(--gray-900);
+      }
+      .sppb-btn.active.s4 {
+        background: var(--green-50);
+        border-color: var(--green-500);
+        color: var(--green-600);
+      }
+      .sppb-btn.active.s3 {
+        background: #f0fff4;
+        border-color: #86efac;
+        color: #15803d;
+      }
+      .sppb-btn.active.s2 {
+        background: #fff7ed;
+        border-color: var(--orange-500);
+        color: var(--orange-500);
+      }
+      .sppb-btn.active.s1 {
+        background: #fef2f2;
+        border-color: var(--red-500);
+        color: var(--red-500);
+      }
+      .sppb-btn.active.s0 {
+        background: #fef2f2;
+        border-color: #7f1d1d;
+        color: #7f1d1d;
+      }
+      .sppb-panel {
+        display: none;
+      }
+      .sppb-panel.active {
+        display: block;
+      }
+
       .risk-tabs {
         display: flex;
         gap: 6px;
@@ -663,14 +749,12 @@
         background: var(--color-danger);
         color: white;
       }
-
       .action-panel {
         display: none;
       }
       .action-panel.active {
         display: block;
       }
-
       .action-list {
         display: flex;
         flex-direction: column;
@@ -726,7 +810,6 @@
         line-height: 1.65;
       }
 
-      /* 衛教（在同一個 card 內） */
       .card-divider {
         height: 1px;
         background: var(--gray-100);
@@ -745,7 +828,6 @@
       .card-sub-title i {
         color: var(--blue-500);
       }
-
       .edu-list {
         display: flex;
         flex-direction: column;
@@ -796,7 +878,210 @@
         font-weight: 500;
       }
 
-      /* ══ MODAL ══ */
+      .email-block {
+        margin-top: 20px;
+        background: var(--gray-50);
+        border-radius: 14px;
+        padding: 20px;
+        border: 1px solid var(--gray-200);
+      }
+      .email-block-title {
+        font-size: 0.95rem;
+        font-weight: 900;
+        color: var(--gray-900);
+        margin-bottom: 6px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .email-block-title i {
+        color: var(--blue-500);
+      }
+      .email-block-desc {
+        font-size: 0.83rem;
+        color: var(--gray-600);
+        margin-bottom: 14px;
+        line-height: 1.6;
+      }
+      .email-input-row {
+        display: flex;
+        gap: 10px;
+      }
+      .email-input {
+        flex: 1;
+        height: 48px;
+        border: 1.5px solid var(--gray-200);
+        border-radius: 10px;
+        padding: 0 16px;
+        font-size: 0.95rem;
+        font-family: "Noto Sans TC", sans-serif;
+        color: var(--gray-900);
+        background: white;
+        outline: none;
+        transition: border-color 0.15s;
+      }
+      .email-input:focus {
+        border-color: var(--blue-500);
+      }
+      .email-send-btn {
+        height: 48px;
+        padding: 0 22px;
+        background: var(--blue-600);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 0.92rem;
+        font-weight: 900;
+        font-family: "Noto Sans TC", sans-serif;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        white-space: nowrap;
+        transition: background 0.15s;
+      }
+      .email-send-btn:hover {
+        background: var(--blue-700);
+      }
+      .email-send-btn:active {
+        opacity: 0.85;
+      }
+      .email-status {
+        margin-top: 10px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        min-height: 20px;
+      }
+      .email-status.ok {
+        color: var(--green-600);
+      }
+      .email-status.err {
+        color: var(--red-500);
+      }
+      @media (max-width: 480px) {
+        .email-input-row {
+          flex-direction: column;
+        }
+        .email-send-btn {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+
+      /* ══ 方案展示專用樣式 ══ */
+      .scheme-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.78rem;
+        font-weight: 900;
+        letter-spacing: 2px;
+        color: var(--blue-600);
+        margin: 20px 0 10px;
+        padding: 6px 12px;
+        background: var(--blue-50);
+        border-radius: 8px;
+        border-left: 3px solid var(--blue-500);
+      }
+      .scheme-label i {
+        font-size: 0.75rem;
+      }
+
+      .img-ph {
+        width: 100%;
+        height: 160px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, var(--blue-100), var(--blue-50));
+        border: 2px dashed var(--blue-200);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin-bottom: 10px;
+      }
+      .img-ph i {
+        font-size: 2rem;
+        color: #60a5fa;
+      }
+      .img-ph-label {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--blue-500);
+        letter-spacing: 1px;
+      }
+      .img-ph-sub {
+        font-size: 0.7rem;
+        color: var(--gray-400);
+      }
+
+      .edu-item-col {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 14px 16px;
+        background: var(--gray-50);
+        border-radius: 12px;
+        margin-bottom: 10px;
+      }
+      .edu-item-col-top {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+      }
+      .img-ph-below {
+        width: 100%;
+        height: 130px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, var(--gray-100), var(--blue-50));
+        border: 2px dashed var(--gray-200);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+      }
+      .img-ph-below i {
+        font-size: 1.6rem;
+        color: #cbd5e1;
+      }
+      .img-ph-below span {
+        font-size: 0.7rem;
+        color: var(--gray-400);
+      }
+
+      .edu-item-side {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 14px 16px;
+        background: var(--gray-50);
+        border-radius: 12px;
+        margin-bottom: 10px;
+      }
+      .edu-img-side {
+        width: 80px;
+        height: 80px;
+        flex-shrink: 0;
+        border-radius: 10px;
+        background: linear-gradient(135deg, var(--blue-100), var(--blue-50));
+        border: 1.5px solid var(--blue-100);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+      }
+      .edu-img-side i {
+        font-size: 1.8rem;
+        color: #60a5fa;
+      }
+      .edu-img-side span {
+        font-size: 0.6rem;
+        color: var(--blue-500);
+        font-weight: 700;
+      }
+
       .modal-overlay {
         position: fixed;
         inset: 0;
@@ -909,7 +1194,6 @@
         color: var(--gray-600);
       }
 
-      /* ══ RWD ══ */
       @media (min-width: 768px) {
         .page {
           padding: 32px 32px 60px;
@@ -917,11 +1201,9 @@
         .hero-title {
           font-size: 2.4rem;
         }
-        /* 平板：profile-grid 固定 2欄 */
         .profile-grid {
           grid-template-columns: repeat(2, 1fr);
         }
-        /* 平板：基本資料+骨架圖 card 維持左右分欄 */
         .profile-skeleton-body {
           grid-template-columns: 1fr 1fr;
         }
@@ -959,7 +1241,6 @@
         .two-col .section-label {
           margin-bottom: -6px;
         }
-        /* 桌機：profile-grid 固定 2欄 */
         .profile-grid {
           grid-template-columns: repeat(2, 1fr);
         }
@@ -972,7 +1253,6 @@
           padding-bottom: 32px;
         }
       }
-      /* 手機：基本資料+骨架圖 上下堆疊 */
       @media (max-width: 767px) {
         .profile-skeleton-body {
           grid-template-columns: 1fr;
@@ -981,7 +1261,6 @@
           border-right: none;
           border-bottom: 1px solid var(--gray-100);
         }
-        /* 手機：profile-grid 1欄 */
         .profile-grid {
           grid-template-columns: 1fr;
         }
@@ -1004,7 +1283,6 @@
     </style>
   </head>
   <body>
-    <!-- ── MODAL ── -->
     <div class="modal-overlay show" id="saveModal">
       <div class="modal-sheet">
         <div class="modal-handle"></div>
@@ -1027,7 +1305,6 @@
       </div>
     </div>
 
-    <!-- ── TOP NAV ── -->
     <nav class="top-nav">
       <div class="nav-logo">
         <img
@@ -1045,7 +1322,7 @@
     </nav>
 
     <div class="page">
-      <!-- ① HERO -->
+      <!-- HERO -->
       <div class="report-hero">
         <div class="hero-left">
           <div class="hero-eyebrow">DETAILED WALK ANALYSIS REPORT</div>
@@ -1057,26 +1334,24 @@
           </div>
           <button class="hero-save-btn" onclick="triggerSave()">
             <i class="fa-solid fa-download"></i>
-            <span>
-              儲存此報告
-              <span class="btn-sub">點擊儲存圖片至相簿</span>
-            </span>
+            <span
+              >儲存此報告<span class="btn-sub">點擊儲存圖片至相簿</span></span
+            >
           </button>
         </div>
       </div>
 
-      <!-- ② 基本資料 + 骨架圖（同一 card，左右分欄） -->
+      <!-- 基本資料 + 骨架圖 -->
       <div class="section-label">個人資訊與骨架分析</div>
       <div class="card">
         <div class="card-title-row">
           <div class="card-title-icon"><i class="fa-solid fa-id-card"></i></div>
           <div>
-            <div class="ct-label">PERSONAL INFO & SKELETAL ANALYSIS</div>
+            <div class="ct-label">PERSONAL INFO &amp; SKELETAL ANALYSIS</div>
             <div class="ct-title">基本資料與骨架分析圖</div>
           </div>
         </div>
         <div class="profile-skeleton-body">
-          <!-- 左：基本資料 -->
           <div class="profile-skeleton-left">
             <div class="profile-grid">
               <div class="profile-item">
@@ -1097,7 +1372,6 @@
               </div>
             </div>
           </div>
-          <!-- 右：骨架圖 -->
           <div class="profile-skeleton-right">
             <div class="skeleton-ph">
               <i class="fa-solid fa-person-rays"></i>
@@ -1110,7 +1384,7 @@
         </div>
       </div>
 
-      <!-- 風險評估（全寬） -->
+      <!-- 風險評估 -->
       <div class="section-label">風險評估</div>
       <div class="card">
         <div class="card-title-row">
@@ -1145,14 +1419,14 @@
               <div class="risk-seg danger"></div>
             </div>
             <div class="risk-labels">
-              <span>低</span><span>中低</span><span>中</span>
-              <span class="active-label">高</span><span>危險</span>
+              <span>低</span><span>中低</span><span>中</span
+              ><span class="active-label">高</span><span>危險</span>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- 步態指標（全寬） -->
+      <!-- 步態指標 -->
       <div class="section-label">步態指標</div>
       <div class="card">
         <div class="card-title-row">
@@ -1166,102 +1440,224 @@
         </div>
         <div class="card-body">
           <div class="gait-grid">
-            <!-- 步行速度 -->
             <div class="gait-item">
               <div class="gait-item-label">
                 <i class="fa-solid fa-gauge-high"></i>步行速度
               </div>
-              <div class="gait-big-val">90<span class="unit">cm/s</span></div>
-              <div class="gait-pill good">
-                <i class="fa-solid fa-circle-check"></i>正常範圍
+              <div class="sppb-switcher">
+                <button
+                  class="sppb-btn s4 active"
+                  onclick="switchSppb(this, 4)"
+                >
+                  正常
+                </button>
+                <button class="sppb-btn s3" onclick="switchSppb(this, 3)">
+                  稍慢
+                </button>
+                <button class="sppb-btn s2" onclick="switchSppb(this, 2)">
+                  偏慢
+                </button>
+                <button class="sppb-btn s1" onclick="switchSppb(this, 1)">
+                  過慢
+                </button>
+                <button class="sppb-btn s0" onclick="switchSppb(this, 0)">
+                  無法執行
+                </button>
+              </div>
+              <div class="sppb-panel active" id="sppb-4">
+                <div class="gait-big-val">90<span class="unit">cm/s</span></div>
+                <div class="gait-pill good">
+                  <i class="fa-solid fa-circle-check"></i>正常範圍（4分）
+                </div>
+                <div class="gait-desc">
+                  步行速度 90 cm/s，達到 SPPB 滿分（4分）標準（&gt; 83
+                  cm/s），代表下肢肌力與協調能力良好，建議維持規律步行習慣，每日至少
+                  30 分鐘以持續鞏固。
+                </div>
+              </div>
+              <div class="sppb-panel" id="sppb-3">
+                <div
+                  class="gait-big-val"
+                  style="
+                    font-size: 1.4rem;
+                    font-family: &quot;Noto Sans TC&quot;, sans-serif;
+                  "
+                >
+                  65–83 <span class="unit">cm/s</span>
+                </div>
+                <div class="gait-pill warning">
+                  <i class="fa-solid fa-triangle-exclamation"></i
+                  >稍慢，需留意（3分）
+                </div>
+                <div class="gait-desc">
+                  SPPB 3分：步行速度 65～83 cm/s（通過時間 4.82～6.20
+                  秒），下肢功能略有下降。建議增加日常步行量，並每週進行 2～3
+                  次輕度肌力訓練，如深蹲、踮腳尖等動作。
+                </div>
+              </div>
+              <div class="sppb-panel" id="sppb-2">
+                <div
+                  class="gait-big-val"
+                  style="
+                    font-size: 1.4rem;
+                    font-family: &quot;Noto Sans TC&quot;, sans-serif;
+                  "
+                >
+                  46–64 <span class="unit">cm/s</span>
+                </div>
+                <div class="gait-pill warning">
+                  <i class="fa-solid fa-triangle-exclamation"></i
+                  >偏慢，需加強（2分）
+                </div>
+                <div class="gait-desc">
+                  SPPB 2分：步行速度 46～64 cm/s（通過時間 6.21～8.70
+                  秒），顯示下肢功能明顯退化。建議諮詢物理治療師，安排每週 2
+                  次肌力與步態訓練，同時檢視居家環境安全。
+                </div>
+              </div>
+              <div class="sppb-panel" id="sppb-1">
+                <div
+                  class="gait-big-val"
+                  style="
+                    font-size: 1.4rem;
+                    font-family: &quot;Noto Sans TC&quot;, sans-serif;
+                  "
+                >
+                  &lt;46 <span class="unit">cm/s</span>
+                </div>
+                <div class="gait-pill bad">
+                  <i class="fa-solid fa-circle-exclamation"></i
+                  >步速過慢，高風險（1分）
+                </div>
+                <div class="gait-desc">
+                  SPPB 1分：步行速度低於 46 cm/s（通過時間 &gt; 8.70
+                  秒），跌倒風險顯著上升。建議儘速就醫評估，進行專業復健介入，外出時應使用輔助器具，並告知家人加強陪伴照護。
+                </div>
+              </div>
+              <div class="sppb-panel" id="sppb-0">
+                <div
+                  class="gait-big-val"
+                  style="
+                    font-size: 1.4rem;
+                    font-family: &quot;Noto Sans TC&quot;, sans-serif;
+                  "
+                >
+                  無法<span class="unit">執行</span>
+                </div>
+                <div class="gait-pill bad">
+                  <i class="fa-solid fa-circle-exclamation"></i
+                  >無法完成測試（0分）
+                </div>
+                <div class="gait-desc">
+                  SPPB
+                  0分：無法完成步行測試，顯示行動能力嚴重受損。請立即安排醫療評估，由老年醫學科或復健科醫師進行完整評估，全天候使用輔助器具，並規劃密集復健療程。
+                </div>
               </div>
             </div>
-            <!-- 身體晃動：輕微 -->
+
             <div class="gait-item">
               <div class="gait-item-label">
-                <i class="fa-solid fa-arrows-left-right"></i>身體晃動程度 ──
-                輕微
+                <i class="fa-solid fa-arrows-left-right"></i>身體晃動程度
               </div>
-              <div
-                class="gait-big-val"
-                style="
-                  font-size: 1.5rem;
-                  font-family: &quot;Noto Sans TC&quot;, sans-serif;
-                "
-              >
-                輕微
+              <div class="sway-switcher">
+                <button
+                  class="sway-btn active-low"
+                  onclick="switchSway(this, 'low')"
+                >
+                  輕微
+                </button>
+                <button class="sway-btn" onclick="switchSway(this, 'medium')">
+                  中
+                </button>
+                <button class="sway-btn" onclick="switchSway(this, 'high')">
+                  高
+                </button>
               </div>
-              <div class="sway-track">
-                <div class="sway-seg s-low"></div>
-                <div class="sway-seg"></div>
-                <div class="sway-seg"></div>
+              <div class="sway-panel active" id="sway-low">
+                <div
+                  class="gait-big-val"
+                  style="
+                    font-size: 1.5rem;
+                    font-family: &quot;Noto Sans TC&quot;, sans-serif;
+                  "
+                >
+                  輕微
+                </div>
+                <div class="sway-track">
+                  <div class="sway-seg s-low"></div>
+                  <div class="sway-seg"></div>
+                  <div class="sway-seg"></div>
+                </div>
+                <div class="sway-labels">
+                  <span class="sl-low">輕微 ✓</span><span>中</span
+                  ><span>高</span>
+                </div>
+                <div class="gait-pill good">
+                  <i class="fa-solid fa-circle-check"></i>良好
+                </div>
+                <div class="gait-desc">
+                  行走時身體晃動幅度輕微，表示靜態平衡與核心穩定度良好，建議持續進行平衡訓練（如太極、瑜伽），以維持現有表現。
+                </div>
               </div>
-              <div class="sway-labels">
-                <span class="sl-low">輕微 ✓</span><span>中</span><span>高</span>
+              <div class="sway-panel" id="sway-medium">
+                <div
+                  class="gait-big-val"
+                  style="
+                    font-size: 1.5rem;
+                    font-family: &quot;Noto Sans TC&quot;, sans-serif;
+                  "
+                >
+                  中
+                </div>
+                <div class="sway-track">
+                  <div class="sway-seg"></div>
+                  <div class="sway-seg s-medium"></div>
+                  <div class="sway-seg"></div>
+                </div>
+                <div class="sway-labels">
+                  <span>輕微</span><span class="sl-medium">中 ✓</span
+                  ><span>高</span>
+                </div>
+                <div class="gait-pill warning">
+                  <i class="fa-solid fa-triangle-exclamation"></i>需注意
+                </div>
+                <div class="gait-desc">
+                  行走時身體晃動達中等程度，顯示平衡控制有待加強，建議每日進行
+                  10～15 分鐘的下肢肌力與平衡訓練，並留意行走環境的安全性。
+                </div>
               </div>
-              <div class="gait-pill good">
-                <i class="fa-solid fa-circle-check"></i>良好
-              </div>
-            </div>
-            <!-- 身體晃動：中 -->
-            <div class="gait-item">
-              <div class="gait-item-label">
-                <i class="fa-solid fa-arrows-left-right"></i>身體晃動程度 ── 中
-              </div>
-              <div
-                class="gait-big-val"
-                style="
-                  font-size: 1.5rem;
-                  font-family: &quot;Noto Sans TC&quot;, sans-serif;
-                "
-              >
-                中
-              </div>
-              <div class="sway-track">
-                <div class="sway-seg"></div>
-                <div class="sway-seg s-medium"></div>
-                <div class="sway-seg"></div>
-              </div>
-              <div class="sway-labels">
-                <span>輕微</span><span class="sl-medium">中 ✓</span
-                ><span>高</span>
-              </div>
-              <div class="gait-pill warning">
-                <i class="fa-solid fa-triangle-exclamation"></i>需注意
-              </div>
-            </div>
-            <!-- 身體晃動：高 -->
-            <div class="gait-item">
-              <div class="gait-item-label">
-                <i class="fa-solid fa-arrows-left-right"></i>身體晃動程度 ── 高
-              </div>
-              <div
-                class="gait-big-val"
-                style="
-                  font-size: 1.5rem;
-                  font-family: &quot;Noto Sans TC&quot;, sans-serif;
-                "
-              >
-                高
-              </div>
-              <div class="sway-track">
-                <div class="sway-seg"></div>
-                <div class="sway-seg"></div>
-                <div class="sway-seg s-high"></div>
-              </div>
-              <div class="sway-labels">
-                <span>輕微</span><span>中</span
-                ><span class="sl-high">高 ✓</span>
-              </div>
-              <div class="gait-pill bad">
-                <i class="fa-solid fa-circle-exclamation"></i>危險
+              <div class="sway-panel" id="sway-high">
+                <div
+                  class="gait-big-val"
+                  style="
+                    font-size: 1.5rem;
+                    font-family: &quot;Noto Sans TC&quot;, sans-serif;
+                  "
+                >
+                  高
+                </div>
+                <div class="sway-track">
+                  <div class="sway-seg"></div>
+                  <div class="sway-seg"></div>
+                  <div class="sway-seg s-high"></div>
+                </div>
+                <div class="sway-labels">
+                  <span>輕微</span><span>中</span
+                  ><span class="sl-high">高 ✓</span>
+                </div>
+                <div class="gait-pill bad">
+                  <i class="fa-solid fa-circle-exclamation"></i>危險
+                </div>
+                <div class="gait-desc">
+                  行走時身體晃動幅度偏高，跌倒風險顯著上升，建議儘速諮詢物理治療師，進行專業平衡評估與復健介入，外出時應考慮使用輔助器具。
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- 行動建議與衛教資訊（全寬獨立區塊） -->
+      <!-- 行動建議與衛教 -->
       <div class="section-label">行動建議與衛教資訊</div>
       <div class="card">
         <div class="card-title-row">
@@ -1269,12 +1665,11 @@
             <i class="fa-solid fa-list-check"></i>
           </div>
           <div>
-            <div class="ct-label">NEXT STEPS & HEALTH EDUCATION</div>
+            <div class="ct-label">NEXT STEPS &amp; HEALTH EDUCATION</div>
             <div class="ct-title">下一步行動建議與衛教資訊</div>
           </div>
         </div>
         <div class="card-body">
-          <!-- ── 行動建議（依風險等級 tabs）── -->
           <div class="card-sub-title">
             <i class="fa-solid fa-list-check"></i>依風險等級查看行動建議
           </div>
@@ -1316,7 +1711,6 @@
             </button>
           </div>
 
-          <!-- 低風險 -->
           <div class="action-panel" id="panel-low2">
             <div class="action-list">
               <div class="action-item level-low2">
@@ -1359,8 +1753,6 @@
               </div>
             </div>
           </div>
-
-          <!-- 中低風險 -->
           <div class="action-panel" id="panel-low">
             <div class="action-list">
               <div class="action-item level-low">
@@ -1402,8 +1794,6 @@
               </div>
             </div>
           </div>
-
-          <!-- 中風險 -->
           <div class="action-panel" id="panel-medium">
             <div class="action-list">
               <div class="action-item level-medium">
@@ -1454,8 +1844,6 @@
               </div>
             </div>
           </div>
-
-          <!-- 高風險（預設顯示） -->
           <div class="action-panel active" id="panel-high">
             <div class="action-list">
               <div class="action-item level-high">
@@ -1498,8 +1886,6 @@
               </div>
             </div>
           </div>
-
-          <!-- 危險 -->
           <div class="action-panel" id="panel-danger">
             <div class="action-list">
               <div class="action-item level-danger">
@@ -1551,10 +1937,9 @@
             </div>
           </div>
 
-          <!-- 分隔線 -->
           <div class="card-divider"></div>
 
-          <!-- ── 衛教資訊 ── -->
+          <!-- ── 原本衛教資訊 ── -->
           <div class="card-sub-title">
             <i class="fa-solid fa-heart-pulse"></i>衛教資訊
           </div>
@@ -1601,16 +1986,192 @@
               </div>
             </div>
           </div>
+
+          <!-- ── 圖片排版方案展示（新增）── -->
+          <div class="card-divider"></div>
+          <div class="card-sub-title">
+            <i class="fa-solid fa-swatchbook"></i>衛教圖片排版方案比較
+          </div>
+
+          <div class="scheme-label">純圖片（圖片自帶文字，取代整個項目）</div>
+          <div class="edu-list">
+            <div class="img-ph">
+              <i class="fa-solid fa-shoe-prints"></i>
+              <div class="img-ph-label">穿著合適鞋具</div>
+              <div class="img-ph-sub">
+                圖片 320 × 160px｜圖片自帶標題與說明文字
+              </div>
+            </div>
+            <div class="img-ph">
+              <i class="fa-solid fa-pills"></i>
+              <div class="img-ph-label">定期審視用藥</div>
+              <div class="img-ph-sub">
+                圖片 320 × 160px｜圖片自帶標題與說明文字
+              </div>
+            </div>
+            <div class="img-ph">
+              <i class="fa-solid fa-apple-whole"></i>
+              <div class="img-ph-label">均衡營養補充</div>
+              <div class="img-ph-sub">
+                圖片 320 × 160px｜圖片自帶標題與說明文字
+              </div>
+            </div>
+            <div class="img-ph">
+              <i class="fa-solid fa-eye"></i>
+              <div class="img-ph-label">定期視力檢查</div>
+              <div class="img-ph-sub">
+                圖片 320 × 160px｜圖片自帶標題與說明文字
+              </div>
+            </div>
+          </div>
+
+          <div class="scheme-label">圖片在文字下方（說明圖／示範照）</div>
+          <div class="edu-list">
+            <div class="edu-item-col">
+              <div class="edu-item-col-top">
+                <div class="edu-icon">
+                  <i class="fa-solid fa-shoe-prints"></i>
+                </div>
+                <div>
+                  <div class="edu-title">穿著合適鞋具</div>
+                  <div class="edu-desc">
+                    選擇防滑、包覆性佳的鞋子，避免穿拖鞋或高跟鞋外出，可有效減少跌倒發生。
+                  </div>
+                </div>
+              </div>
+              <div class="img-ph-below">
+                <i class="fa-solid fa-image"></i><span>圖片 280 × 130px</span>
+              </div>
+            </div>
+            <div class="edu-item-col">
+              <div class="edu-item-col-top">
+                <div class="edu-icon"><i class="fa-solid fa-pills"></i></div>
+                <div>
+                  <div class="edu-title">定期審視用藥</div>
+                  <div class="edu-desc">
+                    部分藥物可能影響平衡感與反應力，請定期與醫師討論目前用藥是否需要調整。
+                  </div>
+                </div>
+              </div>
+              <div class="img-ph-below">
+                <i class="fa-solid fa-image"></i><span>圖片 280 × 130px</span>
+              </div>
+            </div>
+            <div class="edu-item-col">
+              <div class="edu-item-col-top">
+                <div class="edu-icon">
+                  <i class="fa-solid fa-apple-whole"></i>
+                </div>
+                <div>
+                  <div class="edu-title">均衡營養補充</div>
+                  <div class="edu-desc">
+                    攝取足夠的鈣質、維生素 D
+                    與蛋白質，有助於維持骨骼強度與肌肉量，降低骨折風險。
+                  </div>
+                </div>
+              </div>
+              <div class="img-ph-below">
+                <i class="fa-solid fa-image"></i><span>圖片 280 × 130px</span>
+              </div>
+            </div>
+            <div class="edu-item-col">
+              <div class="edu-item-col-top">
+                <div class="edu-icon"><i class="fa-solid fa-eye"></i></div>
+                <div>
+                  <div class="edu-title">定期視力檢查</div>
+                  <div class="edu-desc">
+                    視力退化是跌倒的重要風險因子之一，建議每年進行視力檢查，確認眼鏡度數是否合適。
+                  </div>
+                </div>
+              </div>
+              <div class="img-ph-below">
+                <i class="fa-solid fa-image"></i><span>圖片 280 × 130px</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="scheme-label">圖文左右並排（大圖取代 icon）</div>
+          <div class="edu-list">
+            <div class="edu-item-side">
+              <div class="edu-img-side">
+                <i class="fa-solid fa-shoe-prints"></i><span>80×80px</span>
+              </div>
+              <div>
+                <div class="edu-title">穿著合適鞋具</div>
+                <div class="edu-desc">
+                  選擇防滑、包覆性佳的鞋子，避免穿拖鞋或高跟鞋外出，可有效減少跌倒發生。
+                </div>
+              </div>
+            </div>
+            <div class="edu-item-side">
+              <div class="edu-img-side">
+                <i class="fa-solid fa-pills"></i><span>80×80px</span>
+              </div>
+              <div>
+                <div class="edu-title">定期審視用藥</div>
+                <div class="edu-desc">
+                  部分藥物可能影響平衡感與反應力，請定期與醫師討論目前用藥是否需要調整。
+                </div>
+              </div>
+            </div>
+            <div class="edu-item-side">
+              <div class="edu-img-side">
+                <i class="fa-solid fa-apple-whole"></i><span>80×80px</span>
+              </div>
+              <div>
+                <div class="edu-title">均衡營養補充</div>
+                <div class="edu-desc">
+                  攝取足夠的鈣質、維生素 D
+                  與蛋白質，有助於維持骨骼強度與肌肉量，降低骨折風險。
+                </div>
+              </div>
+            </div>
+            <div class="edu-item-side">
+              <div class="edu-img-side">
+                <i class="fa-solid fa-eye"></i><span>80×80px</span>
+              </div>
+              <div>
+                <div class="edu-title">定期視力檢查</div>
+                <div class="edu-desc">
+                  視力退化是跌倒的重要風險因子之一，建議每年進行視力檢查，確認眼鏡度數是否合適。
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-divider"></div>
+
           <div class="closing">
             <i class="fa-solid fa-circle-info" style="margin-right: 6px"></i>
             本報告由 FongAI
             步態分析系統自動產生，僅供健康參考使用，不作為醫療診斷依據。如有任何疑問，請洽專業醫療人員進行進一步評估。感謝您使用
             FongAI 健康服務，祝您身體健康、步伐穩健！
           </div>
+
+          <div class="email-block">
+            <div class="email-block-title">
+              <i class="fa-solid fa-envelope"></i>將報告寄送至您的信箱
+            </div>
+            <div class="email-block-desc">
+              輸入您的
+              Email，我們將把這份步態分析報告寄送給您，方便日後查閱或與醫師分享。
+            </div>
+            <div class="email-input-row">
+              <input
+                type="email"
+                id="reportEmail"
+                class="email-input"
+                placeholder="example@email.com"
+              />
+              <button class="email-send-btn" onclick="sendReportEmail()">
+                <i class="fa-solid fa-paper-plane"></i>寄送報告
+              </button>
+            </div>
+            <div class="email-status" id="emailStatus"></div>
+          </div>
         </div>
       </div>
     </div>
-    <!-- /page -->
 
     <script>
       function closeModal() {
@@ -1633,7 +2194,50 @@
         document
           .querySelector(`.risk-tab[data-level="${level}"]`)
           .classList.add("active");
-        document.getElementById(`panel-${level}`).classList.add("active");
+        document.getElementById("panel-" + level).classList.add("active");
+      }
+      function sendReportEmail() {
+        const input = document.getElementById("reportEmail");
+        const status = document.getElementById("emailStatus");
+        const email = input.value.trim();
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!email) {
+          status.textContent = "請輸入 Email 地址。";
+          status.className = "email-status err";
+          return;
+        }
+        if (!re.test(email)) {
+          status.textContent = "Email 格式不正確，請重新輸入。";
+          status.className = "email-status err";
+          return;
+        }
+        status.textContent = "✓ 報告已寄送至 " + email + "，請記得查收信箱！";
+        status.className = "email-status ok";
+        input.value = "";
+      }
+      function switchSway(btn, level) {
+        const container = btn.closest(".gait-item");
+        container
+          .querySelectorAll(".sway-btn")
+          .forEach((b) =>
+            b.classList.remove("active-low", "active-medium", "active-high"),
+          );
+        container
+          .querySelectorAll(".sway-panel")
+          .forEach((p) => p.classList.remove("active"));
+        btn.classList.add("active-" + level);
+        container.querySelector("#sway-" + level).classList.add("active");
+      }
+      function switchSppb(btn, score) {
+        const container = btn.closest(".gait-item");
+        container
+          .querySelectorAll(".sppb-btn")
+          .forEach((b) => b.classList.remove("active"));
+        container
+          .querySelectorAll(".sppb-panel")
+          .forEach((p) => p.classList.remove("active"));
+        btn.classList.add("active");
+        container.querySelector("#sppb-" + score).classList.add("active");
       }
     </script>
   </body>
