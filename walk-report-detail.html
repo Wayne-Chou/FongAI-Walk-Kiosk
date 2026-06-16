@@ -867,13 +867,13 @@
         color: var(--gray-600);
         line-height: 1.65;
       }
-
       .edu-infographic {
         width: 100%;
         border-radius: 12px;
         display: block;
       }
 
+      /* ── 三種排版方案 CSS ── */
       .img-ph {
         width: 100%;
         height: 160px;
@@ -1305,7 +1305,6 @@
     </nav>
 
     <div class="page">
-      <!-- HERO -->
       <div class="report-hero">
         <div class="hero-left">
           <div class="hero-eyebrow">DETAILED WALK ANALYSIS REPORT</div>
@@ -1324,7 +1323,6 @@
         </div>
       </div>
 
-      <!-- 基本資料 + 骨架圖 -->
       <div class="section-label">個人資訊與骨架分析</div>
       <div class="card">
         <div class="card-title-row">
@@ -1367,7 +1365,6 @@
         </div>
       </div>
 
-      <!-- 風險評估 -->
       <div class="section-label">風險評估</div>
       <div class="card">
         <div class="card-title-row">
@@ -1409,7 +1406,6 @@
         </div>
       </div>
 
-      <!-- 步態指標 -->
       <div class="section-label">步態指標</div>
       <div class="card">
         <div class="card-title-row">
@@ -1450,7 +1446,7 @@
               <div class="sppb-panel active" id="sppb-4">
                 <div class="gait-big-val">90<span class="unit">cm/s</span></div>
                 <div class="gait-pill good">
-                  <i class="fa-solid fa-circle-check"></i>正常範圍（4分）
+                  <i class="fa-solid fa-circle-check"></i>正常範圍
                 </div>
                 <div class="gait-desc">
                   步行速度 90 cm/s，達到 SPPB 滿分（4分）標準（&gt; 83
@@ -1469,8 +1465,7 @@
                   65–83 <span class="unit">cm/s</span>
                 </div>
                 <div class="gait-pill warning">
-                  <i class="fa-solid fa-triangle-exclamation"></i
-                  >稍慢，需留意（3分）
+                  <i class="fa-solid fa-triangle-exclamation"></i>稍慢，需留意
                 </div>
                 <div class="gait-desc">
                   SPPB 3分：步行速度 65～83 cm/s（通過時間 4.82～6.20
@@ -1489,13 +1484,11 @@
                   46–64 <span class="unit">cm/s</span>
                 </div>
                 <div class="gait-pill warning">
-                  <i class="fa-solid fa-triangle-exclamation"></i
-                  >偏慢，需加強（2分）
+                  <i class="fa-solid fa-triangle-exclamation"></i>偏慢，需加強
                 </div>
                 <div class="gait-desc">
                   SPPB 2分：步行速度 46～64 cm/s（通過時間 6.21～8.70
-                  秒），顯示下肢功能明顯退化。建議諮詢物理治療師，安排每週 2
-                  次肌力與步態訓練，同時檢視居家環境安全。
+                  秒），顯示下肢功能明顯退化。建議諮詢物理治療師，進行評估與步態訓練，同時檢視居家環境安全。
                 </div>
               </div>
               <div class="sppb-panel" id="sppb-1">
@@ -1509,8 +1502,7 @@
                   &lt;46 <span class="unit">cm/s</span>
                 </div>
                 <div class="gait-pill bad">
-                  <i class="fa-solid fa-circle-exclamation"></i
-                  >步速過慢，高風險（1分）
+                  <i class="fa-solid fa-circle-exclamation"></i>步速過慢，高風險
                 </div>
                 <div class="gait-desc">
                   SPPB 1分：步行速度低於 46 cm/s（通過時間 &gt; 8.70
@@ -1528,16 +1520,14 @@
                   無法<span class="unit">執行</span>
                 </div>
                 <div class="gait-pill bad">
-                  <i class="fa-solid fa-circle-exclamation"></i
-                  >無法完成測試（0分）
+                  <i class="fa-solid fa-circle-exclamation"></i>無法完成測試
                 </div>
                 <div class="gait-desc">
                   SPPB
-                  0分：無法完成步行測試，顯示行動能力嚴重受損。請立即安排醫療評估，由老年醫學科或復健科醫師進行完整評估，全天候使用輔助器具，並規劃密集復健療程。
+                  0分：無法完成步行測試，顯示行動能力嚴重受損。請立即安排醫療評估，並規劃密集復健療程。
                 </div>
               </div>
             </div>
-
             <div class="gait-item">
               <div class="gait-item-label">
                 <i class="fa-solid fa-arrows-left-right"></i>身體晃動程度
@@ -1640,7 +1630,6 @@
         </div>
       </div>
 
-      <!-- 行動建議與衛教 -->
       <div class="section-label">行動建議與衛教資訊</div>
       <div class="card">
         <div class="card-title-row">
@@ -1751,9 +1740,9 @@
               <div class="action-item level-low">
                 <div class="action-num">2</div>
                 <div>
-                  <div class="action-title">諮詢物理治療師</div>
+                  <div class="action-title">參加社區健康促進課程</div>
                   <div class="action-desc">
-                    建議安排一次物理治療評估，了解個人弱點，制定客製化訓練計畫。
+                    可加入社區長者健康課程或健走、太極等活動，強化肌力與身體協調性。
                   </div>
                 </div>
               </div>
@@ -1834,7 +1823,7 @@
                 <div>
                   <div class="action-title">儘速安排醫療諮詢</div>
                   <div class="action-desc">
-                    建議於兩週內前往板橋區衛生所家醫科，攜帶本報告讓醫師進行專業評估與建議。
+                    建議前往家醫科、復健科或尋求相關專業人員諮詢，進行全面的健康評估與防跌指導。
                   </div>
                 </div>
               </div>
@@ -1843,8 +1832,8 @@
                 <div>
                   <div class="action-title">開始居家平衡訓練</div>
                   <div class="action-desc">
-                    每日進行 10～15
-                    分鐘平衡與下肢肌力訓練，可從扶椅站立、單腳站立等簡單動作開始。
+                    建議每週進行 2~3
+                    次基礎肌力訓練，可在家人或照護者在旁輔助下，練習安全簡單的坐姿抬腳等運動。
                   </div>
                 </div>
               </div>
@@ -1876,7 +1865,7 @@
                 <div>
                   <div class="action-title">立即安排醫療評估</div>
                   <div class="action-desc">
-                    請勿延誤，本週內攜帶此報告至醫院老年醫學科或神經科進行完整評估，確認跌倒根本原因。
+                    請勿延誤，建議至醫院老年醫學科、家庭醫學科或復健科進行完整評估，確認潛在的衰弱原因與身體狀況。
                   </div>
                 </div>
               </div>
@@ -1903,8 +1892,7 @@
                 <div>
                   <div class="action-title">規劃專業復健療程</div>
                   <div class="action-desc">
-                    由物理治療師每週指導 2～3
-                    次密集復健，優先改善平衡、步態穩定與下肢肌力。
+                    建議由醫療、復健或運動指導專業人員評估後，依個人狀況安排合適的復健、肌力或步態訓練，避免自行進行高風險活動。
                   </div>
                 </div>
               </div>
@@ -1922,7 +1910,6 @@
 
           <div class="card-divider"></div>
 
-          <!-- 衛教資訊 -->
           <div class="card-sub-title">
             <i class="fa-solid fa-heart-pulse"></i>衛教資訊
           </div>
