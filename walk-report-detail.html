@@ -346,7 +346,7 @@
       .skeleton-ph {
         background: var(--gray-50);
         border-radius: 12px;
-        border: 2px dashed var(--gray-200);
+        border: 2px solid var(--gray-200);
         min-height: 200px;
         display: flex;
         flex-direction: column;
@@ -2063,6 +2063,52 @@
             </div>
           </div>
 
+          <div class="closing">
+            <i class="fa-solid fa-circle-info" style="margin-right: 6px"></i>
+            本報告由 FongAI
+            步態分析系統自動產生，僅供健康參考使用，不作為醫療診斷依據。如有任何疑問，請洽專業醫療人員進行進一步評估。感謝您使用
+            FongAI 健康服務，祝您身體健康、步伐穩健！
+          </div>
+
+          <div class="email-block">
+            <div class="email-block-title">
+              <i class="fa-solid fa-envelope"></i>將報告寄送至您的信箱
+            </div>
+            <div class="email-block-desc">
+              輸入您的 Email，我們將把這份步態分析報告寄送給您。
+            </div>
+            <div class="email-input-row">
+              <input
+                type="email"
+                id="reportEmail"
+                class="email-input"
+                placeholder="example@email.com"
+              />
+              <button class="email-send-btn" onclick="sendReportEmail()">
+                <i class="fa-solid fa-paper-plane"></i>寄送報告
+              </button>
+            </div>
+            <div class="email-status" id="emailStatus"></div>
+          </div>
+          <div class="card-divider"></div>
+          <h4
+            style="
+              display: inline-flex;
+              align-items: center;
+              gap: 7px;
+              font-size: 13px;
+              font-weight: 700;
+              color: #2563eb;
+              background: #eff6ff;
+              border: 1px solid #bfdbfe;
+              border-radius: 6px;
+              padding: 6px 14px;
+              margin: 0 0 16px;
+              letter-spacing: 0.5px;
+            "
+          >
+            ◈ 衛教資訊版型參考（擇一使用）
+          </h4>
           <!-- 純圖片橫幅 -->
           <div class="edu-list">
             <div class="img-ph">
@@ -2247,36 +2293,6 @@
             <div style="font-size: 0.72rem; color: var(--gray-400)">
               建議尺寸：750 × 1200px
             </div>
-          </div>
-
-          <div class="card-divider"></div>
-
-          <div class="closing">
-            <i class="fa-solid fa-circle-info" style="margin-right: 6px"></i>
-            本報告由 FongAI
-            步態分析系統自動產生，僅供健康參考使用，不作為醫療診斷依據。如有任何疑問，請洽專業醫療人員進行進一步評估。感謝您使用
-            FongAI 健康服務，祝您身體健康、步伐穩健！
-          </div>
-
-          <div class="email-block">
-            <div class="email-block-title">
-              <i class="fa-solid fa-envelope"></i>將報告寄送至您的信箱
-            </div>
-            <div class="email-block-desc">
-              輸入您的 Email，我們將把這份步態分析報告寄送給您。
-            </div>
-            <div class="email-input-row">
-              <input
-                type="email"
-                id="reportEmail"
-                class="email-input"
-                placeholder="example@email.com"
-              />
-              <button class="email-send-btn" onclick="sendReportEmail()">
-                <i class="fa-solid fa-paper-plane"></i>寄送報告
-              </button>
-            </div>
-            <div class="email-status" id="emailStatus"></div>
           </div>
         </div>
       </div>
