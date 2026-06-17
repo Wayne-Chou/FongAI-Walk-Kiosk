@@ -128,11 +128,6 @@
         color: var(--brand-blue);
         letter-spacing: 0.5px;
       }
-      .qr-label-sub {
-        font-size: 0.75rem;
-        color: var(--sub-text);
-        line-height: 1.5;
-      }
 
       .flow-content {
         padding: 0px 40px 40px 40px;
@@ -358,7 +353,7 @@
       }
       .status-excellent .progress-fill {
         background: linear-gradient(90deg, #4ade80 0%, #16a34a 100%);
-        width: 85%;
+        width: 50%;
       }
       .status-excellent .leader-comment {
         color: #166534;
@@ -383,7 +378,7 @@
       }
       .status-warning .progress-fill {
         background: linear-gradient(90deg, #fb923c 0%, #f97316 100%);
-        width: 45%;
+        width: 50%;
       }
       .status-warning .leader-comment {
         color: #9a3412;
@@ -408,7 +403,7 @@
       }
       .status-danger .progress-fill {
         background: linear-gradient(90deg, #f87171 0%, #ef4444 100%);
-        width: 20%;
+        width: 80%;
       }
       .status-danger .leader-comment {
         color: #991b1b;
@@ -666,9 +661,6 @@
               src="https://raw.githubusercontent.com/Wayne-Chou/FongAI-Walk-Kiosk/refs/heads/main/assets/qrcode-demo.png"
               alt="完整報告 QR Code"
             />
-            <span class="qr-label-sub"
-              >包含歷次紀錄、趨勢圖表<br />與專業復能建議</span
-            >
           </div>
         </header>
 
@@ -728,12 +720,12 @@
           <div class="leaderboard-showcase status-excellent">
             <div class="leader-badge-left">
               <div class="leader-icon-box">
-                <i class="fa-solid fa-medal"></i>
+                <i class="fa-solid fa-chart-line"></i>
               </div>
               <div class="leader-main-data">
-                <span class="leader-title">超越同齡層用戶</span>
+                <span class="leader-title">優於 50% 同齡群體</span>
                 <div class="leader-num-group">
-                  <span class="leader-big-num">85</span>
+                  <span class="leader-big-num">50</span>
                   <span class="leader-unit">%</span>
                 </div>
               </div>
@@ -743,8 +735,8 @@
                 <div class="progress-fill"></div>
               </div>
               <div class="leader-comment">
-                <i class="fa-solid fa-circle-check"></i
-                ><span>您的下肢力量與平衡感在同齡群體中名列前茅！</span>
+                <i class="fa-solid fa-circle-check"></i>
+                <span>步行速度表現優異，請繼續保持。</span>
               </div>
             </div>
           </div>
@@ -752,12 +744,12 @@
           <div class="leaderboard-showcase status-warning">
             <div class="leader-badge-left">
               <div class="leader-icon-box">
-                <i class="fa-solid fa-medal"></i>
+                <i class="fa-solid fa-chart-line"></i>
               </div>
               <div class="leader-main-data">
-                <span class="leader-title">超越同齡層用戶</span>
+                <span class="leader-title">落後 50% 同齡群體</span>
                 <div class="leader-num-group">
-                  <span class="leader-big-num">85</span>
+                  <span class="leader-big-num">50</span>
                   <span class="leader-unit">%</span>
                 </div>
               </div>
@@ -767,8 +759,8 @@
                 <div class="progress-fill"></div>
               </div>
               <div class="leader-comment">
-                <i class="fa-solid fa-circle-check"></i
-                ><span>您的下肢力量與平衡感在同齡群體中名列前茅！</span>
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <span>步行速度略低於同齡群體，建議加強訓練。</span>
               </div>
             </div>
           </div>
@@ -776,12 +768,12 @@
           <div class="leaderboard-showcase status-danger">
             <div class="leader-badge-left">
               <div class="leader-icon-box">
-                <i class="fa-solid fa-medal"></i>
+                <i class="fa-solid fa-chart-line"></i>
               </div>
               <div class="leader-main-data">
-                <span class="leader-title">超越同齡層用戶</span>
+                <span class="leader-title">落後 80% 同齡群體</span>
                 <div class="leader-num-group">
-                  <span class="leader-big-num">85</span>
+                  <span class="leader-big-num">80</span>
                   <span class="leader-unit">%</span>
                 </div>
               </div>
@@ -791,8 +783,8 @@
                 <div class="progress-fill"></div>
               </div>
               <div class="leader-comment">
-                <i class="fa-solid fa-circle-check"></i
-                ><span>您的下肢力量與平衡感在同齡群體中名列前茅！</span>
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <span>步行速度明顯落後，建議儘速諮詢專業評估。</span>
               </div>
             </div>
           </div>
