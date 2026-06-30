@@ -295,103 +295,28 @@
       }
 
       /* ---------- 位置正確（綠色）---------- */
-
       .floor-target.correct {
         border-color: var(--accent-green);
         border-style: solid;
-        /* 實心發光地毯：中心最亮往外淡出，半透明仍可透出人影 */
+        /* 中央填色大幅調淡，重心放回環與光暈，不在人身上疊色、不干擾偵測 */
         background: radial-gradient(
-          ellipse at center,
-          rgba(34, 197, 94, 0.45) 0%,
-          rgba(34, 197, 94, 0.25) 45%,
-          rgba(34, 197, 94, 0.08) 75%,
-          transparent 100%
+          circle,
+          rgba(34, 197, 94, 0.1) 0%,
+          transparent 62%
         );
-        /* 深色描邊提升相機畫面對比，並加上綠色外發光 */
+        /* 同紅圈加深色描邊提升相機畫面對比，並強化綠色外發光 */
         box-shadow:
           0 0 0 2px rgba(0, 0, 0, 0.45),
-          0 0 35px rgba(34, 197, 94, 0.7),
-          inset 0 0 25px rgba(34, 197, 94, 0.4);
-        /* 進場播一次性「鎖定」，之後整塊持續呼吸；同時蓋掉紅色 pulse-red */
-        animation:
-          lock-on 0.6s ease-out,
-          glow-breathe 2.6s ease-in-out 0.6s infinite;
+          0 0 45px rgba(34, 197, 94, 0.9),
+          inset 0 0 22px rgba(34, 197, 94, 0.6);
+        /* 環本身維持不動，並停掉基礎的紅色 pulse-red 脈動，避免綠圈外殘留紅光 */
+        animation: none;
         opacity: 1;
       }
 
-      /* 環不動，讓整塊發光地毯與外發光持續明暗呼吸，最亮時中心泛淺綠 */
-      @keyframes glow-breathe {
-        0%,
-        100% {
-          background: radial-gradient(
-            ellipse at center,
-            rgba(34, 197, 94, 0.45) 0%,
-            rgba(34, 197, 94, 0.25) 45%,
-            rgba(34, 197, 94, 0.08) 75%,
-            transparent 100%
-          );
-          box-shadow:
-            0 0 0 2px rgba(0, 0, 0, 0.45),
-            0 0 35px rgba(34, 197, 94, 0.7),
-            inset 0 0 25px rgba(34, 197, 94, 0.4);
-        }
-        50% {
-          background: radial-gradient(
-            ellipse at center,
-            rgba(110, 231, 183, 0.7) 0%,
-            rgba(34, 197, 94, 0.45) 45%,
-            rgba(34, 197, 94, 0.18) 75%,
-            transparent 100%
-          );
-          box-shadow:
-            0 0 0 2px rgba(0, 0, 0, 0.45),
-            0 0 80px rgba(34, 197, 94, 1),
-            inset 0 0 40px rgba(34, 197, 94, 0.7);
-        }
-      }
-
-      /* 進場瞬間：環縮回 + 亮一下的鎖定感 */
-      @keyframes lock-on {
-        0% {
-          transform: rotateX(60deg) scale(1.35);
-          filter: brightness(2.2);
-        }
-        55% {
-          transform: rotateX(60deg) scale(0.97);
-          filter: brightness(1.4);
-        }
-        100% {
-          transform: rotateX(60deg) scale(1);
-          filter: brightness(1);
-        }
-      }
-
-      /* ::after：鎖定瞬間爆出一圈光環，一次性 */
+      /* 綠色：完全靜止的成功光圈，不做動態（之後再設計站人畫面） */
+      .floor-target.correct::before,
       .floor-target.correct::after {
-        display: block;
-        inset: -5px;
-        border: 4px solid #bbf7d0;
-        opacity: 0;
-        pointer-events: none;
-        filter: drop-shadow(0 0 8px var(--accent-green));
-        animation: lock-flash 0.6s ease-out;
-      }
-      @keyframes lock-flash {
-        0% {
-          transform: scale(0.7);
-          opacity: 0;
-        }
-        40% {
-          opacity: 0.9;
-        }
-        100% {
-          transform: scale(1.5);
-          opacity: 0;
-        }
-      }
-
-      /* 綠色階段關掉 ::before，避免基礎的紅色漣漪在綠圈上出現 */
-      .floor-target.correct::before {
         display: none;
       }
 

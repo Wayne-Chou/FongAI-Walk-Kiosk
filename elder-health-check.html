@@ -13,10 +13,10 @@
     />
     <style>
       :root {
-        --sage: #5c7a5a;
-        --sage-light: #8aab87;
-        --sage-pale: #d6e8d4;
-        --sage-ghost: #eef6ed;
+        --sage: #6f4e37;
+        --sage-light: #a07e5e;
+        --sage-pale: #e7dccf;
+        --sage-ghost: #f7f3ef;
         --amber: #c98b2a;
         --amber-light: #f2b94b;
         --amber-pale: #fdf0d5;
@@ -24,12 +24,12 @@
         --coral-pale: #fceae7;
         --sky: #3a7ba8;
         --sky-pale: #e5f0f8;
-        --ink: #1a2218;
-        --ink-light: #3d4f3a;
-        --mist: #f5f8f4;
+        --ink: #1f1a14;
+        --ink-light: #4a3f33;
+        --mist: #f8f5f1;
         --white: #ffffff;
-        --border: #d8e6d5;
-        --shadow: rgba(30, 60, 28, 0.1);
+        --border: #e3d7c8;
+        --shadow: rgba(60, 40, 28, 0.1);
       }
       * {
         box-sizing: border-box;
@@ -63,7 +63,7 @@
         display: flex;
       }
       .app-header {
-        background: linear-gradient(135deg, var(--sage) 0%, #3e5c3c 100%);
+        background: linear-gradient(135deg, var(--sage) 0%, #4e342e 100%);
         padding: 20px 20px 24px;
         position: relative;
         overflow: hidden;
@@ -178,7 +178,7 @@
         overflow-y: auto;
       }
       .question-card {
-        background: linear-gradient(135deg, var(--sage) 0%, #4a6b47 100%);
+        background: linear-gradient(135deg, var(--sage) 0%, #5a3e2c 100%);
         border-radius: 16px;
         padding: 20px;
         margin-bottom: 16px;
@@ -208,6 +208,14 @@
         color: white;
         line-height: 1.6;
         font-family: "Noto Serif TC", serif;
+      }
+      .sub-text {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--ink);
+        line-height: 1.6;
+        margin-bottom: 14px;
+        padding-left: 2px;
       }
       .audio-controls {
         display: flex;
@@ -252,7 +260,7 @@
         outline: none;
         appearance: none;
         -webkit-appearance: none;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235C7A5A' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236f4e37' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
         background-repeat: no-repeat;
         background-position: right 10px center;
         padding-right: 28px;
@@ -360,7 +368,7 @@
       .btn-timer-end {
         background: var(--sage);
         color: white;
-        box-shadow: 0 4px 12px rgba(92, 122, 90, 0.3);
+        box-shadow: 0 4px 12px rgba(111, 78, 55, 0.3);
       }
       .btn-timer-reset {
         background: white;
@@ -372,6 +380,93 @@
         color: var(--ink);
         margin-bottom: 10px;
         font-weight: 500;
+      }
+      /* ===== 身分判別 ===== */
+      .identity-card {
+        background: linear-gradient(135deg, var(--sage) 0%, #5a3e2c 100%);
+        border-radius: 16px;
+        padding: 18px 20px;
+        margin-bottom: 18px;
+        position: relative;
+        overflow: hidden;
+      }
+      .identity-card::before {
+        content: "";
+        position: absolute;
+        top: -15px;
+        right: -15px;
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.08);
+      }
+      .identity-prompt {
+        color: white;
+        font-family: "Noto Serif TC", serif;
+        font-weight: 700;
+        font-size: 16px;
+        line-height: 1.6;
+      }
+      .identity-options {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .identity-option {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        background: white;
+        border: 2px solid var(--border);
+        border-radius: 14px;
+        padding: 16px;
+        cursor: pointer;
+        transition:
+          border-color 0.15s,
+          background 0.15s,
+          box-shadow 0.15s;
+      }
+      .identity-option:active {
+        transform: scale(0.99);
+      }
+      .identity-option.selected {
+        border-color: var(--sage);
+        background: var(--sage-ghost);
+        box-shadow: 0 4px 14px var(--shadow);
+      }
+      .identity-check {
+        width: 24px;
+        height: 24px;
+        border-radius: 7px;
+        border: 2px solid var(--border);
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 2px;
+        transition:
+          background 0.15s,
+          border-color 0.15s;
+      }
+      .identity-check svg {
+        width: 14px;
+        height: 14px;
+        opacity: 0;
+        transition: opacity 0.15s;
+      }
+      .identity-option.selected .identity-check {
+        background: var(--sage);
+        border-color: var(--sage);
+      }
+      .identity-option.selected .identity-check svg {
+        opacity: 1;
+      }
+      .identity-label {
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 1.6;
+        color: var(--ink);
+        font-family: "Noto Serif TC", serif;
       }
       .nav-bar {
         display: flex;
@@ -425,7 +520,7 @@
         color: white;
         padding: 10px 20px;
         border-radius: 10px;
-        box-shadow: 0 4px 12px rgba(92, 122, 90, 0.3);
+        box-shadow: 0 4px 12px rgba(111, 78, 55, 0.3);
         white-space: nowrap;
       }
       .btn-nav-next:disabled {
@@ -532,6 +627,16 @@
         background: var(--coral-pale);
         color: var(--coral);
       }
+      .role-badge {
+        display: inline-block;
+        font-size: 12px;
+        font-weight: 600;
+        padding: 4px 12px;
+        border-radius: 20px;
+        background: var(--sky-pale);
+        color: var(--sky);
+        margin-bottom: 10px;
+      }
       .score-row {
         display: flex;
         gap: 20px;
@@ -604,9 +709,9 @@
         transform: scale(0.98);
       }
       .btn-primary {
-        background: linear-gradient(135deg, var(--sage) 0%, #3e5c3c 100%);
+        background: linear-gradient(135deg, var(--sage) 0%, #4e342e 100%);
         color: white;
-        box-shadow: 0 6px 20px rgba(92, 122, 90, 0.35);
+        box-shadow: 0 6px 20px rgba(111, 78, 55, 0.35);
       }
       .btn-secondary {
         background: white;
@@ -614,7 +719,7 @@
         border: 1.5px solid var(--border);
       }
       .report-header {
-        background: linear-gradient(135deg, var(--sage) 0%, #2e4a2c 100%);
+        background: linear-gradient(135deg, var(--sage) 0%, #3b2620 100%);
         padding: 20px;
         color: white;
       }
@@ -703,7 +808,7 @@
         background: linear-gradient(
           160deg,
           var(--sage) 0%,
-          #2e4a2c 60%,
+          #3b2620 60%,
           var(--ink) 100%
         );
         padding: 48px 24px 40px;
@@ -854,7 +959,7 @@
           </div>
           <div class="home-title">長者量六力</div>
           <div class="home-subtitle">
-            HPA 銀髮健康功能自評表<br />六大向度全面評估，守護長者健康
+            HPA 銀髮健康功能自評表<br />六大向度全面評估,守護長者健康
           </div>
         </div>
         <div class="home-body">
@@ -866,7 +971,7 @@
                   height="28"
                   viewBox="0 0 24 24"
                   fill="none"
-                  stroke="#5C7A5A"
+                  stroke="#6f4e37"
                   stroke-width="1.8"
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -890,7 +995,7 @@
                   height="28"
                   viewBox="0 0 24 24"
                   fill="none"
-                  stroke="#5C7A5A"
+                  stroke="#6f4e37"
                   stroke-width="1.8"
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -910,7 +1015,7 @@
                   height="28"
                   viewBox="0 0 24 24"
                   fill="none"
-                  stroke="#5C7A5A"
+                  stroke="#6f4e37"
                   stroke-width="1.8"
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -926,7 +1031,7 @@
                   height="28"
                   viewBox="0 0 24 24"
                   fill="none"
-                  stroke="#5C7A5A"
+                  stroke="#6f4e37"
                   stroke-width="1.8"
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -943,13 +1048,13 @@
                   height="28"
                   viewBox="0 0 24 24"
                   fill="none"
-                  stroke="#5C7A5A"
+                  stroke="#6f4e37"
                   stroke-width="1.8"
                   stroke-linecap="round"
                   stroke-linejoin="round"
                 >
                   <path d="M6 8a6 6 0 0 1 12 0c0 3.5-2 5-3 6s-1 1.5-1 3" />
-                  <circle cx="12" cy="20" r="1" fill="#5C7A5A" /></svg
+                  <circle cx="12" cy="20" r="1" fill="#6f4e37" /></svg
               ></span>
               <span class="domain-name">聽力障礙</span>
             </div>
@@ -960,7 +1065,7 @@
                   height="28"
                   viewBox="0 0 24 24"
                   fill="none"
-                  stroke="#5C7A5A"
+                  stroke="#6f4e37"
                   stroke-width="1.8"
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -1030,6 +1135,128 @@
               <polyline points="14 2 14 8 20 8"></polyline>
             </svg>
             查看歷史紀錄
+          </button>
+        </div>
+      </div>
+
+      <!-- ===== IDENTITY SCREEN (身分判別) ===== -->
+      <div class="screen" id="screen-identity">
+        <div class="app-header">
+          <div class="header-label">受評長輩</div>
+          <div class="header-name" id="id-header-name">李佳穎</div>
+          <div class="header-badge">
+            <span class="dot"></span><span id="id-header-lang">國語</span>
+          </div>
+        </div>
+        <div class="category-strip">
+          <div class="category-name">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#6f4e37"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="8" r="4" />
+              <path d="M4 21v-1a6 6 0 0 1 12 0v1" />
+              <path d="M19 8v6M16 11h6" />
+            </svg>
+            身分判別
+          </div>
+        </div>
+        <div class="question-body">
+          <div class="identity-card">
+            <div class="identity-prompt">
+              為提供符合您評估的題組,請選擇您的身分
+            </div>
+          </div>
+          <div class="identity-options">
+            <div
+              class="identity-option"
+              id="role-self"
+              onclick="selectRole('self')"
+            >
+              <div class="identity-check">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="white"
+                  stroke-width="3.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </div>
+              <div class="identity-label">我是長者本人,自我評估身心功能</div>
+            </div>
+            <div
+              class="identity-option"
+              id="role-family"
+              onclick="selectRole('family')"
+            >
+              <div class="identity-check">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="white"
+                  stroke-width="3.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </div>
+              <div class="identity-label">
+                我是長者家屬(友人),幫長者評估身心功能
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="nav-bar">
+          <div class="nav-left">
+            <button
+              class="btn-nav btn-nav-home"
+              onclick="showScreen('screen-home')"
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+              </svg>
+              首頁
+            </button>
+          </div>
+          <button
+            class="btn-nav btn-nav-next"
+            id="id-next"
+            onclick="confirmRole()"
+            disabled
+          >
+            下一題
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
           </button>
         </div>
       </div>
@@ -1154,6 +1381,7 @@
 
     <script>
       const LANGUAGES = { zh: "國語", tw: "台語", en: "English", hk: "客語" };
+      const ROLE_LABELS = { self: "長者本人", family: "家屬(友人)" };
 
       const CATEGORY_ICONS = {
         認知功能: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3a4 4 0 0 0-4 4c0 1.1.45 2.1 1.17 2.83A4 4 0 0 0 5 13a4 4 0 0 0 4 4v4"/><path d="M15 3a4 4 0 0 1 4 4c0 1.1-.45 2.1-1.17 2.83A4 4 0 0 1 19 13a4 4 0 0 1-4 4v4"/><line x1="9" y1="21" x2="15" y2="21"/><line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="13" x2="15" y2="13"/></svg>`,
@@ -1164,154 +1392,268 @@
         憂鬱情緒: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`,
       };
 
-      const QUESTIONS = [
+      /* ===== 家屬友人 題組 ===== */
+      const QUESTIONS_FAMILY = [
         {
-          id: "cog1",
+          id: "f_cog1",
           category: "認知功能",
-          text: "您是否覺得長者近一年來有記憶減退現象？",
+          text: "1. 您是否覺得長者近一年來有記憶減退現象?",
           type: "yesno",
           illustration: "memory",
           abnormalAnswer: "yes",
         },
         {
-          id: "cog2",
+          id: "f_cog2",
           category: "認知功能",
-          text: "長者能否記住剛說過的3件事？（例：蘋果、火車、誠實）",
+          text: "1. 長者能否記住剛說過的3件事?(例:蘋果、火車、誠實)",
           type: "yesno",
           illustration: "recall",
           abnormalAnswer: "no",
         },
         {
-          id: "mob1",
+          id: "f_mob1",
           category: "行動功能",
-          text: "家屬協助評估長者，椅子起身測試：長者雙手抱胸，完成連續起立坐下5次。",
+          text: "2. 家屬協助評估長者,椅子起身測試:長者雙手抱胸,完成連續起立坐下5次。",
           type: "timer",
           threshold: 12,
-          thresholdLabel: "是否大於 12 秒？",
+          thresholdLabel: "是否大於 12 秒?",
           illustration: "chair",
           abnormalAnswer: "yes",
         },
         {
-          id: "mob2",
+          id: "f_mob2",
           category: "行動功能",
-          text: "長者行走時，是否有步態不穩或容易跌倒的情況？",
+          text: "2. 長者行走時,是否有步態不穩或容易跌倒的情況?",
           type: "yesno",
           illustration: "walk",
           abnormalAnswer: "yes",
         },
         {
-          id: "nut1",
+          id: "f_nut1",
           category: "營養不良",
-          text: "詢問長輩在非刻意減重的情況下，過去三個月，體重是否減輕 3 公斤或以上？",
+          text: "3. 詢問長輩在非刻意減重的情況下,過去三個月,體重是否減輕 3 公斤或以上?",
           type: "yesno",
           illustration: "weight",
           abnormalAnswer: "yes",
         },
         {
-          id: "nut2",
+          id: "f_nut2",
           category: "營養不良",
-          text: "長者每天是否食用至少一份蛋白質食物（肉、魚、蛋、豆）？",
+          text: "3. 長者每天是否食用至少一份蛋白質食物(肉、魚、蛋、豆)?",
           type: "yesno",
           illustration: "protein",
           abnormalAnswer: "no",
         },
         {
-          id: "vis1",
+          id: "f_vis1",
           category: "視力障礙",
-          text: "詢問長輩眼睛看遠、看近或閱讀是否有困難？",
+          text: "5. 詢問長輩眼睛看遠、看近或閱讀是否有困難?",
           type: "yesno",
           illustration: "vision",
           abnormalAnswer: "yes",
         },
         {
-          id: "vis2",
+          id: "f_vis2",
           category: "視力障礙",
-          text: "長者是否超過一年以上未檢查視力？",
+          text: "5. 長者是否超過一年以上未檢查視力?",
           type: "yesno",
           illustration: "eyecheck",
           abnormalAnswer: "yes",
         },
         {
-          id: "aud1",
+          id: "f_aud1",
           category: "聽力障礙",
-          text: "詢問長輩聽到別人說話是否有困難？",
+          text: "6. 詢問長輩聽到別人說話是否有困難?",
           type: "yesno",
           illustration: "hearing",
           abnormalAnswer: "yes",
         },
         {
-          id: "aud2",
+          id: "f_aud2",
           category: "聽力障礙",
-          text: "長者是否常常需要請別人重複或大聲說話？",
+          text: "6. 長者是否常常需要請別人重複或大聲說話?",
           type: "yesno",
           illustration: "repeat",
           abnormalAnswer: "yes",
         },
         {
-          id: "dep1",
+          id: "f_dep1",
           category: "憂鬱情緒",
-          text: "長者在過去一個月，是否常感到情緒低落、沮喪或絕望？",
+          text: "7. 長者在過去一個月,是否常感到情緒低落、沮喪或絕望?",
           type: "yesno",
           illustration: "depression",
           abnormalAnswer: "yes",
         },
         {
-          id: "dep2",
+          id: "f_dep2",
           category: "憂鬱情緒",
-          text: "長者是否對原本喜歡的活動失去興趣？",
+          text: "8. 長者是否對原本喜歡的活動失去興趣?",
           type: "yesno",
           illustration: "interest",
           abnormalAnswer: "yes",
         },
       ];
 
-      const CATEGORY_DOMAINS = {
-        認知功能: { ids: ["cog1", "cog2"] },
-        行動功能: { ids: ["mob1", "mob2"] },
-        營養不良: { ids: ["nut1", "nut2"] },
-        視力障礙: { ids: ["vis1", "vis2"] },
-        聽力障礙: { ids: ["aud1", "aud2"] },
-        憂鬱情緒: { ids: ["dep1", "dep2"] },
-      };
+      /* ===== 長者本人 題組(依影片) ===== */
+      const QUESTIONS_SELF = [
+        {
+          id: "s_cog1",
+          category: "認知功能",
+          text: "1. 您最近一年來,是否有記憶明顯減退的情形?",
+          type: "yesno",
+          illustration: "memory",
+          abnormalAnswer: "yes",
+        },
+        {
+          id: "s_mob1",
+          category: "行動功能",
+          text: "2. 您是否出現以下「任一種」情況?",
+          subText: "2-1. 非常擔心自己會跌倒",
+          type: "yesno",
+          illustration: "fall_worry",
+          abnormalAnswer: "yes",
+        },
+        {
+          id: "s_mob2",
+          category: "行動功能",
+          text: "2. 您是否出現以下「任一種」情況?",
+          subText: "2-2. 過去一年內曾跌倒過",
+          type: "yesno",
+          illustration: "fall_past",
+          abnormalAnswer: "yes",
+        },
+        {
+          id: "s_mob3",
+          category: "行動功能",
+          text: "2. 您是否出現以下「任一種」情況?",
+          subText: "2-3. 坐著時,必須抓握東西才能從椅子上站起來?",
+          type: "yesno",
+          illustration: "chair_grip",
+          abnormalAnswer: "yes",
+        },
+        {
+          id: "s_nut1",
+          category: "營養不良",
+          text: "3. 在非刻意減重的情況下,過去三個月,您的體重是否減輕 3 公斤或以上?",
+          type: "yesno",
+          illustration: "weight",
+          abnormalAnswer: "yes",
+        },
+        {
+          id: "s_nut2",
+          category: "營養不良",
+          text: "4. 過去三個月,您是否曾經食慾不好?",
+          type: "yesno",
+          illustration: "appetite",
+          abnormalAnswer: "yes",
+        },
+        {
+          id: "s_vis1",
+          category: "視力障礙",
+          text: "5. 您的眼睛看遠、看近或閱讀是否有困難?",
+          type: "yesno",
+          illustration: "vision",
+          abnormalAnswer: "yes",
+        },
+        {
+          id: "s_aud1",
+          category: "聽力障礙",
+          text: "6. 您的聽力是否出現以下「任一種」情況?",
+          subText: "6-1. 電話或手機交談時聽不清楚,或因為沒聽到鈴聲常漏接電話",
+          type: "yesno",
+          illustration: "phone_hear",
+          abnormalAnswer: "yes",
+        },
+        {
+          id: "s_aud2",
+          category: "聽力障礙",
+          text: "6. 您的聽力是否出現以下「任一種」情況?",
+          subText: "6-2. 看電視／聽收音機時,常被家人或朋友說音量開太大聲?",
+          type: "yesno",
+          illustration: "tv_loud",
+          abnormalAnswer: "yes",
+        },
+        {
+          id: "s_aud3",
+          category: "聽力障礙",
+          text: "6. 您的聽力是否出現以下「任一種」情況?",
+          subText: "6-3. 與人交談時,常需要對方提高說話音量或再說一次?",
+          type: "yesno",
+          illustration: "repeat",
+          abnormalAnswer: "yes",
+        },
+        {
+          id: "s_aud4",
+          category: "聽力障礙",
+          text: "6. 您的聽力是否出現以下「任一種」情況?",
+          subText: "6-4. 因為聽力問題而不想去參加朋友聚會或活動?",
+          type: "yesno",
+          illustration: "social_avoid",
+          abnormalAnswer: "yes",
+        },
+        {
+          id: "s_dep1",
+          category: "憂鬱情緒",
+          text: "7. 過去兩週,您是否常感到厭煩(心煩或「阿雜」),或覺得生活沒有希望?",
+          type: "yesno",
+          illustration: "gloomy",
+          abnormalAnswer: "yes",
+        },
+        {
+          id: "s_dep2",
+          category: "憂鬱情緒",
+          text: "8. 過去兩週,您是否減少很多的活動和原本您感興趣的事?",
+          type: "yesno",
+          illustration: "interest",
+          abnormalAnswer: "yes",
+        },
+      ];
+
+      const QUESTION_SETS = { self: QUESTIONS_SELF, family: QUESTIONS_FAMILY };
 
       const ILLUSTRATIONS = {
-        memory: `<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg"><rect width="320" height="200" fill="#EEF6ED"/><ellipse cx="90" cy="120" rx="32" ry="38" fill="#B8CDBA"/><circle cx="90" cy="72" r="22" fill="#D4A989"/><ellipse cx="83" cy="68" rx="5" ry="6" fill="#B8956F"/><ellipse cx="97" cy="68" rx="5" ry="6" fill="#B8956F"/><rect x="72" y="85" width="36" height="8" rx="4" fill="#D4A989"/><rect x="58" y="78" width="18" height="28" rx="4" fill="#333"/><rect x="60" y="80" width="14" height="22" rx="3" fill="#666"/><ellipse cx="148" cy="55" rx="45" ry="30" fill="white" opacity="0.9"/><ellipse cx="113" cy="78" rx="8" ry="8" fill="white" opacity="0.7"/><ellipse cx="105" cy="90" rx="5" ry="5" fill="white" opacity="0.5"/><text x="148" y="50" text-anchor="middle" font-size="18" font-weight="bold" fill="#C74B3A">2/6?</text><text x="148" y="72" text-anchor="middle" font-size="18" font-weight="bold" fill="#C74B3A">2/9?</text><ellipse cx="240" cy="125" rx="30" ry="35" fill="#C8A87A"/><circle cx="240" cy="80" r="22" fill="#8D6440"/><rect x="248" y="88" width="18" height="28" rx="4" fill="#333"/><rect x="250" y="90" width="14" height="22" rx="3" fill="#666"/><ellipse cx="196" cy="55" rx="35" ry="28" fill="white" opacity="0.9"/><ellipse cx="225" cy="76" rx="7" ry="7" fill="white" opacity="0.7"/><ellipse cx="232" cy="87" rx="4" ry="4" fill="white" opacity="0.5"/><text x="196" y="62" text-anchor="middle" font-size="22" font-weight="bold" fill="#3A7BA8">2/4!</text></svg>`,
-        recall: `<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg"><rect width="320" height="200" fill="#EEF6ED"/><text x="160" y="40" text-anchor="middle" font-size="14" fill="#5C7A5A" font-weight="600">記住這3件事</text><rect x="40" y="60" width="70" height="60" rx="12" fill="white" stroke="#D8E6D5" stroke-width="2"/><text x="75" y="98" text-anchor="middle" font-size="32">🍎</text><text x="75" y="134" text-anchor="middle" font-size="12" fill="#5C7A5A" font-weight="700">蘋果</text><rect x="126" y="60" width="70" height="60" rx="12" fill="white" stroke="#D8E6D5" stroke-width="2"/><text x="161" y="98" text-anchor="middle" font-size="32">🚂</text><text x="161" y="134" text-anchor="middle" font-size="12" fill="#5C7A5A" font-weight="700">火車</text><rect x="212" y="60" width="70" height="60" rx="12" fill="white" stroke="#D8E6D5" stroke-width="2"/><text x="247" y="98" text-anchor="middle" font-size="32">💚</text><text x="247" y="134" text-anchor="middle" font-size="12" fill="#5C7A5A" font-weight="700">誠實</text><text x="160" y="170" text-anchor="middle" font-size="12" fill="#888">請問長者能記住幾個？</text></svg>`,
+        memory: `<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg"><rect width="320" height="200" fill="#f7f3ef"/><ellipse cx="90" cy="120" rx="32" ry="38" fill="#cabba6"/><circle cx="90" cy="72" r="22" fill="#D4A989"/><ellipse cx="83" cy="68" rx="5" ry="6" fill="#B8956F"/><ellipse cx="97" cy="68" rx="5" ry="6" fill="#B8956F"/><rect x="72" y="85" width="36" height="8" rx="4" fill="#D4A989"/><rect x="58" y="78" width="18" height="28" rx="4" fill="#333"/><rect x="60" y="80" width="14" height="22" rx="3" fill="#666"/><ellipse cx="148" cy="55" rx="45" ry="30" fill="white" opacity="0.9"/><ellipse cx="113" cy="78" rx="8" ry="8" fill="white" opacity="0.7"/><ellipse cx="105" cy="90" rx="5" ry="5" fill="white" opacity="0.5"/><text x="148" y="50" text-anchor="middle" font-size="18" font-weight="bold" fill="#C74B3A">2/6?</text><text x="148" y="72" text-anchor="middle" font-size="18" font-weight="bold" fill="#C74B3A">2/9?</text><ellipse cx="240" cy="125" rx="30" ry="35" fill="#C8A87A"/><circle cx="240" cy="80" r="22" fill="#8D6440"/><rect x="248" y="88" width="18" height="28" rx="4" fill="#333"/><rect x="250" y="90" width="14" height="22" rx="3" fill="#666"/><ellipse cx="196" cy="55" rx="35" ry="28" fill="white" opacity="0.9"/><ellipse cx="225" cy="76" rx="7" ry="7" fill="white" opacity="0.7"/><ellipse cx="232" cy="87" rx="4" ry="4" fill="white" opacity="0.5"/><text x="196" y="62" text-anchor="middle" font-size="22" font-weight="bold" fill="#3A7BA8">2/4!</text></svg>`,
+        recall: `<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg"><rect width="320" height="200" fill="#f7f3ef"/><text x="160" y="40" text-anchor="middle" font-size="14" fill="#6f4e37" font-weight="600">記住這3件事</text><rect x="40" y="60" width="70" height="60" rx="12" fill="white" stroke="#e3d7c8" stroke-width="2"/><text x="75" y="98" text-anchor="middle" font-size="32">🍎</text><text x="75" y="134" text-anchor="middle" font-size="12" fill="#6f4e37" font-weight="700">蘋果</text><rect x="126" y="60" width="70" height="60" rx="12" fill="white" stroke="#e3d7c8" stroke-width="2"/><text x="161" y="98" text-anchor="middle" font-size="32">🚂</text><text x="161" y="134" text-anchor="middle" font-size="12" fill="#6f4e37" font-weight="700">火車</text><rect x="212" y="60" width="70" height="60" rx="12" fill="white" stroke="#e3d7c8" stroke-width="2"/><text x="247" y="98" text-anchor="middle" font-size="32">💚</text><text x="247" y="134" text-anchor="middle" font-size="12" fill="#6f4e37" font-weight="700">誠實</text><text x="160" y="170" text-anchor="middle" font-size="12" fill="#888">請問長者能記住幾個?</text></svg>`,
         chair: `<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg"><rect width="320" height="200" fill="#FDF0D5"/><rect x="55" y="120" width="60" height="8" rx="4" fill="#8D6440"/><rect x="60" y="100" width="50" height="25" rx="4" fill="#A67C52"/><rect x="55" y="128" width="8" height="40" rx="4" fill="#8D6440"/><rect x="107" y="128" width="8" height="40" rx="4" fill="#8D6440"/><rect x="80" y="72" width="8" height="30" rx="4" fill="#8D6440"/><circle cx="95" cy="55" r="18" fill="#D4A989"/><rect x="78" y="72" width="36" height="38" rx="6" fill="#4A7ADB"/><rect x="68" y="80" width="50" height="10" rx="5" fill="#3A6BC8"/><rect x="78" y="110" width="16" height="35" rx="8" fill="#2C3E6E"/><rect x="96" y="110" width="16" height="35" rx="8" fill="#2C3E6E"/><text x="75" y="175" text-anchor="middle" font-size="13" font-weight="bold" fill="#C98B2A">① 站起</text><text x="160" y="110" text-anchor="middle" font-size="28" fill="#C98B2A">↔</text><circle cx="235" cy="55" r="18" fill="#D4A989"/><rect x="218" y="72" width="36" height="38" rx="6" fill="#4A7ADB"/><rect x="208" y="80" width="50" height="10" rx="5" fill="#3A6BC8"/><rect x="195" y="108" width="60" height="8" rx="4" fill="#8D6440"/><rect x="200" y="88" width="50" height="25" rx="4" fill="#A67C52"/><rect x="195" y="116" width="8" height="40" rx="4" fill="#8D6440"/><rect x="247" y="116" width="8" height="40" rx="4" fill="#8D6440"/><rect x="220" y="60" width="8" height="30" rx="4" fill="#8D6440"/><rect x="218" y="108" width="36" height="12" rx="6" fill="#2C3E6E"/><text x="225" y="175" text-anchor="middle" font-size="13" font-weight="bold" fill="#C98B2A">② 坐下</text><text x="160" y="193" text-anchor="middle" font-size="12" fill="#C98B2A" font-weight="600">① + ② 做五次 = ? 秒</text></svg>`,
-        weight: `<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg"><rect width="320" height="200" fill="#EEF6ED"/><circle cx="90" cy="70" r="20" fill="#D4A989"/><rect x="68" y="88" width="44" height="50" rx="8" fill="#89B899"/><rect x="60" y="88" width="20" height="45" rx="10" fill="#2C5E42"/><rect x="100" y="88" width="20" height="45" rx="10" fill="#2C5E42"/><rect x="74" y="135" width="16" height="30" rx="8" fill="#2C3E6E"/><rect x="96" y="135" width="16" height="30" rx="8" fill="#2C3E6E"/><rect x="60" y="162" width="60" height="12" rx="6" fill="#DDD" stroke="#CCC" stroke-width="1"/><text x="90" y="172" text-anchor="middle" font-size="11" font-weight="bold" fill="#333">70.0 kg</text><text x="160" y="110" text-anchor="middle" font-size="24" fill="#5C7A5A">→</text><text x="160" y="130" text-anchor="middle" font-size="10" fill="#888">三個月</text><circle cx="230" cy="70" r="20" fill="#C4987A"/><rect x="212" y="88" width="36" height="44" rx="8" fill="#96B5D4"/><rect x="204" y="88" width="18" height="42" rx="9" fill="#3A6090"/><rect x="238" y="88" width="18" height="42" rx="9" fill="#3A6090"/><rect x="212" y="128" width="14" height="30" rx="7" fill="#2C3E6E"/><rect x="230" y="128" width="14" height="30" rx="7" fill="#2C3E6E"/><rect x="200" y="157" width="60" height="12" rx="6" fill="#DDD" stroke="#CCC" stroke-width="1"/><text x="230" y="167" text-anchor="middle" font-size="11" font-weight="bold" fill="#C74B3A">67.0 kg</text><text x="230" y="185" text-anchor="middle" font-size="11" fill="#C74B3A" font-weight="600">▼ 3kg</text></svg>`,
-        vision: `<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg"><rect width="320" height="200" fill="#EEF6ED"/><circle cx="70" cy="70" r="20" fill="#C0B090"/><rect x="50" y="88" width="40" height="46" rx="8" fill="#E8A060"/><ellipse cx="136" cy="50" rx="40" ry="28" fill="white" opacity="0.9"/><ellipse cx="102" cy="70" rx="7" ry="7" fill="white" opacity="0.7"/><ellipse cx="93" cy="82" rx="5" ry="5" fill="white" opacity="0.5"/><text x="136" y="38" text-anchor="middle" font-size="22">🐕</text><text x="136" y="62" text-anchor="middle" font-size="14" fill="#888">?</text><text x="155" y="28" text-anchor="middle" font-size="20">🐈</text><circle cx="240" cy="70" r="20" fill="#A89880"/><circle cx="232" cy="70" r="7" fill="none" stroke="#666" stroke-width="2"/><circle cx="248" cy="70" r="7" fill="none" stroke="#666" stroke-width="2"/><line x1="239" y1="70" x2="241" y2="70" stroke="#666" stroke-width="2"/><rect x="220" y="88" width="40" height="46" rx="8" fill="#8AA0C8"/><rect x="205" y="118" width="44" height="28" rx="4" fill="#C74B3A"/><line x1="227" y1="118" x2="227" y2="146" stroke="white" stroke-width="1"/><ellipse cx="184" cy="50" rx="40" ry="28" fill="white" opacity="0.9"/><ellipse cx="218" cy="70" rx="7" ry="7" fill="white" opacity="0.7"/><ellipse cx="226" cy="82" rx="5" ry="5" fill="white" opacity="0.5"/><rect x="154" y="38" width="60" height="7" rx="3" fill="#CCC"/><rect x="158" y="50" width="52" height="7" rx="3" fill="#CCC"/><rect x="154" y="62" width="60" height="7" rx="3" fill="#CCC"/><text x="184" y="76" text-anchor="middle" font-size="14" fill="#888">?</text></svg>`,
-        hearing: `<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg"><rect width="320" height="200" fill="#EEF6ED"/><circle cx="100" cy="80" r="24" fill="#D4A989"/><rect x="76" y="102" width="48" height="52" rx="8" fill="#6A8FA8"/><path d="M145 65 Q155 80 145 95" stroke="#5C7A5A" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M155 55 Q172 80 155 105" stroke="#5C7A5A" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M165 45 Q189 80 165 115" stroke="#5C7A5A" stroke-width="3" fill="none" stroke-linecap="round"/><line x1="175" y1="55" x2="195" y2="75" stroke="#C74B3A" stroke-width="4" stroke-linecap="round"/><line x1="195" y1="55" x2="175" y2="75" stroke="#C74B3A" stroke-width="4" stroke-linecap="round"/><circle cx="100" cy="80" r="5" fill="#8D6440"/><ellipse cx="78" cy="85" rx="8" ry="12" fill="#D4A989"/><text x="160" y="165" text-anchor="middle" font-size="13" fill="#5C7A5A" font-weight="600">聽力是否有困難？</text></svg>`,
-        depression: `<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg"><rect width="320" height="200" fill="#F0EEF8"/><circle cx="160" cy="60" r="28" fill="#D4A989"/><circle cx="150" cy="57" r="4" fill="#8D6440"/><circle cx="170" cy="57" r="4" fill="#8D6440"/><path d="M148 73 Q160 65 172 73" stroke="#8D6440" stroke-width="2.5" fill="none" stroke-linecap="round"/><rect x="132" y="86" width="56" height="56" rx="8" fill="#9090C8"/><rect x="100" y="92" width="34" height="12" rx="6" fill="#7878B8"/><rect x="186" y="92" width="34" height="12" rx="6" fill="#7878B8"/><rect x="138" y="140" width="18" height="36" rx="9" fill="#6060A0"/><rect x="164" y="140" width="18" height="36" rx="9" fill="#6060A0"/><text x="90" y="50" font-size="20" fill="#9090C8">💧</text><text x="230" y="50" font-size="20" fill="#9090C8">💧</text><text x="60" y="90" font-size="16" fill="#9090C8">💧</text><text x="250" y="90" font-size="16" fill="#9090C8">💧</text><text x="160" y="190" text-anchor="middle" font-size="12" fill="#7070A0">長者是否常感到沮喪或絕望？</text></svg>`,
-        protein: `<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg"><rect width="320" height="200" fill="#EEF6ED"/><text x="160" y="35" text-anchor="middle" font-size="14" fill="#5C7A5A" font-weight="600">每日蛋白質攝取</text><rect x="30" y="55" width="60" height="65" rx="12" fill="white" stroke="#D8E6D5" stroke-width="2"/><text x="60" y="93" text-anchor="middle" font-size="32">🥚</text><text x="60" y="130" text-anchor="middle" font-size="11" fill="#5C7A5A" font-weight="600">蛋</text><rect x="105" y="55" width="60" height="65" rx="12" fill="white" stroke="#D8E6D5" stroke-width="2"/><text x="135" y="93" text-anchor="middle" font-size="32">🥩</text><text x="135" y="130" text-anchor="middle" font-size="11" fill="#5C7A5A" font-weight="600">肉</text><rect x="180" y="55" width="60" height="65" rx="12" fill="white" stroke="#D8E6D5" stroke-width="2"/><text x="210" y="93" text-anchor="middle" font-size="32">🐟</text><text x="210" y="130" text-anchor="middle" font-size="11" fill="#5C7A5A" font-weight="600">魚</text><rect x="255" y="55" width="60" height="65" rx="12" fill="white" stroke="#D8E6D5" stroke-width="2"/><text x="285" y="93" text-anchor="middle" font-size="32">🫘</text><text x="285" y="130" text-anchor="middle" font-size="11" fill="#5C7A5A" font-weight="600">豆</text><text x="160" y="168" text-anchor="middle" font-size="12" fill="#888">每天是否至少攝取一份？</text></svg>`,
-        walk: `<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg"><rect width="320" height="200" fill="#EEF6ED"/><rect x="20" y="155" width="280" height="4" rx="2" fill="#D8E6D5"/><circle cx="120" cy="70" r="22" fill="#D4A989"/><rect x="100" y="90" width="40" height="48" rx="8" fill="#5C7A5A"/><line x1="95" y1="105" x2="80" y2="155" stroke="#8D6440" stroke-width="4" stroke-linecap="round"/><line x1="72" y1="155" x2="88" y2="155" stroke="#8D6440" stroke-width="4" stroke-linecap="round"/><rect x="100" y="136" width="16" height="30" rx="8" fill="#2C3E6E" transform="rotate(-10 108 136)"/><rect x="120" y="136" width="16" height="30" rx="8" fill="#2C3E6E" transform="rotate(10 128 136)"/><polygon points="180,68 200,100 160,100" fill="#C98B2A" opacity="0.9"/><line x1="180" y1="78" x2="180" y2="90" stroke="white" stroke-width="3" stroke-linecap="round"/><circle cx="180" cy="95" r="2" fill="white"/><text x="160" y="185" text-anchor="middle" font-size="12" fill="#888">步態是否不穩？</text></svg>`,
-        eyecheck: `<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg"><rect width="320" height="200" fill="#EEF6ED"/><rect x="100" y="30" width="120" height="130" rx="8" fill="white" stroke="#D8E6D5" stroke-width="2"/><text x="160" y="65" text-anchor="middle" font-size="28" font-weight="900" fill="#333">E</text><text x="160" y="90" text-anchor="middle" font-size="22" font-weight="700" fill="#555">F P</text><text x="160" y="112" text-anchor="middle" font-size="16" font-weight="600" fill="#666">T O Z</text><text x="160" y="130" text-anchor="middle" font-size="13" fill="#888">L P E D</text><text x="160" y="148" text-anchor="middle" font-size="10" fill="#AAA">PECFD</text><text x="220" y="185" text-anchor="middle" font-size="13" fill="#C74B3A" font-weight="600">超過1年未檢查？</text><rect x="60" y="170" width="40" height="26" rx="4" fill="white" stroke="#C74B3A" stroke-width="1.5"/><rect x="60" y="170" width="40" height="8" rx="4" fill="#C74B3A"/><line x1="70" y1="168" x2="70" y2="174" stroke="#C74B3A" stroke-width="2" stroke-linecap="round"/><line x1="90" y1="168" x2="90" y2="174" stroke="#C74B3A" stroke-width="2" stroke-linecap="round"/><text x="80" y="192" text-anchor="middle" font-size="9" fill="#C74B3A" font-weight="700">1yr+</text></svg>`,
-        repeat: `<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg"><rect width="320" height="200" fill="#EEF6ED"/><circle cx="75" cy="70" r="20" fill="#8D9E8A"/><rect x="55" y="88" width="40" height="46" rx="8" fill="#5C7A5A"/><rect x="108" y="40" width="80" height="36" rx="12" fill="#5C7A5A"/><text x="148" y="63" text-anchor="middle" font-size="14" fill="white" font-weight="600">您好！</text><polygon points="108,58 96,65 110,68" fill="#5C7A5A"/><rect x="108" y="88" width="90" height="36" rx="12" fill="#8AAB87"/><text x="153" y="111" text-anchor="middle" font-size="12" fill="white" font-weight="600">請再說一次</text><polygon points="108,106 96,113 110,116" fill="#8AAB87"/><rect x="108" y="135" width="100" height="36" rx="12" fill="#B8D4B4"/><text x="158" y="158" text-anchor="middle" font-size="12" fill="#3A5A38" font-weight="600">麻煩大聲一點</text><polygon points="108,153 96,160 110,163" fill="#B8D4B4"/><circle cx="248" cy="100" r="20" fill="#D4A989"/><rect x="228" y="118" width="40" height="46" rx="8" fill="#9090C8"/><ellipse cx="230" cy="105" rx="8" ry="12" fill="#D4A989"/></svg>`,
-        interest: `<svg viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg"><rect width="320" height="220" fill="#F0EEF8"/><g opacity="0.2"><ellipse cx="75" cy="78" rx="10" ry="7" fill="#7070A0"/><rect x="83" y="48" width="4" height="33" rx="2" fill="#7070A0"/><rect x="83" y="48" width="18" height="4" rx="2" fill="#7070A0"/><ellipse cx="97" cy="68" rx="10" ry="7" fill="#7070A0"/><rect x="105" y="40" width="4" height="32" rx="2" fill="#7070A0"/><circle cx="160" cy="65" r="8" fill="#9080A0"/><circle cx="160" cy="50" r="6" fill="#9080A0"/><circle cx="160" cy="80" r="6" fill="#9080A0"/><circle cx="147" cy="58" r="6" fill="#9080A0"/><circle cx="173" cy="58" r="6" fill="#9080A0"/><circle cx="147" cy="73" r="6" fill="#9080A0"/><circle cx="173" cy="73" r="6" fill="#9080A0"/><rect x="218" y="48" width="36" height="46" rx="4" fill="#7070A0"/><line x1="236" y1="48" x2="236" y2="94" stroke="white" stroke-width="2" opacity="0.5"/><rect x="220" y="55" width="13" height="3" rx="1" fill="white" opacity="0.4"/><rect x="220" y="62" width="13" height="3" rx="1" fill="white" opacity="0.4"/><rect x="220" y="69" width="13" height="3" rx="1" fill="white" opacity="0.4"/></g><circle cx="160" cy="115" r="22" fill="#D4A989"/><circle cx="151" cy="112" r="3" fill="#8D6440"/><circle cx="169" cy="112" r="3" fill="#8D6440"/><path d="M151 124 Q160 120 169 124" stroke="#8D6440" stroke-width="2.5" fill="none" stroke-linecap="round"/><rect x="138" y="135" width="44" height="38" rx="8" fill="#8080B8"/><rect x="138" y="171" width="16" height="28" rx="8" fill="#6060A0"/><rect x="158" y="171" width="16" height="28" rx="8" fill="#6060A0"/><text x="160" y="213" text-anchor="middle" font-size="11" fill="#7070A0" font-weight="600">對喜歡的事物失去興趣？</text></svg>`,
+        weight: `<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg"><rect width="320" height="200" fill="#f7f3ef"/><circle cx="90" cy="70" r="20" fill="#D4A989"/><rect x="68" y="88" width="44" height="50" rx="8" fill="#b89a7e"/><rect x="60" y="88" width="20" height="45" rx="10" fill="#4e342e"/><rect x="100" y="88" width="20" height="45" rx="10" fill="#4e342e"/><rect x="74" y="135" width="16" height="30" rx="8" fill="#2C3E6E"/><rect x="96" y="135" width="16" height="30" rx="8" fill="#2C3E6E"/><rect x="60" y="162" width="60" height="12" rx="6" fill="#DDD" stroke="#CCC" stroke-width="1"/><text x="90" y="172" text-anchor="middle" font-size="11" font-weight="bold" fill="#333">70.0 kg</text><text x="160" y="110" text-anchor="middle" font-size="24" fill="#6f4e37">→</text><text x="160" y="130" text-anchor="middle" font-size="10" fill="#888">三個月</text><circle cx="230" cy="70" r="20" fill="#C4987A"/><rect x="212" y="88" width="36" height="44" rx="8" fill="#96B5D4"/><rect x="204" y="88" width="18" height="42" rx="9" fill="#3A6090"/><rect x="238" y="88" width="18" height="42" rx="9" fill="#3A6090"/><rect x="212" y="128" width="14" height="30" rx="7" fill="#2C3E6E"/><rect x="230" y="128" width="14" height="30" rx="7" fill="#2C3E6E"/><rect x="200" y="157" width="60" height="12" rx="6" fill="#DDD" stroke="#CCC" stroke-width="1"/><text x="230" y="167" text-anchor="middle" font-size="11" font-weight="bold" fill="#C74B3A">67.0 kg</text><text x="230" y="185" text-anchor="middle" font-size="11" fill="#C74B3A" font-weight="600">▼ 3kg</text></svg>`,
+        vision: `<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg"><rect width="320" height="200" fill="#f7f3ef"/><circle cx="70" cy="70" r="20" fill="#C0B090"/><rect x="50" y="88" width="40" height="46" rx="8" fill="#E8A060"/><ellipse cx="136" cy="50" rx="40" ry="28" fill="white" opacity="0.9"/><ellipse cx="102" cy="70" rx="7" ry="7" fill="white" opacity="0.7"/><ellipse cx="93" cy="82" rx="5" ry="5" fill="white" opacity="0.5"/><text x="136" y="38" text-anchor="middle" font-size="22">🐕</text><text x="136" y="62" text-anchor="middle" font-size="14" fill="#888">?</text><text x="155" y="28" text-anchor="middle" font-size="20">🐈</text><circle cx="240" cy="70" r="20" fill="#A89880"/><circle cx="232" cy="70" r="7" fill="none" stroke="#666" stroke-width="2"/><circle cx="248" cy="70" r="7" fill="none" stroke="#666" stroke-width="2"/><line x1="239" y1="70" x2="241" y2="70" stroke="#666" stroke-width="2"/><rect x="220" y="88" width="40" height="46" rx="8" fill="#8AA0C8"/><rect x="205" y="118" width="44" height="28" rx="4" fill="#C74B3A"/><line x1="227" y1="118" x2="227" y2="146" stroke="white" stroke-width="1"/><ellipse cx="184" cy="50" rx="40" ry="28" fill="white" opacity="0.9"/><ellipse cx="218" cy="70" rx="7" ry="7" fill="white" opacity="0.7"/><ellipse cx="226" cy="82" rx="5" ry="5" fill="white" opacity="0.5"/><rect x="154" y="38" width="60" height="7" rx="3" fill="#CCC"/><rect x="158" y="50" width="52" height="7" rx="3" fill="#CCC"/><rect x="154" y="62" width="60" height="7" rx="3" fill="#CCC"/><text x="184" y="76" text-anchor="middle" font-size="14" fill="#888">?</text></svg>`,
+        hearing: `<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg"><rect width="320" height="200" fill="#f7f3ef"/><circle cx="100" cy="80" r="24" fill="#D4A989"/><rect x="76" y="102" width="48" height="52" rx="8" fill="#6A8FA8"/><path d="M145 65 Q155 80 145 95" stroke="#6f4e37" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M155 55 Q172 80 155 105" stroke="#6f4e37" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M165 45 Q189 80 165 115" stroke="#6f4e37" stroke-width="3" fill="none" stroke-linecap="round"/><line x1="175" y1="55" x2="195" y2="75" stroke="#C74B3A" stroke-width="4" stroke-linecap="round"/><line x1="195" y1="55" x2="175" y2="75" stroke="#C74B3A" stroke-width="4" stroke-linecap="round"/><circle cx="100" cy="80" r="5" fill="#8D6440"/><ellipse cx="78" cy="85" rx="8" ry="12" fill="#D4A989"/><text x="160" y="165" text-anchor="middle" font-size="13" fill="#6f4e37" font-weight="600">聽力是否有困難?</text></svg>`,
+        depression: `<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg"><rect width="320" height="200" fill="#F0EEF8"/><circle cx="160" cy="60" r="28" fill="#D4A989"/><circle cx="150" cy="57" r="4" fill="#8D6440"/><circle cx="170" cy="57" r="4" fill="#8D6440"/><path d="M148 73 Q160 65 172 73" stroke="#8D6440" stroke-width="2.5" fill="none" stroke-linecap="round"/><rect x="132" y="86" width="56" height="56" rx="8" fill="#9090C8"/><rect x="100" y="92" width="34" height="12" rx="6" fill="#7878B8"/><rect x="186" y="92" width="34" height="12" rx="6" fill="#7878B8"/><rect x="138" y="140" width="18" height="36" rx="9" fill="#6060A0"/><rect x="164" y="140" width="18" height="36" rx="9" fill="#6060A0"/><text x="90" y="50" font-size="20" fill="#9090C8">💧</text><text x="230" y="50" font-size="20" fill="#9090C8">💧</text><text x="60" y="90" font-size="16" fill="#9090C8">💧</text><text x="250" y="90" font-size="16" fill="#9090C8">💧</text><text x="160" y="190" text-anchor="middle" font-size="12" fill="#7070A0">長者是否常感到沮喪或絕望?</text></svg>`,
+        protein: `<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg"><rect width="320" height="200" fill="#f7f3ef"/><text x="160" y="35" text-anchor="middle" font-size="14" fill="#6f4e37" font-weight="600">每日蛋白質攝取</text><rect x="30" y="55" width="60" height="65" rx="12" fill="white" stroke="#e3d7c8" stroke-width="2"/><text x="60" y="93" text-anchor="middle" font-size="32">🥚</text><text x="60" y="130" text-anchor="middle" font-size="11" fill="#6f4e37" font-weight="600">蛋</text><rect x="105" y="55" width="60" height="65" rx="12" fill="white" stroke="#e3d7c8" stroke-width="2"/><text x="135" y="93" text-anchor="middle" font-size="32">🥩</text><text x="135" y="130" text-anchor="middle" font-size="11" fill="#6f4e37" font-weight="600">肉</text><rect x="180" y="55" width="60" height="65" rx="12" fill="white" stroke="#e3d7c8" stroke-width="2"/><text x="210" y="93" text-anchor="middle" font-size="32">🐟</text><text x="210" y="130" text-anchor="middle" font-size="11" fill="#6f4e37" font-weight="600">魚</text><rect x="255" y="55" width="60" height="65" rx="12" fill="white" stroke="#e3d7c8" stroke-width="2"/><text x="285" y="93" text-anchor="middle" font-size="32">🫘</text><text x="285" y="130" text-anchor="middle" font-size="11" fill="#6f4e37" font-weight="600">豆</text><text x="160" y="168" text-anchor="middle" font-size="12" fill="#888">每天是否至少攝取一份?</text></svg>`,
+        walk: `<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg"><rect width="320" height="200" fill="#f7f3ef"/><rect x="20" y="155" width="280" height="4" rx="2" fill="#e3d7c8"/><circle cx="120" cy="70" r="22" fill="#D4A989"/><rect x="100" y="90" width="40" height="48" rx="8" fill="#6f4e37"/><line x1="95" y1="105" x2="80" y2="155" stroke="#8D6440" stroke-width="4" stroke-linecap="round"/><line x1="72" y1="155" x2="88" y2="155" stroke="#8D6440" stroke-width="4" stroke-linecap="round"/><rect x="100" y="136" width="16" height="30" rx="8" fill="#2C3E6E" transform="rotate(-10 108 136)"/><rect x="120" y="136" width="16" height="30" rx="8" fill="#2C3E6E" transform="rotate(10 128 136)"/><polygon points="180,68 200,100 160,100" fill="#C98B2A" opacity="0.9"/><line x1="180" y1="78" x2="180" y2="90" stroke="white" stroke-width="3" stroke-linecap="round"/><circle cx="180" cy="95" r="2" fill="white"/><text x="160" y="185" text-anchor="middle" font-size="12" fill="#888">步態是否不穩?</text></svg>`,
+        eyecheck: `<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg"><rect width="320" height="200" fill="#f7f3ef"/><rect x="100" y="30" width="120" height="130" rx="8" fill="white" stroke="#e3d7c8" stroke-width="2"/><text x="160" y="65" text-anchor="middle" font-size="28" font-weight="900" fill="#333">E</text><text x="160" y="90" text-anchor="middle" font-size="22" font-weight="700" fill="#555">F P</text><text x="160" y="112" text-anchor="middle" font-size="16" font-weight="600" fill="#666">T O Z</text><text x="160" y="130" text-anchor="middle" font-size="13" fill="#888">L P E D</text><text x="160" y="148" text-anchor="middle" font-size="10" fill="#AAA">PECFD</text><text x="220" y="185" text-anchor="middle" font-size="13" fill="#C74B3A" font-weight="600">超過1年未檢查?</text><rect x="60" y="170" width="40" height="26" rx="4" fill="white" stroke="#C74B3A" stroke-width="1.5"/><rect x="60" y="170" width="40" height="8" rx="4" fill="#C74B3A"/><line x1="70" y1="168" x2="70" y2="174" stroke="#C74B3A" stroke-width="2" stroke-linecap="round"/><line x1="90" y1="168" x2="90" y2="174" stroke="#C74B3A" stroke-width="2" stroke-linecap="round"/><text x="80" y="192" text-anchor="middle" font-size="9" fill="#C74B3A" font-weight="700">1yr+</text></svg>`,
+        repeat: `<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg"><rect width="320" height="200" fill="#f7f3ef"/><circle cx="75" cy="70" r="20" fill="#8D9E8A"/><rect x="55" y="88" width="40" height="46" rx="8" fill="#6f4e37"/><rect x="108" y="40" width="80" height="36" rx="12" fill="#6f4e37"/><text x="148" y="63" text-anchor="middle" font-size="14" fill="white" font-weight="600">您好!</text><polygon points="108,58 96,65 110,68" fill="#6f4e37"/><rect x="108" y="88" width="90" height="36" rx="12" fill="#a07e5e"/><text x="153" y="111" text-anchor="middle" font-size="12" fill="white" font-weight="600">請再說一次</text><polygon points="108,106 96,113 110,116" fill="#a07e5e"/><rect x="108" y="135" width="100" height="36" rx="12" fill="#ddccba"/><text x="158" y="158" text-anchor="middle" font-size="12" fill="#5a3e2c" font-weight="600">麻煩大聲一點</text><polygon points="108,153 96,160 110,163" fill="#ddccba"/><circle cx="248" cy="100" r="20" fill="#D4A989"/><rect x="228" y="118" width="40" height="46" rx="8" fill="#9090C8"/><ellipse cx="230" cy="105" rx="8" ry="12" fill="#D4A989"/></svg>`,
+        interest: `<svg viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg"><rect width="320" height="220" fill="#F0EEF8"/><g opacity="0.2"><ellipse cx="75" cy="78" rx="10" ry="7" fill="#7070A0"/><rect x="83" y="48" width="4" height="33" rx="2" fill="#7070A0"/><rect x="83" y="48" width="18" height="4" rx="2" fill="#7070A0"/><ellipse cx="97" cy="68" rx="10" ry="7" fill="#7070A0"/><rect x="105" y="40" width="4" height="32" rx="2" fill="#7070A0"/><circle cx="160" cy="65" r="8" fill="#9080A0"/><circle cx="160" cy="50" r="6" fill="#9080A0"/><circle cx="160" cy="80" r="6" fill="#9080A0"/><circle cx="147" cy="58" r="6" fill="#9080A0"/><circle cx="173" cy="58" r="6" fill="#9080A0"/><circle cx="147" cy="73" r="6" fill="#9080A0"/><circle cx="173" cy="73" r="6" fill="#9080A0"/><rect x="218" y="48" width="36" height="46" rx="4" fill="#7070A0"/><line x1="236" y1="48" x2="236" y2="94" stroke="white" stroke-width="2" opacity="0.5"/><rect x="220" y="55" width="13" height="3" rx="1" fill="white" opacity="0.4"/><rect x="220" y="62" width="13" height="3" rx="1" fill="white" opacity="0.4"/><rect x="220" y="69" width="13" height="3" rx="1" fill="white" opacity="0.4"/></g><circle cx="160" cy="115" r="22" fill="#D4A989"/><circle cx="151" cy="112" r="3" fill="#8D6440"/><circle cx="169" cy="112" r="3" fill="#8D6440"/><path d="M151 124 Q160 120 169 124" stroke="#8D6440" stroke-width="2.5" fill="none" stroke-linecap="round"/><rect x="138" y="135" width="44" height="38" rx="8" fill="#8080B8"/><rect x="138" y="171" width="16" height="28" rx="8" fill="#6060A0"/><rect x="158" y="171" width="16" height="28" rx="8" fill="#6060A0"/><text x="160" y="213" text-anchor="middle" font-size="11" fill="#7070A0" font-weight="600">對喜歡的事物失去興趣?</text></svg>`,
+
+        /* ===== 長者本人新增插圖 ===== */
+        fall_worry: `<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg"><rect width="320" height="200" fill="#E5F0F8"/><polygon points="40,170 130,170 130,150 95,150 95,130 60,130 60,110 40,110" fill="#9BB8D4"/><polygon points="40,168 130,168 130,148 95,148 95,128 60,128 60,108 40,108" fill="#B4CCE2"/><circle cx="180" cy="58" r="20" fill="#D4A989"/><path d="M168 52 Q172 47 178 51" stroke="#8D6440" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M183 51 Q189 47 192 52" stroke="#8D6440" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="174" cy="58" r="2.5" fill="#8D6440"/><circle cx="187" cy="58" r="2.5" fill="#8D6440"/><ellipse cx="180" cy="68" rx="5" ry="6" fill="#8D6440" opacity="0.5"/><rect x="160" y="76" width="40" height="50" rx="10" fill="#B07CC0"/><path d="M162 84 L150 120" stroke="#B07CC0" stroke-width="11" stroke-linecap="round"/><path d="M198 84 L212 118" stroke="#B07CC0" stroke-width="11" stroke-linecap="round"/><rect x="163" y="124" width="14" height="40" rx="7" fill="#5b4a6e"/><rect x="183" y="124" width="14" height="40" rx="7" fill="#5b4a6e"/><line x1="214" y1="92" x2="214" y2="168" stroke="#8D6440" stroke-width="4" stroke-linecap="round"/><line x1="214" y1="92" x2="224" y2="98" stroke="#8D6440" stroke-width="4" stroke-linecap="round"/><text x="150" y="46" font-size="26" font-weight="900" fill="#C74B3A">!</text><text x="205" y="50" font-size="22" font-weight="900" fill="#C74B3A">!</text><text x="160" y="192" text-anchor="middle" font-size="12" fill="#3A7BA8" font-weight="600">非常擔心自己會跌倒</text></svg>`,
+
+        fall_past: `<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg"><rect width="320" height="200" fill="#E5F0F8"/><polygon points="40,60 150,60 150,80 110,80 110,100 75,100 75,120 40,120 40,140 20,140 20,60" fill="#9BB8D4"/><polygon points="40,58 150,58 150,78 110,78 110,98 75,98 75,118 40,118 40,138 20,138 20,58" fill="#B4CCE2"/><circle cx="180" cy="135" r="18" fill="#D4A989"/><path d="M170 130 Q174 126 179 130" stroke="#8D6440" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M183 130 Q188 126 191 130" stroke="#8D6440" stroke-width="2" fill="none" stroke-linecap="round"/><ellipse cx="180" cy="143" rx="6" ry="5" fill="#8D6440" opacity="0.5"/><ellipse cx="205" cy="158" rx="40" ry="20" fill="#B07CC0"/><rect x="196" y="150" width="50" height="22" rx="11" fill="#B07CC0"/><path d="M232 152 L258 140" stroke="#B07CC0" stroke-width="11" stroke-linecap="round"/><path d="M242 165 L270 168" stroke="#5b4a6e" stroke-width="12" stroke-linecap="round"/><path d="M222 172 L246 182" stroke="#5b4a6e" stroke-width="12" stroke-linecap="round"/><g stroke="#C98B2A" stroke-width="3" stroke-linecap="round"><line x1="160" y1="120" x2="152" y2="108"/><line x1="172" y1="116" x2="170" y2="100"/><line x1="186" y1="118" x2="192" y2="104"/></g><text x="160" y="40" text-anchor="middle" font-size="13" fill="#C74B3A" font-weight="700">過去一年內曾跌倒過</text></svg>`,
+
+        chair_grip: `<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg"><rect width="320" height="200" fill="#E8EFE8"/><rect x="200" y="70" width="14" height="100" rx="4" fill="#A67C52"/><rect x="196" y="66" width="50" height="12" rx="4" fill="#A67C52"/><rect x="196" y="120" width="60" height="10" rx="4" fill="#A67C52"/><rect x="244" y="120" width="12" height="50" rx="4" fill="#8D6440"/><rect x="200" y="128" width="12" height="42" rx="4" fill="#8D6440"/><circle cx="150" cy="70" r="19" fill="#D4A989"/><path d="M139 64 Q143 60 149 64" stroke="#8D6440" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M153 64 Q159 60 162 65" stroke="#8D6440" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M144 78 Q150 74 157 78" stroke="#8D6440" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M150 88 Q135 96 132 118 L150 124 L170 120 Q178 100 165 90 Z" fill="#C77FB0"/><path d="M150 90 L120 130" stroke="#C77FB0" stroke-width="12" stroke-linecap="round"/><rect x="135" y="120" width="16" height="46" rx="8" fill="#6B5A4A"/><rect x="156" y="118" width="16" height="48" rx="8" fill="#6B5A4A"/><rect x="95" y="120" width="14" height="56" rx="4" fill="#8D6440"/><rect x="118" y="120" width="14" height="56" rx="4" fill="#8D6440"/><rect x="90" y="116" width="48" height="10" rx="5" fill="#A67C52"/><rect x="90" y="168" width="48" height="8" rx="4" fill="#8D6440"/><g stroke="#C98B2A" stroke-width="3" stroke-linecap="round"><line x1="118" y1="70" x2="110" y2="62"/><line x1="182" y1="74" x2="190" y2="66"/></g><text x="160" y="194" text-anchor="middle" font-size="12" fill="#6f4e37" font-weight="600">必須抓握東西才能站起來</text></svg>`,
+
+        appetite: `<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg"><rect width="320" height="200" fill="#f7f3ef"/><rect x="0" y="150" width="320" height="50" fill="#7B5B3E"/><circle cx="165" cy="62" r="26" fill="#D4A989"/><path d="M150 56 Q155 51 162 56" stroke="#8D6440" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M168 56 Q175 51 180 57" stroke="#8D6440" stroke-width="2.2" fill="none" stroke-linecap="round"/><circle cx="156" cy="62" r="2.5" fill="#8D6440"/><circle cx="174" cy="62" r="2.5" fill="#8D6440"/><path d="M156 76 Q165 71 174 76" stroke="#8D6440" stroke-width="2.5" fill="none" stroke-linecap="round"/><rect x="138" y="86" width="56" height="64" rx="10" fill="#8E7CB8"/><path d="M138 96 L112 132" stroke="#8E7CB8" stroke-width="13" stroke-linecap="round"/><circle cx="108" cy="135" r="9" fill="#D4A989"/><ellipse cx="160" cy="150" rx="42" ry="14" fill="#fff"/><ellipse cx="160" cy="146" rx="42" ry="12" fill="#F2EDE6" stroke="#e3d7c8" stroke-width="1.5"/><ellipse cx="160" cy="145" rx="30" ry="7" fill="#fff"/><line x1="105" y1="138" x2="135" y2="146" stroke="#A67C52" stroke-width="3" stroke-linecap="round"/><g stroke="#bbb" stroke-width="2" stroke-linecap="round" opacity="0.8"><path d="M150 128 Q153 120 150 114"/><path d="M165 126 Q168 117 165 110"/></g><text x="240" y="120" font-size="34">🍚</text><text x="244" y="150" font-size="13" fill="#888" text-anchor="middle">食慾不好</text></svg>`,
+
+        phone_hear: `<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg"><rect width="320" height="200" fill="#f7f3ef"/><rect x="20" y="150" width="170" height="40" rx="6" fill="#A67C52"/><circle cx="95" cy="80" r="22" fill="#D4A989"/><path d="M83 74 Q87 70 93 74" stroke="#8D6440" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M97 74 Q103 70 106 75" stroke="#8D6440" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="88" cy="80" r="2.3" fill="#8D6440"/><circle cx="101" cy="80" r="2.3" fill="#8D6440"/><rect x="72" y="100" width="46" height="52" rx="10" fill="#C98B5A"/><rect x="60" y="128" width="80" height="48" rx="6" fill="#8D6440"/><rect x="68" y="120" width="64" height="14" rx="4" fill="#6f4e37"/><rect x="200" y="70" width="44" height="74" rx="8" fill="#2C3E6E"/><rect x="205" y="78" width="34" height="56" rx="3" fill="#5B86C4"/><circle cx="222" cy="139" r="3" fill="#fff"/><g stroke="#C74B3A" stroke-width="3.5" stroke-linecap="round"><path d="M256 78 Q266 88 256 98"/><path d="M262 68 Q278 88 262 108"/></g><line x1="270" y1="62" x2="284" y2="50" stroke="#C74B3A" stroke-width="4" stroke-linecap="round"/><line x1="284" y1="62" x2="270" y2="50" stroke="#C74B3A" stroke-width="4" stroke-linecap="round"/><text x="160" y="40" text-anchor="middle" font-size="12" fill="#C74B3A" font-weight="600">沒聽到鈴聲 · 漏接電話</text></svg>`,
+
+        tv_loud: `<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg"><rect width="320" height="200" fill="#f7f3ef"/><rect x="30" y="50" width="130" height="86" rx="8" fill="#2C3E6E"/><rect x="38" y="58" width="114" height="62" rx="4" fill="#7FB2D4"/><circle cx="62" cy="78" r="9" fill="#F2C94C"/><rect x="38" y="100" width="114" height="20" fill="#8FCB7A"/><rect x="70" y="136" width="50" height="8" rx="3" fill="#1f2a4a"/><rect x="80" y="120" width="30" height="16" fill="#34406b"/><g stroke="#C98B2A" stroke-width="3.5" stroke-linecap="round"><path d="M168 70 Q180 88 168 106"/><path d="M178 60 Q198 88 178 116"/></g><polygon points="150,76 162,76 174,66 174,110 162,100 150,100" fill="#C98B2A"/><circle cx="240" cy="70" r="20" fill="#D4A989"/><path d="M230 66 Q234 62 240 66" stroke="#8D6440" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M243 67 Q249 63 252 68" stroke="#8D6440" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M233 80 Q240 86 248 80" stroke="#8D6440" stroke-width="2.3" fill="none" stroke-linecap="round"/><rect x="220" y="90" width="40" height="50" rx="10" fill="#3F5A78"/><path d="M222 96 L212 76" stroke="#3F5A78" stroke-width="11" stroke-linecap="round"/><path d="M258 96 L268 76" stroke="#3F5A78" stroke-width="11" stroke-linecap="round"/><circle cx="210" cy="73" r="7" fill="#D4A989"/><circle cx="270" cy="73" r="7" fill="#D4A989"/><text x="240" y="186" text-anchor="middle" font-size="12" fill="#6f4e37" font-weight="600">被說音量開太大聲</text></svg>`,
+
+        social_avoid: `<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg"><rect width="320" height="200" fill="#f7f3ef"/><g opacity="0.55"><circle cx="70" cy="80" r="18" fill="#C9A86F"/><rect x="52" y="98" width="36" height="42" rx="9" fill="#C98B5A"/><circle cx="120" cy="74" r="18" fill="#D4A989"/><rect x="102" y="92" width="36" height="46" rx="9" fill="#8AA0C8"/><circle cx="170" cy="80" r="18" fill="#C9A86F"/><rect x="152" y="98" width="36" height="42" rx="9" fill="#9BBE8A"/><ellipse cx="120" cy="40" rx="42" ry="22" fill="#fff"/><text x="120" y="46" text-anchor="middle" font-size="16">🎤 🎵</text></g><line x1="205" y1="60" x2="205" y2="150" stroke="#e3d7c8" stroke-width="2" stroke-dasharray="5 5"/><circle cx="255" cy="82" r="20" fill="#D4A989"/><path d="M245 90 Q255 96 265 90" stroke="#8D6440" stroke-width="2.3" fill="none" stroke-linecap="round" transform="rotate(180 255 90)"/><circle cx="249" cy="80" r="2.5" fill="#8D6440"/><circle cx="261" cy="80" r="2.5" fill="#8D6440"/><rect x="235" y="100" width="40" height="50" rx="10" fill="#6f4e37"/><path d="M270 76 Q280 70 286 76" stroke="#8D6440" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M275 68 Q288 60 296 70" stroke="#8D6440" stroke-width="3" fill="none" stroke-linecap="round"/><line x1="290" y1="74" x2="302" y2="64" stroke="#C74B3A" stroke-width="3.5" stroke-linecap="round"/><line x1="302" y1="74" x2="290" y2="64" stroke="#C74B3A" stroke-width="3.5" stroke-linecap="round"/><text x="160" y="190" text-anchor="middle" font-size="12" fill="#6f4e37" font-weight="600">不想去參加聚會或活動</text></svg>`,
+
+        gloomy: `<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg"><rect width="320" height="200" fill="#F0EEF8"/><rect x="40" y="120" width="240" height="60" rx="8" fill="#9A8FB8"/><rect x="40" y="110" width="50" height="70" rx="8" fill="#8478A6"/><circle cx="150" cy="92" r="24" fill="#D4A989"/><path d="M138 86 Q142 82 148 86" stroke="#8D6440" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M152 86 Q158 82 162 87" stroke="#8D6440" stroke-width="2.2" fill="none" stroke-linecap="round"/><circle cx="143" cy="92" r="2.6" fill="#8D6440"/><circle cx="157" cy="92" r="2.6" fill="#8D6440"/><path d="M140 106 Q150 100 160 106" stroke="#8D6440" stroke-width="2.5" fill="none" stroke-linecap="round" transform="rotate(180 150 103)"/><path d="M150 116 Q128 124 124 160 L150 168 L178 162 Q182 124 165 118 Z" fill="#6E84A8"/><path d="M150 120 L120 150" stroke="#6E84A8" stroke-width="13" stroke-linecap="round"/><circle cx="116" cy="152" r="9" fill="#D4A989"/><g stroke="#7A6E96" stroke-width="2.5" fill="none" opacity="0.85"><path d="M178 60 q12 -6 18 4 t-4 16 t14 6 t6 -14 t12 2"/></g><circle cx="220" cy="76" r="3" fill="#7A6E96" opacity="0.7"/><circle cx="230" cy="84" r="2.2" fill="#7A6E96" opacity="0.6"/><text x="160" y="192" text-anchor="middle" font-size="12" fill="#7070A0" font-weight="600">感到厭煩、覺得生活沒有希望</text></svg>`,
       };
 
       let state = {
         userName: "",
         language: "zh",
+        role: null,
+        questions: [],
         currentIndex: 0,
         answers: {},
         timerVal: 0,
         timerRunning: false,
         timerInterval: null,
-        history: [
-          {
-            date: "20260316",
-            results: {
-              認知功能: false,
-              行動功能: true,
-              營養不良: false,
-              視力障礙: false,
-              聽力障礙: false,
-              憂鬱情緒: false,
-            },
-            yesCount: 2,
-            noCount: 10,
-          },
-        ],
+        history: [],
       };
 
       function showScreen(id) {
@@ -1323,33 +1665,58 @@
 
       function computeResults() {
         const results = {};
-        Object.entries(CATEGORY_DOMAINS).forEach(([cat, cfg]) => {
-          const isAbnormal = cfg.ids.some((qid) => {
-            const q = QUESTIONS.find((q) => q.id === qid);
-            const ans = state.answers[qid];
-            if (!ans) return false;
-            return ans === q.abnormalAnswer;
-          });
-          results[cat] = isAbnormal;
+        state.questions.forEach((q) => {
+          if (!(q.category in results)) results[q.category] = false;
+          const ans = state.answers[q.id];
+          if (ans && ans === q.abnormalAnswer) results[q.category] = true;
         });
         return results;
       }
 
+      /* ===== 開始評估 → 先進入身分判別 ===== */
       function startAssessment() {
         state.userName = document.getElementById("input-name").value || "長輩";
         state.language = document.getElementById("home-lang").value;
         state.answers = {};
         state.currentIndex = 0;
+        state.role = null;
+        document.getElementById("id-header-name").textContent = state.userName;
+        document.getElementById("id-header-lang").textContent =
+          LANGUAGES[state.language];
         document.getElementById("q-header-name").textContent = state.userName;
         document.getElementById("q-header-lang").textContent =
           LANGUAGES[state.language];
+        // 重置身分選項
+        document.getElementById("role-self").classList.remove("selected");
+        document.getElementById("role-family").classList.remove("selected");
+        document.getElementById("id-next").disabled = true;
+        showScreen("screen-identity");
+      }
+
+      function selectRole(role) {
+        state.role = role;
+        document
+          .getElementById("role-self")
+          .classList.toggle("selected", role === "self");
+        document
+          .getElementById("role-family")
+          .classList.toggle("selected", role === "family");
+        document.getElementById("id-next").disabled = false;
+      }
+
+      function confirmRole() {
+        if (!state.role) return;
+        state.questions = QUESTION_SETS[state.role];
+        state.currentIndex = 0;
+        state.answers = {};
+        state.timerVal = 0;
         renderQuestion();
         showScreen("screen-question");
       }
 
       function renderQuestion() {
-        const q = QUESTIONS[state.currentIndex];
-        const total = QUESTIONS.length;
+        const q = state.questions[state.currentIndex];
+        const total = state.questions.length;
         const current = state.currentIndex + 1;
         const pct = (current / total) * 100;
         document.getElementById("progress-bar").style.width = pct + "%";
@@ -1377,6 +1744,7 @@
               <option value="hk" ${state.language === "hk" ? "selected" : ""}>客語</option>
             </select>
           </div>
+          ${q.subText ? `<div class="sub-text">${q.subText}</div>` : ""}
           <div class="illustration-wrap">${ILLUSTRATIONS[q.illustration] || ""}</div>`;
 
         if (q.type === "yesno") {
@@ -1403,7 +1771,7 @@
 
         body.innerHTML = content;
         const isLast = state.currentIndex === total - 1;
-        document.getElementById("btn-prev").disabled = state.currentIndex === 0;
+        document.getElementById("btn-prev").disabled = false;
         const nextBtn = document.getElementById("btn-next");
         if (!ans) {
           nextBtn.disabled = true;
@@ -1443,7 +1811,7 @@
         setTimeout(() => startTimer(), 200);
       }
       function answer(val) {
-        const q = QUESTIONS[state.currentIndex];
+        const q = state.questions[state.currentIndex];
         state.answers[q.id] = val;
         renderQuestion();
         document.getElementById("btn-next").disabled = false;
@@ -1453,15 +1821,19 @@
         document.getElementById("q-header-lang").textContent = LANGUAGES[val];
       }
       function prevQuestion() {
+        endTimer();
         if (state.currentIndex > 0) {
-          endTimer();
           state.currentIndex--;
+          state.timerVal = 0;
           renderQuestion();
+        } else {
+          // 第一題往回 → 回到身分判別
+          showScreen("screen-identity");
         }
       }
       function nextQuestion() {
         endTimer();
-        if (state.currentIndex < QUESTIONS.length - 1) {
+        if (state.currentIndex < state.questions.length - 1) {
           state.timerVal = 0;
           state.currentIndex++;
           renderQuestion();
@@ -1479,7 +1851,13 @@
         ).length;
         const today = new Date();
         const dateStr = `${today.getFullYear()}${String(today.getMonth() + 1).padStart(2, "0")}${String(today.getDate()).padStart(2, "0")}`;
-        state.history.unshift({ date: dateStr, results, yesCount, noCount });
+        state.history.unshift({
+          date: dateStr,
+          role: state.role,
+          results,
+          yesCount,
+          noCount,
+        });
         goToResults();
       }
       function goToResults() {
@@ -1493,7 +1871,8 @@
         const body = document.getElementById("results-body");
         if (state.history.length === 0) {
           body.innerHTML =
-            '<p style="text-align:center;color:#888;padding:40px;">尚無自評紀錄</p>';
+            '<p style="text-align:center;color:#888;padding:40px;">尚無自評紀錄</p>' +
+            '<button class="btn-action btn-secondary" onclick="showScreen(\'screen-home\')">← 回首頁</button>';
           return;
         }
         let html = "";
@@ -1506,8 +1885,10 @@
             .map(([k]) => k);
           const d = rec.date;
           const dateLabel = `${d.slice(0, 4)}年${d.slice(4, 6)}月${d.slice(6, 8)}日`;
+          const roleLabel = rec.role ? ROLE_LABELS[rec.role] : "";
           html += `<div class="result-summary-card">
             <div class="result-date">${dateLabel} 自評表</div>
+            ${roleLabel ? `<div class="role-badge">受評身分:${roleLabel}</div>` : ""}
             <div class="result-grid">
               ${Object.entries(rec.results)
                 .map(
@@ -1528,11 +1909,13 @@
               <div class="score-item"><span class="score-num">${rec.noCount}</span><span class="score-unit">個否</span></div>
             </div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px;">
+              
               <button class="btn-action btn-secondary" style="margin:0;font-size:13px;padding:10px;" onclick="viewReport(${i})">👁 檢視報告</button>
               <button class="btn-action btn-primary" style="margin:0;font-size:13px;padding:10px;" onclick="startAssessment()">↻ 重新評估</button>
             </div>
           </div>`;
         });
+        html += `<button class="btn-action btn-secondary" >接著做 SPPB 體能檢測 →</button>`;
         html += `<button class="btn-action btn-secondary" onclick="showScreen('screen-home')">← 回首頁</button>`;
         body.innerHTML = html;
       }
@@ -1544,11 +1927,13 @@
         const abnormals = Object.entries(rec.results)
           .filter(([, v]) => v)
           .map(([k]) => k);
+        const roleLabel = rec.role ? ROLE_LABELS[rec.role] : "—";
         let html = `
           <div class="info-section">
-            <div class="info-section-head">基本資料（註冊資料）</div>
+            <div class="info-section-head">基本資料(註冊資料)</div>
             <div class="info-section-body">
               <div class="info-row"><span class="info-key">姓名</span><span class="info-val">${state.userName}</span></div>
+              <div class="info-row"><span class="info-key">受評身分</span><span class="info-val">${roleLabel}</span></div>
               <div class="info-row"><span class="info-key">評估日期</span><span class="info-val">${d.slice(0, 4)}/${d.slice(4, 6)}/${d.slice(6, 8)}</span></div>
               <div class="info-row"><span class="info-key">語言</span><span class="info-val">${LANGUAGES[state.language]}</span></div>
             </div>
@@ -1581,13 +1966,13 @@
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
               ※ 建議
             </div>
-            <div class="advice-text">評估結果如有異常（包含：${abnormals.join("、")}），可於回診時請教醫師。</div>
-            <div class="disclaimer">本項內容僅供個人列印參考使用，而非任何醫事證明文件。</div>
+            <div class="advice-text">評估結果如有異常(包含:${abnormals.join("、")}),可於回診時請教醫師。</div>
+            <div class="disclaimer">本項內容僅供個人列印參考使用,而非任何醫事證明文件。</div>
           </div>`
               : `
           <div class="advice-card">
             <div class="advice-title">🎉 各項結果均正常</div>
-            <div class="advice-text">恭喜！本次六力評估結果均為正常，請持續維持良好的生活習慣。</div>
+            <div class="advice-text">恭喜!本次六力評估結果均為正常,請持續維持良好的生活習慣。</div>
           </div>`
           }
           <button class="btn-action btn-primary" onclick="goToResults()">← 返回歷史紀錄</button>

@@ -218,6 +218,25 @@
         color: var(--gray-400);
         margin-top: 2px;
       }
+      .hero-save-btn .btn-countdown {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: var(--blue-600);
+        margin-top: 4px;
+      }
+      .hero-save-btn .btn-countdown i {
+        font-size: 0.8rem;
+        color: var(--blue-600);
+      }
+      .hero-save-btn .btn-countdown.expired {
+        color: var(--red-500);
+      }
+      .hero-save-btn .btn-countdown.expired i {
+        color: var(--red-500);
+      }
       @keyframes pulse {
         0%,
         100% {
@@ -1203,6 +1222,32 @@
         margin-bottom: 28px;
         line-height: 1.6;
       }
+      .modal-expire {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        background: var(--blue-50);
+        border: 1px solid var(--blue-100);
+        border-radius: 10px;
+        padding: 10px 14px;
+        margin-bottom: 28px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--blue-700);
+        text-align: center;
+      }
+      .modal-expire i {
+        color: var(--blue-600);
+      }
+      .modal-expire.expired {
+        background: #fef2f2;
+        border-color: #fecaca;
+        color: var(--red-500);
+      }
+      .modal-expire.expired i {
+        color: var(--red-500);
+      }
       .modal-btn-group {
         display: flex;
         flex-direction: column;
@@ -1335,6 +1380,13 @@
         <div class="modal-hint">
           報告將以圖檔方式存入您的相簿，<br />方便日後查閱或與家人分享。
         </div>
+        <div class="modal-expire" id="modalExpire">
+          <i class="fa-solid fa-clock"></i>
+          <span
+            >報告有效期限：1 天（剩餘
+            <span id="modalCountdown">計算中…</span>）</span
+          >
+        </div>
         <div class="modal-btn-group">
           <button class="modal-btn modal-btn-save" onclick="saveReport()">
             <i class="fa-solid fa-download"></i>儲存至相簿
@@ -1375,7 +1427,11 @@
           <button class="hero-save-btn" onclick="triggerSave()">
             <i class="fa-solid fa-download"></i>
             <span
-              >儲存此報告<span class="btn-sub">點擊儲存圖片至相簿</span></span
+              >儲存此報告<span class="btn-sub">點擊儲存圖片至相簿</span
+              ><span class="btn-sub btn-countdown"
+                ><i class="fa-solid fa-clock"></i>儲存時效剩餘
+                <span id="heroCountdown">計算中…</span></span
+              ></span
             >
           </button>
         </div>
@@ -1395,7 +1451,7 @@
             <div class="profile-grid">
               <div class="profile-item">
                 <div class="pi-label">姓名</div>
-                <div class="pi-val name-val">王小明</div>
+                <div class="pi-val name-val">王x明</div>
               </div>
               <div class="profile-item">
                 <div class="pi-label">性別</div>
@@ -2297,6 +2353,53 @@
     </div>
 
     <script>
+      /* ── 儲存時效倒數計時（範例：載入當下 + 1 天） ── */
+      /* 實際上線時，可將 expireTime 改為後端回傳的真實到期時間 */
+      const expireTime = Date.now() + 24 * 60 * 60 * 1000; // +1 天
+
+      function updateCountdown() {
+        const heroEl = document.getElementById("heroCountdown");
+        const modalEl = document.getElementById("modalCountdown");
+        const heroWrap = document.querySelector(
+          ".hero-save-btn .btn-countdown",
+        );
+        const modalWrap = document.getElementById("modalExpire");
+
+        let diff = expireTime - Date.now();
+
+        if (diff <= 0) {
+          if (heroEl) heroEl.textContent = "已過期";
+          if (modalEl) modalEl.textContent = "已過期";
+          if (heroWrap) heroWrap.classList.add("expired");
+          if (modalWrap) modalWrap.classList.add("expired");
+          clearInterval(countdownTimer);
+          return;
+        }
+
+        const days = Math.floor(diff / (24 * 60 * 60 * 1000));
+        diff -= days * 24 * 60 * 60 * 1000;
+        const hours = Math.floor(diff / (60 * 60 * 1000));
+        diff -= hours * 60 * 60 * 1000;
+        const minutes = Math.floor(diff / (60 * 1000));
+        diff -= minutes * 60 * 1000;
+        const seconds = Math.floor(diff / 1000);
+
+        const pad = (n) => String(n).padStart(2, "0");
+        const text =
+          (days > 0 ? days + " 天 " : "") +
+          pad(hours) +
+          ":" +
+          pad(minutes) +
+          ":" +
+          pad(seconds);
+
+        if (heroEl) heroEl.textContent = text;
+        if (modalEl) modalEl.textContent = text;
+      }
+
+      const countdownTimer = setInterval(updateCountdown, 1000);
+      updateCountdown();
+
       /* ── 風險等級設定 ── */
       const riskConfig = {
         low2: {

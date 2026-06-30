@@ -1,0 +1,676 @@
+<!doctype html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>FongAI - 基本資料填寫</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg-main: #f7f3ef;
+        --card-bg: rgba(255, 255, 255, 0.7);
+        --line: #e3d7c8;
+        --primary: #6f4e37;
+        --primary-dark: #4e342e;
+        --secondary: #8a6a4f;
+        --secondary-light: #a07e5e;
+        --text-dark: #2b2018;
+        --text-body: #5c4d40;
+        --text-light: #8a7d6f;
+        --shadow-lg: 0 24px 60px rgba(60, 40, 28, 0.12);
+        --shadow-md: 0 12px 28px rgba(111, 78, 55, 0.08);
+        --input-border: #ddcdba;
+        --input-focus: #a07e5e;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Noto Sans TC", sans-serif;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      body {
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f3efe9;
+      }
+
+      /* ── 平板外殼 ── */
+      .tablet-shell {
+        width: 920px;
+        height: 600px;
+        background: rgba(255, 255, 255, 0.65);
+        border: 1px solid rgba(255, 255, 255, 0.7);
+
+        overflow: hidden;
+        box-shadow: var(--shadow-lg);
+        backdrop-filter: blur(20px);
+        display: flex;
+        flex-direction: column;
+        padding: 32px 48px 28px;
+        position: relative;
+        gap: 20px;
+      }
+      .tablet-shell::before {
+        content: "";
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        background: linear-gradient(
+          135deg,
+          rgba(111, 78, 55, 0.05),
+          rgba(160, 126, 94, 0.05)
+        );
+        top: -50px;
+        left: -50px;
+        pointer-events: none;
+      }
+      .tablet-shell::after {
+        content: "";
+        position: absolute;
+        width: 240px;
+        height: 240px;
+        border-radius: 50%;
+        background: linear-gradient(
+          135deg,
+          rgba(160, 126, 94, 0.05),
+          rgba(111, 78, 55, 0.04)
+        );
+        bottom: -60px;
+        right: -40px;
+        pointer-events: none;
+      }
+
+      /* ── Header ── */
+      .app-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 1;
+        flex-shrink: 0;
+      }
+      .brand-mark {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .logo-box {
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        background: linear-gradient(
+          135deg,
+          var(--primary),
+          var(--primary-dark)
+        );
+        display: grid;
+        place-items: center;
+        box-shadow: 0 8px 18px rgba(111, 78, 55, 0.18);
+      }
+      .logo-box img {
+        width: 26px;
+        height: auto;
+      }
+      .brand-mark h1 {
+        font-size: 1.6rem;
+        font-weight: 800;
+        color: var(--primary);
+        letter-spacing: 0.5px;
+      }
+
+      .header-right {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .step-indicator {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: var(--text-light);
+      }
+      .step-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--line);
+      }
+      .step-dot.active {
+        background: var(--primary);
+      }
+      .step-dot.done {
+        background: var(--secondary-light);
+      }
+
+      /* ── 頁面標題 ── */
+      .page-title {
+        z-index: 1;
+        flex-shrink: 0;
+      }
+      .page-title h2 {
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: var(--primary);
+        margin-bottom: 2px;
+      }
+      .page-title p {
+        font-size: 0.85rem;
+        color: var(--text-light);
+      }
+
+      /* ── 表單主體（兩欄） ── */
+      .form-body {
+        flex: 1;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px 32px;
+        z-index: 1;
+        overflow: hidden;
+      }
+
+      /* 表單欄位 */
+      .form-field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .form-field.full-width {
+        grid-column: 1 / -1;
+      }
+      .field-label {
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: var(--text-body);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .field-label i {
+        font-size: 0.8rem;
+        color: var(--text-light);
+      }
+      .opt-tag {
+        font-size: 0.68rem;
+        font-weight: 700;
+        color: var(--input-focus);
+        border: 1.5px solid var(--input-focus);
+        padding: 1px 7px;
+        letter-spacing: 0.5px;
+        border-radius: 3px;
+      }
+      .field-input {
+        height: 46px;
+        background: rgba(255, 255, 255, 0.8);
+        border: 1.5px solid var(--input-border);
+
+        padding: 0 14px;
+        font-size: 0.95rem;
+        color: var(--text-dark);
+        outline: none;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s,
+          background 0.2s;
+        backdrop-filter: blur(4px);
+      }
+      .field-input::placeholder {
+        color: #c4b5a4;
+        font-size: 0.88rem;
+      }
+      .field-input:focus {
+        border-color: var(--input-focus);
+        box-shadow: 0 0 0 3px rgba(160, 126, 94, 0.15);
+        background: #fff;
+      }
+
+      /* ── 性別 Radio 按鈕 ── */
+      .gender-group {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 32px;
+      }
+      .gender-btn {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 16px;
+        background: rgba(255, 255, 255, 0.8);
+        border: 1.5px solid var(--input-border);
+
+        cursor: pointer;
+        transition: all 0.2s ease;
+        user-select: none;
+        backdrop-filter: blur(4px);
+      }
+      .gender-btn:hover {
+        border-color: var(--primary);
+        background: rgba(255, 255, 255, 0.95);
+        box-shadow: var(--shadow-md);
+      }
+      /* radio 隱藏原生，自製樣式 */
+      .gender-btn input[type="radio"] {
+        display: none;
+      }
+      .radio-circle {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 2px solid var(--input-border);
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        transition: all 0.2s ease;
+      }
+      .radio-circle::after {
+        content: "";
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: white;
+        opacity: 0;
+        transform: scale(0);
+        transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+      .gender-btn-text {
+        display: flex;
+        flex-direction: column;
+      }
+      .gender-btn-label {
+        font-size: 1rem;
+        font-weight: 800;
+        color: var(--text-dark);
+        line-height: 1.2;
+      }
+      .gender-btn-sub {
+        font-size: 0.72rem;
+        color: var(--text-light);
+        margin-top: 1px;
+      }
+      .gender-btn-icon {
+        margin-left: auto;
+        font-size: 1.4rem;
+        opacity: 0.25;
+        transition:
+          opacity 0.2s,
+          color 0.2s;
+      }
+
+      /* 選中狀態 */
+      .gender-btn.selected-male {
+        background: linear-gradient(
+          135deg,
+          rgba(111, 78, 55, 0.1),
+          rgba(160, 126, 94, 0.07)
+        );
+        border-color: var(--primary);
+        box-shadow: 0 4px 14px rgba(111, 78, 55, 0.14);
+      }
+      .gender-btn.selected-male .radio-circle {
+        border-color: var(--primary);
+        background: var(--primary);
+      }
+      .gender-btn.selected-male .radio-circle::after {
+        opacity: 1;
+        transform: scale(1);
+      }
+      .gender-btn.selected-male .gender-btn-label {
+        color: var(--primary);
+      }
+      .gender-btn.selected-male .gender-btn-icon {
+        opacity: 1;
+        color: var(--primary);
+      }
+
+      .gender-btn.selected-female {
+        background: linear-gradient(
+          135deg,
+          rgba(219, 39, 119, 0.07),
+          rgba(244, 114, 182, 0.05)
+        );
+        border-color: #db2777;
+        box-shadow: 0 4px 14px rgba(219, 39, 119, 0.1);
+      }
+      .gender-btn.selected-female .radio-circle {
+        border-color: #db2777;
+        background: #db2777;
+      }
+      .gender-btn.selected-female .radio-circle::after {
+        opacity: 1;
+        transform: scale(1);
+      }
+      .gender-btn.selected-female .gender-btn-label {
+        color: #be185d;
+      }
+      .gender-btn.selected-female .gender-btn-icon {
+        opacity: 1;
+        color: #db2777;
+      }
+
+      /* ── 底部按鈕列 ── */
+      .form-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 1;
+        flex-shrink: 0;
+      }
+      .btn-back {
+        background: rgba(255, 255, 255, 0.6);
+        border: 1px solid var(--line);
+        color: var(--text-body);
+        padding: 10px 22px;
+
+        font-size: 0.9rem;
+        font-weight: 700;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.2s;
+        backdrop-filter: blur(5px);
+      }
+      .btn-back:hover {
+        background: #fff;
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-md);
+      }
+
+      /* 開始測驗：雷達脈衝圓形按鈕（縮小版） */
+      .radar-pulse-box {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .pulse-ring {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(160, 126, 94, 0.22) 0%,
+          rgba(111, 78, 55, 0.05) 70%,
+          transparent 100%
+        );
+        border: 1px solid rgba(160, 126, 94, 0.28);
+        animation: radar-pulse 3.2s infinite cubic-bezier(0.1, 0.8, 0.3, 1);
+        pointer-events: none;
+      }
+      .pulse-ring:nth-child(2) {
+        animation-delay: 0.8s;
+      }
+      .pulse-ring:nth-child(3) {
+        animation-delay: 1.6s;
+      }
+
+      @keyframes radar-pulse {
+        0% {
+          transform: scale(0.95);
+          opacity: 1;
+        }
+        30% {
+          opacity: 0.5;
+        }
+        100% {
+          transform: scale(2);
+          opacity: 0;
+        }
+      }
+
+      .btn-start {
+        position: relative;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        border: none;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        cursor: pointer;
+        box-shadow:
+          0 12px 32px rgba(111, 78, 55, 0.28),
+          inset 0 2px 4px rgba(255, 255, 255, 0.25);
+        animation: button-breath 4s infinite ease-in-out;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        opacity: 0.4;
+        pointer-events: none;
+      }
+      .btn-start.ready {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .btn-start i {
+        font-size: 1.6rem;
+        transition: transform 0.4s ease;
+      }
+      .btn-start span {
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 3px;
+      }
+      .btn-start:hover {
+        animation: none;
+        transform: scale(1.08);
+        box-shadow:
+          0 20px 44px rgba(78, 52, 46, 0.4),
+          inset 0 2px 6px rgba(255, 255, 255, 0.35);
+        background: linear-gradient(
+          135deg,
+          var(--primary-dark),
+          var(--secondary-light)
+        );
+      }
+      .btn-start:hover i {
+        transform: rotate(15deg) scale(1.1);
+      }
+      .btn-start:active {
+        transform: scale(0.95);
+      }
+
+      @keyframes button-breath {
+        0%,
+        100% {
+          transform: scale(1);
+          box-shadow: 0 12px 32px rgba(111, 78, 55, 0.28);
+        }
+        50% {
+          transform: scale(1.03);
+          box-shadow: 0 16px 38px rgba(78, 52, 46, 0.32);
+        }
+      }
+
+      /* ── Footer ── */
+      .footer-info {
+        display: none; /* 底部空間省給表單 */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="tablet-shell">
+      <!-- Header -->
+      <header class="app-header">
+        <div class="brand-mark">
+          <div class="logo-box">
+            <img src="/assets/logo.png" alt="Logo" />
+          </div>
+          <h1>FongAI</h1>
+        </div>
+        <div class="header-right">
+          <div class="step-indicator">
+            <div class="step-dot done"></div>
+            <div class="step-dot active"></div>
+            <div class="step-dot"></div>
+          </div>
+        </div>
+      </header>
+
+      <!-- 頁面標題 -->
+      <div class="page-title">
+        <h2>基本資料填寫</h2>
+        <p>請填寫以下資訊，標示「選填」的欄位可略過。</p>
+      </div>
+
+      <!-- 表單 -->
+      <div class="form-body">
+        <!-- 姓名 -->
+        <div class="form-field">
+          <div class="field-label"><i class="fa-solid fa-user"></i>姓名</div>
+          <input
+            class="field-input"
+            type="text"
+            id="name"
+            placeholder="請輸入您的姓名"
+            oninput="checkForm()"
+          />
+        </div>
+
+        <!-- 出生年月日 -->
+        <div class="form-field">
+          <div class="field-label">
+            <i class="fa-solid fa-calendar-days"></i>出生年月日
+          </div>
+          <input
+            class="field-input"
+            type="date"
+            id="birthday"
+            oninput="checkForm()"
+          />
+        </div>
+
+        <!-- 電子郵件 -->
+        <div class="form-field">
+          <div class="field-label">
+            <i class="fa-solid fa-envelope"></i>電子郵件
+            <span class="opt-tag">選填</span>
+          </div>
+          <input
+            class="field-input"
+            type="email"
+            id="email"
+            placeholder="可不填｜example@mail.com"
+            inputmode="email"
+          />
+        </div>
+
+        <!-- 聯絡電話 -->
+        <div class="form-field">
+          <div class="field-label">
+            <i class="fa-solid fa-phone"></i>聯絡電話
+            <span class="opt-tag">選填</span>
+          </div>
+          <input
+            class="field-input"
+            type="tel"
+            id="phone"
+            placeholder="可不填｜0912-345-678"
+            inputmode="tel"
+          />
+        </div>
+
+        <!-- 性別（全寬） -->
+        <div class="form-field full-width">
+          <div class="field-label">
+            <i class="fa-solid fa-venus-mars"></i>性別
+          </div>
+          <div class="gender-group">
+            <label
+              class="gender-btn"
+              id="btn-male"
+              onclick="selectGender('male')"
+            >
+              <input type="radio" name="gender" value="male" />
+              <div class="radio-circle"></div>
+              <div class="gender-btn-text">
+                <span class="gender-btn-label">男性</span>
+                <span class="gender-btn-sub">Male</span>
+              </div>
+              <i class="fa-solid fa-mars gender-btn-icon"></i>
+            </label>
+            <label
+              class="gender-btn"
+              id="btn-female"
+              onclick="selectGender('female')"
+            >
+              <input type="radio" name="gender" value="female" />
+              <div class="radio-circle"></div>
+              <div class="gender-btn-text">
+                <span class="gender-btn-label">女性</span>
+                <span class="gender-btn-sub">Female</span>
+              </div>
+              <i class="fa-solid fa-venus gender-btn-icon"></i>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 底部：返回 + 開始測驗 -->
+      <div class="form-footer">
+        <button class="btn-back" onclick="history.back()">
+          <i class="fa-solid fa-arrow-left"></i>返回
+        </button>
+
+        <div class="radar-pulse-box">
+          <div class="pulse-ring"></div>
+          <div class="pulse-ring"></div>
+          <div class="pulse-ring"></div>
+          <button class="btn-start" id="btnStart" onclick="startTest()">
+            <i class="fa-solid fa-circle-play"></i>
+            <span>開始測驗</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let selectedGender = null;
+
+      function selectGender(g) {
+        selectedGender = g;
+        document.getElementById("btn-male").className =
+          "gender-btn" + (g === "male" ? " selected-male" : "");
+        document.getElementById("btn-female").className =
+          "gender-btn" + (g === "female" ? " selected-female" : "");
+        checkForm();
+      }
+
+      function checkForm() {
+        const name = document.getElementById("name").value.trim();
+        const birthday = document.getElementById("birthday").value;
+        const ready = name !== "" && birthday !== "" && selectedGender !== null;
+        const btn = document.getElementById("btnStart");
+        btn.classList.toggle("ready", ready);
+      }
+
+      function startTest() {
+        // 後續接跳轉
+      }
+    </script>
+  </body>
+</html>

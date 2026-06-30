@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>FongAI - 系統安全驗證</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --bg-main: #f7f3ef;
+        --bg-accent: #efe4d7;
+        --card-bg: rgba(255, 255, 255, 0.9);
+        --line: #e3d7c8;
+        --primary: #6f4e37;
+        --primary-dark: #4e342e;
+        --secondary: #8a6a4f;
+        --text-dark: #2b2018;
+        --text-body: #5c4d40;
+        --text-light: #8a7d6f;
+        --input-bg: #faf7f3;
+        --input-border: #e3d7c8;
+        --shadow-lg: 0 24px 60px rgba(60, 40, 28, 0.12);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Noto Sans TC", sans-serif;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      body {
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f3efe9;
+      }
+
+      .tablet-shell {
+        width: 920px;
+        height: 600px;
+        display: grid;
+        grid-template-columns: 1.05fr 0.95fr;
+        background: rgba(255, 255, 255, 0.68);
+        border: 1px solid rgba(255, 255, 255, 0.65);
+
+        overflow: hidden;
+        box-shadow: var(--shadow-lg);
+        backdrop-filter: blur(16px);
+      }
+
+      .left-panel {
+        position: relative;
+        padding: 48px 42px;
+        background: linear-gradient(
+          160deg,
+          rgba(111, 78, 55, 0.96),
+          rgba(78, 52, 46, 0.92)
+        );
+        color: #ffffff;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .left-panel::before {
+        content: "";
+        position: absolute;
+        width: 260px;
+        height: 260px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.08);
+        top: -60px;
+        right: -60px;
+      }
+
+      .left-panel::after {
+        content: "";
+        position: absolute;
+        width: 220px;
+        height: 220px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.05);
+        bottom: -70px;
+        left: -50px;
+      }
+
+      .brand-mark {
+        position: relative;
+        z-index: 1;
+      }
+
+      .logo-box {
+        width: 76px;
+        height: 76px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.14);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        display: grid;
+        place-items: center;
+        margin-bottom: 22px;
+        backdrop-filter: blur(10px);
+      }
+
+      .logo-box img {
+        width: 42px;
+        height: auto;
+      }
+
+      .brand-mark h2 {
+        font-size: 2.8rem;
+        font-weight: 800;
+        color: #ffffff;
+        margin-bottom: 0;
+      }
+
+      .brand-mark p {
+        font-size: 1.05rem;
+        line-height: 1.6;
+        color: rgba(255, 255, 255, 0.85);
+        max-width: 85%;
+        margin-top: 15px;
+        opacity: 0.9;
+      }
+
+      .right-panel {
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.95),
+          rgba(255, 255, 255, 0.88)
+        );
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 42px 38px;
+      }
+
+      .login-card {
+        width: 100%;
+        max-width: 360px;
+      }
+
+      .login-form {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 22px;
+      }
+
+      .form-group label {
+        display: block;
+        font-size: 0.92rem;
+        color: var(--text-dark);
+        margin-bottom: 10px;
+        font-weight: 700;
+      }
+
+      .input-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+
+      .input-prefix {
+        position: absolute;
+        left: 18px;
+        color: #b3a596;
+        font-size: 1.05rem;
+        transition: 0.2s ease;
+      }
+
+      .input-wrapper input {
+        width: 100%;
+        height: 58px;
+        padding: 0 16px 0 50px;
+        background: var(--input-bg);
+        border: 1.5px solid var(--input-border);
+        color: var(--text-dark);
+        font-size: 1rem;
+
+        outline: none;
+        transition: all 0.2s ease;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+      }
+
+      .input-wrapper input.has-toggle {
+        padding-right: 52px;
+      }
+
+      .input-wrapper input:focus {
+        border-color: rgba(111, 78, 55, 0.35);
+        background-color: #ffffff;
+        box-shadow: 0 0 0 4px rgba(111, 78, 55, 0.08);
+      }
+
+      .toggle-password {
+        position: absolute;
+        right: 12px;
+        width: 36px;
+        height: 36px;
+        border-radius: 12px;
+        display: grid;
+        place-items: center;
+        cursor: pointer;
+        color: #b3a596;
+        transition: all 0.2s ease;
+      }
+
+      .btn-submit {
+        width: 100%;
+        height: 58px;
+        margin-top: 6px;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        border: none;
+        color: #ffffff;
+        font-size: 1.05rem;
+        font-weight: 800;
+
+        cursor: pointer;
+        letter-spacing: 8px;
+        box-shadow: 0 14px 24px rgba(111, 78, 55, 0.18);
+      }
+
+      .footer-info {
+        margin-top: 50px;
+        color: var(--text-light);
+        font-size: 0.82rem;
+        text-align: center;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="tablet-shell">
+      <section class="left-panel">
+        <div class="brand-mark">
+          <div class="logo-box">
+            <img src="/assets/logo.png" alt="Logo" />
+          </div>
+          <h2>FongAI</h2>
+          <p>
+            精準、高效、智能。<br />為您打造的專業健康數據鑑測平台，隨時掌握您的身體數據變化。
+          </p>
+        </div>
+      </section>
+
+      <section class="right-panel">
+        <div class="login-card">
+          <div class="login-form">
+            <div class="form-group">
+              <label>帳號</label>
+              <div class="input-wrapper">
+                <input
+                  type="text"
+                  placeholder="請輸入帳號"
+                  autocomplete="username"
+                />
+                <i class="fa-regular fa-user input-prefix"></i>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>密碼</label>
+              <div class="input-wrapper">
+                <input
+                  type="password"
+                  id="pwd_a"
+                  class="has-toggle"
+                  placeholder="請輸入密碼"
+                  autocomplete="current-password"
+                />
+                <i class="fa-solid fa-lock input-prefix"></i>
+                <i
+                  class="fa-solid fa-eye toggle-password"
+                  onclick="togglePassword('pwd_a', this)"
+                ></i>
+              </div>
+            </div>
+
+            <button class="btn-submit" onclick="location.href = 'profile.html'">
+              登入
+            </button>
+          </div>
+
+          <div class="footer-info">© 2026 Fong Health Technology // v2.0</div>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      function togglePassword(id, el) {
+        const input = document.getElementById(id);
+        if (input.type === "password") {
+          input.type = "text";
+          el.classList.replace("fa-eye", "fa-eye-slash");
+        } else {
+          input.type = "password";
+          el.classList.replace("fa-eye-slash", "fa-eye");
+        }
+      }
+    </script>
+  </body>
+</html>

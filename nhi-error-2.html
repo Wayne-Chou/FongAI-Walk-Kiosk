@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>FongAI - 讀取失敗</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --line: #e3d7c8;
+        --primary: #6f4e37;
+        --primary-dark: #4e342e;
+        --secondary: #8a6a4f;
+        --secondary-light: #a07e5e;
+        --text-dark: #2b2018;
+        --text-body: #5c4d40;
+        --text-light: #8a7d6f;
+        --danger: #dc2626;
+        --danger-dark: #b91c1c;
+        --danger-soft: #fef2f2;
+        --danger-border: #fecaca;
+        --shadow-lg: 0 24px 60px rgba(60, 40, 28, 0.12);
+        --shadow-md: 0 12px 28px rgba(111, 78, 55, 0.08);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Noto Sans TC", sans-serif;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      body {
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f3efe9;
+      }
+
+      .tablet-shell {
+        width: 920px;
+        height: 600px;
+        background: rgba(255, 255, 255, 0.65);
+        border: 1px solid rgba(255, 255, 255, 0.7);
+        overflow: hidden;
+        box-shadow: var(--shadow-lg);
+        backdrop-filter: blur(20px);
+        display: flex;
+        flex-direction: column;
+        padding: 24px 40px;
+        position: relative;
+      }
+      .tablet-shell::before {
+        content: "";
+        position: absolute;
+        width: 320px;
+        height: 320px;
+        border-radius: 50%;
+        background: linear-gradient(
+          135deg,
+          rgba(111, 78, 55, 0.05),
+          rgba(160, 126, 94, 0.05)
+        );
+        top: -70px;
+        right: -70px;
+        pointer-events: none;
+      }
+      .tablet-shell::after {
+        content: "";
+        position: absolute;
+        width: 260px;
+        height: 260px;
+        border-radius: 50%;
+        background: linear-gradient(
+          135deg,
+          rgba(160, 126, 94, 0.05),
+          rgba(111, 78, 55, 0.04)
+        );
+        bottom: -80px;
+        left: -60px;
+        pointer-events: none;
+      }
+
+      /* ── 頂部列：品牌 ── */
+      .top-bar {
+        display: flex;
+        align-items: center;
+        z-index: 1;
+        flex-shrink: 0;
+      }
+      .brand-mark {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .logo-box {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: linear-gradient(
+          135deg,
+          var(--primary),
+          var(--primary-dark)
+        );
+        display: grid;
+        place-items: center;
+        box-shadow: 0 8px 18px rgba(111, 78, 55, 0.18);
+      }
+      .logo-box img {
+        width: 24px;
+        height: auto;
+      }
+      .brand-mark h1 {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: var(--primary);
+        letter-spacing: 0.5px;
+      }
+
+      /* ── 中央主區 ── */
+      .main-stage {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        z-index: 1;
+      }
+
+      /* 失敗叉叉 */
+      .x-wrap {
+        position: relative;
+        width: 96px;
+        height: 96px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .x-ring {
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        background: var(--danger-soft);
+        animation: ring-pulse 2.2s infinite ease-out;
+      }
+      @keyframes ring-pulse {
+        0% {
+          transform: scale(1);
+          opacity: 0.7;
+        }
+        70% {
+          transform: scale(1.35);
+          opacity: 0;
+        }
+        100% {
+          transform: scale(1.35);
+          opacity: 0;
+        }
+      }
+      .x-circle {
+        position: relative;
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: var(--danger);
+        display: grid;
+        place-items: center;
+        box-shadow: 0 14px 30px rgba(220, 38, 38, 0.3);
+        transform: scale(0);
+        animation: pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      }
+      @keyframes pop {
+        0% {
+          transform: scale(0);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+      .x-circle i {
+        color: #fff;
+        font-size: 2.4rem;
+        opacity: 0;
+        animation: fade-in 0.3s ease 0.35s forwards;
+      }
+      @keyframes fade-in {
+        to {
+          opacity: 1;
+        }
+      }
+
+      /* 標題與說明 */
+      .fail-title {
+        font-size: 1.9rem;
+        font-weight: 800;
+        color: var(--danger-dark);
+        letter-spacing: 2px;
+      }
+      .fail-desc {
+        font-size: 0.95rem;
+        color: var(--text-body);
+        text-align: center;
+        line-height: 1.6;
+        max-width: 460px;
+      }
+
+      /* 步驟卡 */
+      .steps-card {
+        background: var(--danger-soft);
+        border: 1.5px solid var(--danger-border);
+
+        padding: 16px 22px;
+        display: flex;
+        flex-direction: column;
+        gap: 11px;
+        width: 460px;
+      }
+      .step-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 0.95rem;
+        color: var(--text-dark);
+        font-weight: 500;
+      }
+      .step-num {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: var(--danger);
+        color: #fff;
+        font-size: 0.82rem;
+        font-weight: 800;
+        display: grid;
+        place-items: center;
+        flex-shrink: 0;
+      }
+
+      /* 按鈕列 */
+      .action-row {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-top: 4px;
+      }
+      .btn {
+        height: 50px;
+        padding: 0 26px;
+
+        font-size: 0.95rem;
+        font-weight: 800;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.2s ease;
+        border: none;
+        letter-spacing: 1px;
+      }
+      .btn-primary {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        color: #fff;
+        box-shadow: 0 12px 24px rgba(111, 78, 55, 0.22);
+      }
+      .btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 16px 30px rgba(111, 78, 55, 0.3);
+      }
+      .btn-primary:active {
+        transform: scale(0.97);
+      }
+      .btn-secondary {
+        background: rgba(255, 255, 255, 0.7);
+        border: 1px solid var(--line);
+        color: var(--text-body);
+      }
+      .btn-secondary:hover {
+        background: #fff;
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-md);
+      }
+      .btn-secondary:active {
+        transform: scale(0.97);
+      }
+
+      /* ── 頁尾 ── */
+      .footer-info {
+        text-align: center;
+        color: var(--text-light);
+        font-size: 0.78rem;
+        z-index: 1;
+        flex-shrink: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="tablet-shell">
+      <!-- 頂部列 -->
+      <header class="top-bar">
+        <div class="brand-mark">
+          <div class="logo-box">
+            <img
+              src="/assets/logo.png"
+              alt="Logo"
+              onerror="this.style.display = 'none'"
+            />
+          </div>
+          <h1>FongAI</h1>
+        </div>
+      </header>
+
+      <!-- 中央：失敗叉叉 + 步驟 + 按鈕 -->
+      <main class="main-stage">
+        <div class="x-wrap">
+          <div class="x-ring"></div>
+          <div class="x-circle">
+            <i class="fa-solid fa-xmark"></i>
+          </div>
+        </div>
+
+        <div class="fail-title">卡片無法讀取</div>
+        <div class="fail-desc">
+          請依下方步驟重新操作，或返回選擇其他登入方式。
+        </div>
+
+        <div class="steps-card">
+          <div class="step-row">
+            <span class="step-num">1</span>將健保卡完全取出讀卡槽
+          </div>
+          <div class="step-row">
+            <span class="step-num">2</span>確認晶片面朝上，方向正確
+          </div>
+          <div class="step-row">
+            <span class="step-num">3</span>重新緩慢插入至底部後等待
+          </div>
+        </div>
+
+        <div class="action-row">
+          <button
+            class="btn btn-secondary"
+            onclick="location.href = 'index_home.html'"
+          >
+            <i class="fa-solid fa-house"></i>返回首頁
+          </button>
+        </div>
+      </main>
+
+      <!-- 頁尾 -->
+      <footer class="footer-info">© 2026 Fong Health Technology // v2.0</footer>
+    </div>
+  </body>
+</html>

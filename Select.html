@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>FongAI - 健康檢測(長者友善版)</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary: #6f4e37;
+        --primary-dark: #4e342e;
+        --bg: #f3efe9;
+        --ok: #2f7d4f;
+        --shadow-lg: 0 24px 60px rgba(60, 40, 28, 0.12);
+      }
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+      }
+      body {
+        font-family: "Noto Sans TC", sans-serif;
+        background: var(--bg);
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+      .tablet-shell {
+        width: 920px;
+        height: 600px;
+        background: rgba(255, 255, 255, 0.7);
+        border: 1px solid rgba(255, 255, 255, 0.7);
+        overflow: hidden;
+        box-shadow: var(--shadow-lg);
+        backdrop-filter: blur(20px);
+        display: flex;
+        flex-direction: column;
+        padding: 32px 44px;
+        position: relative;
+      }
+      .app-header {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .logo-box {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: linear-gradient(
+          135deg,
+          var(--primary),
+          var(--primary-dark)
+        );
+        display: grid;
+        place-items: center;
+        box-shadow: 0 8px 18px rgba(111, 78, 55, 0.18);
+      }
+      .app-header h1 {
+        font-size: 1.7rem;
+        font-weight: 900;
+        color: var(--primary);
+      }
+
+      /* 主區 */
+      .main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 18px;
+      }
+      .lead {
+        text-align: center;
+      }
+      .lead h2 {
+        font-size: 2rem;
+        font-weight: 900;
+        color: #2b2018;
+        margin-bottom: 6px;
+      }
+      .lead p {
+        font-size: 1.15rem;
+        color: #6b5b4d;
+        font-weight: 500;
+      }
+
+      .plan {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .plan-item {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        background: #fff;
+        border: 2px solid #ece3d8;
+
+        padding: 16px 20px;
+      }
+      .plan-ico {
+        width: 56px;
+        height: 56px;
+        border-radius: 14px;
+        background: linear-gradient(
+          135deg,
+          var(--primary),
+          var(--primary-dark)
+        );
+        display: grid;
+        place-items: center;
+        flex-shrink: 0;
+      }
+      .plan-ico i {
+        font-size: 1.6rem;
+        color: #fff;
+      }
+      .plan-txt {
+        flex: 1;
+        min-width: 0;
+      }
+      .plan-name {
+        font-size: 1.35rem;
+        font-weight: 900;
+        color: #2b2018;
+        display: block;
+        margin-bottom: 2px;
+      }
+      .plan-desc {
+        font-size: 1.02rem;
+        color: #7a6a5b;
+        line-height: 1.4;
+      }
+      .plan-flag {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        background: #e8f3ec;
+        color: var(--ok);
+        font-size: 1.02rem;
+        font-weight: 800;
+        padding: 8px 14px;
+
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+      .plan-flag i {
+        font-size: 1.05rem;
+      }
+
+      /* 主要行動:一顆超大開始鈕 */
+      .cta {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+      }
+      .btn-go {
+        width: 100%;
+        max-width: 560px;
+        background: linear-gradient(
+          135deg,
+          var(--primary),
+          var(--primary-dark)
+        );
+        color: #fff;
+        border: none;
+
+        padding: 22px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        box-shadow: 0 16px 36px rgba(111, 78, 55, 0.32);
+        transition:
+          transform 0.15s,
+          box-shadow 0.15s;
+      }
+      .btn-go:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 22px 44px rgba(111, 78, 55, 0.4);
+      }
+      .btn-go:active {
+        transform: scale(0.98);
+      }
+      .btn-go i {
+        font-size: 2rem;
+      }
+      .btn-go .go-main {
+        font-size: 1.7rem;
+        font-weight: 900;
+        letter-spacing: 1px;
+      }
+      .btn-go .go-sub {
+        font-size: 1.05rem;
+        font-weight: 500;
+        opacity: 0.85;
+        margin-top: 2px;
+      }
+      /* 次要選項:只做一項 */
+      .secondary-link {
+        background: none;
+        border: none;
+        color: var(--primary);
+        font-family: "Noto Sans TC", sans-serif;
+        font-size: 1.1rem;
+        font-weight: 700;
+        cursor: pointer;
+        padding: 8px 14px;
+        text-decoration: underline;
+        text-underline-offset: 4px;
+      }
+      .secondary-link:active {
+        opacity: 0.7;
+      }
+
+      /* ── 彈窗 ── */
+      .overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(43, 32, 24, 0.5);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        z-index: 100;
+      }
+      .overlay.show {
+        display: flex;
+      }
+      .modal {
+        background: #fff;
+
+        padding: 34px 32px;
+
+        width: 100%;
+        text-align: center;
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3);
+      }
+      .modal h2 {
+        font-size: 1.6rem;
+        font-weight: 900;
+        color: #2b2018;
+        margin-bottom: 8px;
+      }
+      .modal p {
+        font-size: 1.12rem;
+        color: #6b5b4d;
+        line-height: 1.6;
+        margin-bottom: 22px;
+      }
+      /* 只做一項:兩顆大按鈕 */
+      .choose-row {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 18px;
+      }
+      .choose-btn {
+        flex: 1;
+        background: #fff;
+        border: 2.5px solid #e0d3c2;
+
+        padding: 22px 16px;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        transition:
+          border-color 0.15s,
+          background 0.15s,
+          transform 0.15s;
+      }
+      .choose-btn:hover {
+        border-color: var(--primary);
+        background: #faf6f1;
+      }
+      .choose-btn:active {
+        transform: scale(0.97);
+      }
+      .choose-btn .c-ico {
+        width: 60px;
+        height: 60px;
+        border-radius: 16px;
+        background: linear-gradient(
+          135deg,
+          var(--primary),
+          var(--primary-dark)
+        );
+        display: grid;
+        place-items: center;
+      }
+      .choose-btn .c-ico i {
+        font-size: 1.7rem;
+        color: #fff;
+      }
+      .choose-btn .c-name {
+        font-size: 1.25rem;
+        font-weight: 900;
+        color: #2b2018;
+      }
+      .choose-btn .c-time {
+        font-size: 1rem;
+        color: #7a6a5b;
+        font-weight: 500;
+      }
+      .modal-actions {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+      }
+      .mbtn {
+        border: none;
+
+        padding: 15px 28px;
+        font-size: 1.15rem;
+        font-weight: 800;
+        cursor: pointer;
+        font-family: "Noto Sans TC", sans-serif;
+      }
+      .mbtn-ghost {
+        background: #f0eae3;
+        color: var(--primary);
+      }
+      .mbtn-go {
+        background: linear-gradient(
+          135deg,
+          var(--primary),
+          var(--primary-dark)
+        );
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="tablet-shell">
+      <header class="app-header">
+        <div class="logo-box">
+          <img
+            src="/assets/logo.png"
+            style="width: 28px"
+            onerror="this.style.display = 'none'"
+          />
+        </div>
+        <h1>FongAI</h1>
+      </header>
+
+      <main class="main">
+        <div class="lead">
+          <h2>今天為您安排兩項健康檢測</h2>
+          <p>會依序進行,全程大約 5 分鐘,請放心跟著畫面操作。</p>
+        </div>
+
+        <div class="plan">
+          <div class="plan-item">
+            <div class="plan-ico">
+              <i class="fa-solid fa-clipboard-list"></i>
+            </div>
+            <div class="plan-txt">
+              <span class="plan-name">量六力 · 健康自評</span>
+              <span class="plan-desc">回答幾個問題,了解整體健康狀況</span>
+            </div>
+            <div class="plan-flag">
+              <i class="fa-solid fa-check"></i> 約 3 分鐘
+            </div>
+          </div>
+
+          <div class="plan-item">
+            <div class="plan-ico">
+              <i class="fa-solid fa-person-walking"></i>
+            </div>
+            <div class="plan-txt">
+              <span class="plan-name">SPPB · 體能檢測</span>
+              <span class="plan-desc"
+                >簡單的站立與行走動作,評估腿力與跌倒風險</span
+              >
+            </div>
+            <div class="plan-flag">
+              <i class="fa-solid fa-check"></i> 約 2 分鐘
+            </div>
+          </div>
+        </div>
+
+        <div class="cta">
+          <button class="btn-go" onclick="startBoth()">
+            <i class="fa-solid fa-circle-play"></i>
+            <div>
+              <div class="go-main">開始檢測</div>
+              <div class="go-sub">兩項一起做 · 約 5 分鐘</div>
+            </div>
+          </button>
+          <button class="secondary-link" onclick="openChoose()">
+            我只想做其中一項
+          </button>
+        </div>
+      </main>
+    </div>
+
+    <!-- 只做一項:選擇彈窗 -->
+    <div class="overlay" id="choose-overlay">
+      <div class="modal">
+        <h2>想只做一項嗎?</h2>
+        <p>請點選您要進行的項目:</p>
+        <div class="choose-row">
+          <button class="choose-btn" onclick="startOne('liuli')">
+            <div class="c-ico"><i class="fa-solid fa-clipboard-list"></i></div>
+            <div class="c-name">量六力</div>
+            <div class="c-time">健康自評 · 約 3 分鐘</div>
+          </button>
+          <button class="choose-btn" onclick="startOne('sppb')">
+            <div class="c-ico"><i class="fa-solid fa-person-walking"></i></div>
+            <div class="c-name">SPPB</div>
+            <div class="c-time">體能檢測 · 約 2 分鐘</div>
+          </button>
+        </div>
+        <div class="modal-actions">
+          <button class="mbtn mbtn-ghost" onclick="closeChoose()">
+            ← 還是兩項都做
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 開始前確認 -->
+    <div class="overlay" id="go-overlay">
+      <div class="modal">
+        <h2>即將開始</h2>
+        <p id="go-desc"></p>
+        <div class="modal-actions">
+          <button class="mbtn mbtn-ghost" onclick="closeGo()">再等一下</button>
+          <button class="mbtn mbtn-go" onclick="confirmGo()">確認開始</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const NAMES = { liuli: "量六力 · 健康自評", sppb: "SPPB · 體能檢測" };
+      let pending = []; // 這次要做的項目
+
+      function startBoth() {
+        pending = ["liuli", "sppb"];
+        showGo("接下來會依序進行「量六力」與「SPPB」兩項檢測,全程約 5 分鐘。");
+      }
+      function openChoose() {
+        document.getElementById("choose-overlay").classList.add("show");
+      }
+      function closeChoose() {
+        document.getElementById("choose-overlay").classList.remove("show");
+      }
+      function startOne(key) {
+        closeChoose();
+        pending = [key];
+        showGo("接下來會進行「" + NAMES[key] + "」這一項檢測。");
+      }
+
+      function showGo(text) {
+        document.getElementById("go-desc").textContent = text;
+        document.getElementById("go-overlay").classList.add("show");
+      }
+      function closeGo() {
+        document.getElementById("go-overlay").classList.remove("show");
+      }
+      /* 純流程展示:確認後不串接,僅示意 */
+      function confirmGo() {
+        closeGo();
+        alert("開始檢測:" + pending.map((k) => NAMES[k]).join(" → "));
+      }
+    </script>
+  </body>
+</html>

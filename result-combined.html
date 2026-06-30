@@ -1,0 +1,1165 @@
+<!doctype html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>綜合檢測報告 — 量六力 + SPPB</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=IBM+Plex+Mono:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background: #f2f2f2;
+        font-family: "Noto Sans TC", sans-serif;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        padding: 24px 14px 56px;
+        color: #111;
+      }
+      .page {
+        width: 100%;
+        max-width: 530px;
+        overflow: hidden;
+        border-radius: 16px;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+        background: #fff;
+        margin: auto;
+      }
+
+      /* ── 共用頁首 ── */
+      .hd {
+        background: #6f4e37;
+        padding: 22px 22px 18px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+      }
+      .hd-name {
+        font-size: 22px;
+        font-weight: 900;
+        color: #fff;
+      }
+      .hd-flow {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.65);
+        margin-top: 5px;
+        font-weight: 500;
+      }
+      .hd-right {
+        text-align: right;
+      }
+      .hd-date-lbl {
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.6);
+        margin-bottom: 3px;
+      }
+      .hd-date {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 13px;
+        color: #fff;
+        font-weight: 500;
+      }
+
+      /* ── 滑動換頁(高度=當前頁) ── */
+      .swipe-viewport {
+        overflow: hidden;
+        position: relative;
+      }
+      .swipe-track {
+        position: relative;
+      }
+      /* 每張投影片疊在同一處;非當前者絕對定位、不佔高度 */
+      .slide {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.28s ease;
+      }
+      .slide.on {
+        position: relative; /* 只有當前頁進入文檔流,容器高度=這張 */
+        opacity: 1;
+        visibility: visible;
+      }
+
+      /* ── 第一次出現的滑動手勢引導(滑過即淡出) ── */
+      .swipe-coach {
+        position: absolute;
+        inset: 0;
+        background: rgba(43, 32, 24, 0.42);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        z-index: 30;
+        opacity: 1;
+        transition: opacity 0.4s ease;
+      }
+      .swipe-coach.hide {
+        opacity: 0;
+        pointer-events: none;
+      }
+      .coach-gesture {
+        position: relative;
+        width: 120px;
+        height: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .coach-arrow {
+        position: absolute;
+        font-size: 22px;
+        color: rgba(255, 255, 255, 0.85);
+      }
+      .coach-arrow.left {
+        left: 0;
+      }
+      .coach-arrow.right {
+        right: 0;
+      }
+      .coach-hand {
+        font-size: 34px;
+        color: #fff;
+        filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.3));
+        animation: swipeHand 1.6s ease-in-out infinite;
+      }
+      @keyframes swipeHand {
+        0%,
+        100% {
+          transform: translateX(26px) rotate(8deg);
+        }
+        50% {
+          transform: translateX(-26px) rotate(-8deg);
+        }
+      }
+      .coach-text {
+        color: #fff;
+        font-size: 15px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      }
+
+      /* 每張 slide 內的標題列 */
+      .slide-head {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        background: #fbf9f6;
+        padding: 14px 22px;
+        border-bottom: 1px solid #f0ebe3;
+      }
+      /* 底部頁碼圓點 */
+      .dots {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 16px;
+        background: #fff;
+      }
+      .dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: #d8c4ad;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        transition: all 0.2s;
+      }
+      .dot.on {
+        background: #6f4e37;
+        width: 26px;
+        border-radius: 5px;
+      }
+
+      /* ── 區段標題 ── */
+      /* ── 風險儀表 ── */
+      .gauge-band {
+        background: #fff;
+        padding: 16px 22px 14px;
+        border-bottom: 2px solid #f2f2f2;
+      }
+      .gauge-wrap {
+        height: 240px;
+        position: relative;
+      }
+      .gauge-wrap canvas {
+        width: 100% !important;
+        height: 100% !important;
+      }
+      .gauge-risk-tag {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 12px;
+        padding: 12px 16px;
+        border-radius: 12px;
+        border: 2px solid;
+      }
+      .gauge-risk-tag-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+      .gauge-risk-tag-text {
+        font-size: 15px;
+        font-weight: 900;
+        letter-spacing: 0.02em;
+      }
+
+      /* ── SPPB 總分 ── */
+      .sppb-band {
+        background: #fff;
+        padding: 20px 22px;
+        border-bottom: 2px solid #f2f2f2;
+      }
+      .band-label {
+        font-size: 13px;
+        font-weight: 700;
+        color: #6f4e37;
+        margin-bottom: 12px;
+      }
+      .sppb-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 16px;
+      }
+      .sppb-num {
+        font-size: 60px;
+        font-weight: 900;
+        line-height: 1;
+        color: #111;
+        letter-spacing: -0.05em;
+      }
+      .sppb-num span {
+        font-size: 24px;
+        font-weight: 500;
+        color: #bbb;
+      }
+      .sppb-unit {
+        font-size: 13px;
+        color: #888;
+        margin-top: 2px;
+      }
+      .sppb-badge {
+        background: #f7fee7;
+        border: 2px solid #bef264;
+        border-radius: 10px;
+        padding: 10px 16px;
+        text-align: center;
+      }
+      .sppb-badge-num {
+        font-size: 22px;
+        font-weight: 900;
+        color: #3f6212;
+        line-height: 1;
+      }
+      .sppb-badge-txt {
+        font-size: 11px;
+        color: #4d7c0f;
+        margin-top: 3px;
+        font-weight: 500;
+      }
+      .ruler-track {
+        height: 6px;
+        background: #eee;
+        border-radius: 10px;
+        position: relative;
+        margin-bottom: 8px;
+      }
+      .ruler-fill {
+        position: absolute;
+        height: 100%;
+        width: 75%;
+        background: #6f4e37;
+        border-radius: 10px;
+      }
+      .ruler-dot {
+        position: absolute;
+        top: 50%;
+        left: 75%;
+        transform: translate(-50%, -50%);
+        width: 16px;
+        height: 16px;
+        background: #6f4e37;
+        border: 3px solid #fff;
+        border-radius: 50%;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+      }
+      .ruler-labs {
+        display: flex;
+        justify-content: space-between;
+        font-size: 11px;
+        color: #aaa;
+        font-family: "IBM Plex Mono", monospace;
+      }
+
+      /* ── 三項體能 ── */
+      .analysis-band {
+        background: #fff;
+        padding: 20px 22px;
+        border-bottom: 2px solid #f2f2f2;
+      }
+      .band-hdr {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 14px;
+      }
+      .seg {
+        display: flex;
+        background: #f2f2f2;
+        border-radius: 10px;
+        padding: 4px;
+        gap: 3px;
+      }
+      .seg-btn {
+        border: none;
+        background: transparent;
+        font-size: 13px;
+        font-weight: 700;
+        padding: 7px 16px;
+        border-radius: 7px;
+        color: #888;
+        cursor: pointer;
+        transition: all 0.15s;
+        font-family: "Noto Sans TC", sans-serif;
+      }
+      .seg-btn.on {
+        background: #6f4e37;
+        color: #fff;
+      }
+      .radar-view {
+        display: flex;
+        gap: 12px;
+        align-items: stretch;
+      }
+      .data-view {
+        display: none;
+      }
+      .drow {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 13px 0;
+        border-bottom: 1.5px solid #f0f0f0;
+      }
+      .drow:last-child {
+        border-bottom: none;
+      }
+      .drow-l {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .drow-ico {
+        width: 32px;
+        height: 32px;
+        background: #f7f3ef;
+        border-radius: 9px;
+        display: grid;
+        place-items: center;
+      }
+      .drow-ico i {
+        font-size: 14px;
+        color: #6f4e37;
+      }
+      .drow-lbl {
+        font-size: 13px;
+        color: #444;
+        font-weight: 500;
+      }
+      .drow-val {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 14px;
+        font-weight: 500;
+        color: #111;
+      }
+      .radar-box {
+        width: 116px;
+        height: 116px;
+        background: #f7f3ef;
+        border: 2px solid #d8c4ad;
+        border-radius: 12px;
+        padding: 7px;
+        flex-shrink: 0;
+      }
+      .leg-col {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+      }
+      .leg-row {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 0 12px;
+        border-radius: 10px;
+        border: 1.5px solid #e5e5e5;
+        background: #fafafa;
+      }
+      .leg-ico {
+        width: 30px;
+        height: 30px;
+        border-radius: 8px;
+        background: #6f4e37;
+        display: grid;
+        place-items: center;
+        flex-shrink: 0;
+      }
+      .leg-ico i {
+        font-size: 14px;
+        color: #fff;
+      }
+      .leg-txt {
+        flex: 1;
+      }
+      .leg-name {
+        font-size: 13px;
+        font-weight: 700;
+        color: #111;
+        display: block;
+      }
+      .leg-desc {
+        font-size: 11px;
+        color: #888;
+        display: block;
+      }
+      .leg-score {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 13px;
+        font-weight: 500;
+        color: #6f4e37;
+        background: #e7dccf;
+        padding: 3px 8px;
+        border-radius: 6px;
+        white-space: nowrap;
+      }
+
+      /* ── VIVIFRAIL ── */
+      .result-band {
+        background: #1a1410;
+        padding: 20px 22px;
+        display: flex;
+        align-items: center;
+        gap: 18px;
+      }
+      .result-grade {
+        width: 70px;
+        height: 70px;
+        border-radius: 14px;
+        background: #6f4e37;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .result-grade-lbl {
+        font-size: 9px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.6);
+      }
+      .result-grade-val {
+        font-size: 40px;
+        font-weight: 900;
+        color: #fff;
+        line-height: 1;
+        letter-spacing: -0.04em;
+      }
+      .result-tag {
+        font-size: 11px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.45);
+        margin-bottom: 4px;
+      }
+      .result-title {
+        font-size: 18px;
+        font-weight: 900;
+        color: #fff;
+      }
+
+      /* ── 量六力 六大面向 ── */
+      .six-band {
+        background: #fff;
+        padding: 20px 22px;
+        border-bottom: 2px solid #f2f2f2;
+      }
+      .six-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .six-card {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        border: 1.5px solid #eee;
+        border-radius: 11px;
+        padding: 12px 13px;
+        background: #fafafa;
+      }
+      .six-card.bad {
+        border-color: #fca5a5;
+        background: #fef5f4;
+      }
+      .six-cico {
+        width: 30px;
+        height: 30px;
+        border-radius: 8px;
+        background: #f7f3ef;
+        display: grid;
+        place-items: center;
+        flex-shrink: 0;
+      }
+      .six-cico i {
+        font-size: 13px;
+        color: #6f4e37;
+      }
+      .six-card.bad .six-cico {
+        background: #fde0de;
+      }
+      .six-card.bad .six-cico i {
+        color: #dc2626;
+      }
+      .six-txt {
+        flex: 1;
+        min-width: 0;
+      }
+      .six-name {
+        font-size: 13px;
+        font-weight: 700;
+        color: #333;
+        display: block;
+        line-height: 1.2;
+      }
+      .six-stat {
+        font-size: 11px;
+        font-weight: 700;
+      }
+      .six-stat.ok {
+        color: #4d7c0f;
+      }
+      .six-stat.bad {
+        color: #dc2626;
+      }
+      .six-summary {
+        display: flex;
+        gap: 18px;
+        margin-top: 14px;
+        padding-top: 14px;
+        border-top: 1px solid #f0f0f0;
+      }
+      .sm-item {
+        display: flex;
+        align-items: baseline;
+        gap: 6px;
+      }
+      .sm-num {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 24px;
+        font-weight: 500;
+      }
+      .sm-num.ok {
+        color: #4d7c0f;
+      }
+      .sm-num.bad {
+        color: #dc2626;
+      }
+      .sm-unit {
+        font-size: 12px;
+        color: #888;
+      }
+
+      /* ── 綜合建議 ── */
+      .advice-band {
+        background: #fbf9f6;
+        padding: 20px 22px;
+      }
+      .advice-hd {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        font-weight: 900;
+        color: #6f4e37;
+        margin-bottom: 8px;
+      }
+      .advice-txt {
+        font-size: 13px;
+        line-height: 1.75;
+        color: #555;
+      }
+      .advice-note {
+        font-size: 11px;
+        color: #b08968;
+        margin-top: 10px;
+        line-height: 1.6;
+      }
+
+      /* ── 底部動作 ── */
+      .foot-band {
+        background: #fff;
+        padding: 16px 22px 22px;
+        display: flex;
+        gap: 12px;
+      }
+      .fbtn {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        border: none;
+        border-radius: 12px;
+        padding: 15px;
+        font-size: 15px;
+        font-weight: 800;
+        cursor: pointer;
+        font-family: "Noto Sans TC", sans-serif;
+        text-decoration: none;
+      }
+      .fbtn-ghost {
+        flex: 0 0 auto;
+        background: #f0ebe3;
+        color: #6f4e37;
+        padding: 15px 22px;
+      }
+      .fbtn-go {
+        background: #6f4e37;
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <!-- 共用頁首 -->
+      <div class="hd">
+        <div>
+          <div class="hd-name">王小明 先生</div>
+          <div class="hd-flow">完整檢測 · 量六力 ＋ SPPB</div>
+        </div>
+        <div class="hd-right">
+          <div class="hd-date-lbl">檢測日期</div>
+          <div class="hd-date">2024-10-24</div>
+        </div>
+      </div>
+
+      <!-- 滑動容器 -->
+      <div class="swipe-viewport" id="viewport">
+        <!-- 第一次出現的滑動手勢引導 -->
+        <div class="swipe-coach" id="coach">
+          <div class="coach-gesture">
+            <i class="fa-solid fa-arrow-left coach-arrow left"></i>
+            <i class="fa-solid fa-hand-pointer coach-hand"></i>
+            <i class="fa-solid fa-arrow-right coach-arrow right"></i>
+          </div>
+          <div class="coach-text">滑動可以看不同資訊</div>
+        </div>
+        <div class="swipe-track" id="track">
+          <!-- ===== Slide 1:SPPB ===== -->
+          <div class="slide on" id="slide-sppb">
+            <div class="gauge-band">
+              <div class="gauge-wrap"><canvas id="gaugeChart"></canvas></div>
+              <div class="gauge-risk-tag" id="riskTag">
+                <div class="gauge-risk-tag-dot" id="riskDot"></div>
+                <div class="gauge-risk-tag-text" id="riskText"></div>
+              </div>
+            </div>
+
+            <div class="sppb-band">
+              <div class="band-label">SPPB 總分指標</div>
+              <div class="sppb-row">
+                <div>
+                  <div class="sppb-num">9<span>/12</span></div>
+                  <div class="sppb-unit">滿分 12 分</div>
+                </div>
+                <div class="sppb-badge">
+                  <div class="sppb-badge-num">50%</div>
+                  <div class="sppb-badge-txt">優於同齡長者</div>
+                </div>
+              </div>
+              <div class="ruler-track">
+                <div class="ruler-fill"></div>
+                <div class="ruler-dot"></div>
+              </div>
+              <div class="ruler-labs">
+                <span>0 分</span><span>6 分（中間）</span><span>12 分</span>
+              </div>
+            </div>
+
+            <div class="analysis-band">
+              <div class="band-hdr">
+                <div class="band-label" style="margin: 0">三項體能測驗</div>
+                <div class="seg">
+                  <button
+                    class="seg-btn on"
+                    id="btnRadar"
+                    onclick="sw('radar')"
+                  >
+                    圖表
+                  </button>
+                  <button class="seg-btn" id="btnData" onclick="sw('data')">
+                    數據
+                  </button>
+                </div>
+              </div>
+              <div id="radarView" class="radar-view">
+                <div class="radar-box"><canvas id="radarChart"></canvas></div>
+                <div class="leg-col">
+                  <div class="leg-row">
+                    <div class="leg-ico">
+                      <i class="fa-solid fa-person-rays"></i>
+                    </div>
+                    <div class="leg-txt">
+                      <b class="leg-name">平衡</b
+                      ><span class="leg-desc">靜態站立穩定度佳</span>
+                    </div>
+                    <span class="leg-score">3/4</span>
+                  </div>
+                  <div class="leg-row">
+                    <div class="leg-ico"><i class="fa-solid fa-chair"></i></div>
+                    <div class="leg-txt">
+                      <b class="leg-name">起坐</b
+                      ><span class="leg-desc">下肢肌力表現正常</span>
+                    </div>
+                    <span class="leg-score">3/4</span>
+                  </div>
+                  <div class="leg-row">
+                    <div class="leg-ico">
+                      <i class="fa-solid fa-person-walking"></i>
+                    </div>
+                    <div class="leg-txt">
+                      <b class="leg-name">步行</b
+                      ><span class="leg-desc">步態穩健且速度快</span>
+                    </div>
+                    <span class="leg-score">3/4</span>
+                  </div>
+                </div>
+              </div>
+              <div id="dataView" class="data-view">
+                <div class="drow">
+                  <div class="drow-l">
+                    <div class="drow-ico">
+                      <i class="fa-solid fa-person-walking"></i>
+                    </div>
+                    <span class="drow-lbl">步行速度</span>
+                  </div>
+                  <span class="drow-val">4.82 秒</span>
+                </div>
+                <div class="drow">
+                  <div class="drow-l">
+                    <div class="drow-ico">
+                      <i class="fa-solid fa-chair"></i>
+                    </div>
+                    <span class="drow-lbl">五次起坐測試</span>
+                  </div>
+                  <span class="drow-val">12.5 秒</span>
+                </div>
+                <div class="drow">
+                  <div class="drow-l">
+                    <div class="drow-ico">
+                      <i class="fa-solid fa-shoe-prints"></i>
+                    </div>
+                    <span class="drow-lbl">並排站立</span>
+                  </div>
+                  <span class="drow-val">10 秒</span>
+                </div>
+                <div class="drow">
+                  <div class="drow-l">
+                    <div class="drow-ico">
+                      <i
+                        class="fa-solid fa-shoe-prints"
+                        style="opacity: 0.6"
+                      ></i>
+                    </div>
+                    <span class="drow-lbl">半並排</span>
+                  </div>
+                  <span class="drow-val">10 秒</span>
+                </div>
+                <div class="drow">
+                  <div class="drow-l">
+                    <div class="drow-ico">
+                      <i
+                        class="fa-solid fa-shoe-prints"
+                        style="transform: rotate(90deg)"
+                      ></i>
+                    </div>
+                    <span class="drow-lbl">直線站立</span>
+                  </div>
+                  <span class="drow-val">10 秒</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="result-band">
+              <div class="result-grade">
+                <div class="result-grade-lbl">等級</div>
+                <div class="result-grade-val">C</div>
+              </div>
+              <div>
+                <div class="result-tag">綜合評估結論</div>
+                <div class="result-title">VIVIFRAIL 等級</div>
+              </div>
+            </div>
+          </div>
+          <!-- /slide-sppb -->
+
+          <!-- ===== Slide 2:量六力 ===== -->
+          <div class="slide" id="slide-liuli">
+            <!-- ════ 量六力 ════ -->
+            <div class="six-band">
+              <div class="six-grid">
+                <div class="six-card">
+                  <div class="six-cico"><i class="fa-solid fa-brain"></i></div>
+                  <div class="six-txt">
+                    <span class="six-name">認知功能</span
+                    ><span class="six-stat ok">正常</span>
+                  </div>
+                </div>
+                <div class="six-card bad">
+                  <div class="six-cico">
+                    <i class="fa-solid fa-person-walking"></i>
+                  </div>
+                  <div class="six-txt">
+                    <span class="six-name">行動功能</span
+                    ><span class="six-stat bad">異常</span>
+                  </div>
+                </div>
+                <div class="six-card">
+                  <div class="six-cico">
+                    <i class="fa-solid fa-utensils"></i>
+                  </div>
+                  <div class="six-txt">
+                    <span class="six-name">營養不良</span
+                    ><span class="six-stat ok">正常</span>
+                  </div>
+                </div>
+                <div class="six-card">
+                  <div class="six-cico"><i class="fa-solid fa-eye"></i></div>
+                  <div class="six-txt">
+                    <span class="six-name">視力障礙</span
+                    ><span class="six-stat ok">正常</span>
+                  </div>
+                </div>
+                <div class="six-card bad">
+                  <div class="six-cico">
+                    <i class="fa-solid fa-ear-listen"></i>
+                  </div>
+                  <div class="six-txt">
+                    <span class="six-name">聽力障礙</span
+                    ><span class="six-stat bad">異常</span>
+                  </div>
+                </div>
+                <div class="six-card">
+                  <div class="six-cico">
+                    <i class="fa-solid fa-face-smile"></i>
+                  </div>
+                  <div class="six-txt">
+                    <span class="six-name">憂鬱情緒</span
+                    ><span class="six-stat ok">正常</span>
+                  </div>
+                </div>
+              </div>
+              <div class="six-summary">
+                <div class="sm-item">
+                  <span class="sm-num ok">4</span
+                  ><span class="sm-unit">項正常</span>
+                </div>
+                <div class="sm-item">
+                  <span class="sm-num bad">2</span
+                  ><span class="sm-unit">項異常</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- /slide-liuli -->
+        </div>
+        <!-- /track -->
+      </div>
+      <!-- /viewport -->
+
+      <!-- 頁碼圓點 -->
+      <div class="dots">
+        <button
+          class="dot on"
+          id="dot-0"
+          onclick="goSlide(0)"
+          aria-label="SPPB"
+        ></button>
+        <button
+          class="dot"
+          id="dot-1"
+          onclick="goSlide(1)"
+          aria-label="量六力"
+        ></button>
+      </div>
+
+      <!-- ════ 綜合建議(固定顯示) ════ -->
+      <div class="advice-band">
+        <div class="advice-hd">
+          <i class="fa-solid fa-lightbulb"></i> 綜合建議
+        </div>
+        <div class="advice-txt">
+          本次體能檢測為 VIVIFRAIL
+          <b>C 級</b
+          >,跌倒風險稍低、整體狀況尚可。健康功能自評中「<b>行動功能</b>」「<b>聽力障礙</b>」為異常,建議下次回診時一併提供醫師參考,並可諮詢相關運動或聽力資源。
+        </div>
+        <div class="advice-note">本報告僅供個人參考使用,非醫事證明文件。</div>
+      </div>
+
+      <!-- ════ 底部動作 ════ -->
+      <div class="foot-band">
+        <a class="fbtn fbtn-go" href="index.html">
+          <i class="fa-solid fa-house"></i> 回首頁
+        </a>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      /* ── 滑動換頁 ── */
+      let curSlide = 0;
+      let coachDismissed = false;
+
+      function dismissCoach() {
+        if (coachDismissed) return;
+        coachDismissed = true;
+        const c = document.getElementById("coach");
+        c.classList.add("hide");
+        setTimeout(() => c.remove(), 450);
+      }
+
+      function goSlide(i) {
+        curSlide = i;
+        document.getElementById("slide-sppb").classList.toggle("on", i === 0);
+        document.getElementById("slide-liuli").classList.toggle("on", i === 1);
+        document.getElementById("dot-0").classList.toggle("on", i === 0);
+        document.getElementById("dot-1").classList.toggle("on", i === 1);
+        dismissCoach();
+      }
+
+      // 觸控/滑鼠拖曳偵測
+      (function () {
+        const vp = document.getElementById("viewport");
+        let startX = null;
+        function down(x) {
+          startX = x;
+        }
+        function up(x) {
+          if (startX === null) return;
+          const dx = x - startX;
+          if (dx < -40 && curSlide === 0) goSlide(1);
+          else if (dx > 40 && curSlide === 1) goSlide(0);
+          startX = null;
+        }
+        vp.addEventListener("touchstart", (e) => down(e.touches[0].clientX), {
+          passive: true,
+        });
+        vp.addEventListener("touchend", (e) => up(e.changedTouches[0].clientX));
+        vp.addEventListener("mousedown", (e) => down(e.clientX));
+        vp.addEventListener("mouseup", (e) => up(e.clientX));
+      })();
+
+      function sw(type) {
+        const rv = document.getElementById("radarView"),
+          dv = document.getElementById("dataView");
+        const br = document.getElementById("btnRadar"),
+          bd = document.getElementById("btnData");
+        if (type === "radar") {
+          rv.style.display = "flex";
+          dv.style.display = "none";
+          br.classList.add("on");
+          bd.classList.remove("on");
+        } else {
+          rv.style.display = "none";
+          dv.style.display = "block";
+          br.classList.remove("on");
+          bd.classList.add("on");
+        }
+      }
+      const score = 9;
+      const RC = {
+        danger: "#ff5757",
+        high: "#ffa203",
+        mid: "#ffd039",
+        low: "#8cff00",
+        vlow: "#4ffa00",
+      };
+      const bgMap = {
+        danger: "#fef2f2",
+        high: "#fff7ed",
+        mid: "#fefce8",
+        low: "#f7fee7",
+        vlow: "#f0fdf4",
+      };
+      const borderMap = {
+        danger: "#fca5a5",
+        high: "#fdba74",
+        mid: "#fde047",
+        low: "#bef264",
+        vlow: "#86efac",
+      };
+      const textMap = {
+        danger: "#b91c1c",
+        high: "#c2410c",
+        mid: "#854d0e",
+        low: "#3f6212",
+        vlow: "#166534",
+      };
+      const labelMap = {
+        danger: "目前跌倒風險偏高，請特別注意",
+        high: "跌倒風險較高，建議積極改善",
+        mid: "跌倒風險中等，持續關注為佳",
+        low: "跌倒風險稍低，狀況良好",
+        vlow: "跌倒風險低，體能表現優異",
+      };
+      function getLevel(v) {
+        if (v <= 2) return { key: "danger", text: "危險" };
+        if (v <= 5) return { key: "high", text: "高風險" };
+        if (v <= 8) return { key: "mid", text: "中度風險" };
+        if (v <= 11) return { key: "low", text: "稍低風險" };
+        return { key: "vlow", text: "低風險" };
+      }
+      const lv = getLevel(score);
+      const tag = document.getElementById("riskTag");
+      tag.style.background = bgMap[lv.key];
+      tag.style.borderColor = borderMap[lv.key];
+      document.getElementById("riskDot").style.background = RC[lv.key];
+      const txt = document.getElementById("riskText");
+      txt.style.color = textMap[lv.key];
+      txt.textContent = "目前風險等級：" + lv.text + "　" + labelMap[lv.key];
+
+      new Chart(document.getElementById("gaugeChart"), {
+        type: "doughnut",
+        data: {
+          datasets: [
+            {
+              data: [1, 1, 1, 1, 1],
+              backgroundColor: [RC.danger, RC.high, RC.mid, RC.low, RC.vlow],
+              circumference: 180,
+              rotation: 270,
+              borderWidth: 4,
+              borderColor: "#fff",
+              cutout: "72%",
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          layout: { padding: { top: 20, left: 22, right: 22, bottom: 0 } },
+          plugins: { legend: { display: false }, tooltip: { enabled: false } },
+        },
+        plugins: [
+          {
+            id: "g",
+            afterDraw(chart) {
+              const { ctx, chartArea } = chart;
+              const cx = (chartArea.left + chartArea.right) / 2,
+                cy = chartArea.bottom - 10;
+              const ir = chart.getDatasetMeta(0).controller.innerRadius;
+              ctx.save();
+              const ang = Math.PI + Math.PI * (score / 12);
+              const tx = cx + Math.cos(ang) * (ir - 5),
+                ty = cy + Math.sin(ang) * (ir - 5);
+              const sx = cx + Math.cos(ang) * 10,
+                sy = cy + Math.sin(ang) * 10;
+              ctx.beginPath();
+              ctx.moveTo(sx, sy);
+              ctx.lineTo(tx, ty);
+              ctx.strokeStyle = "#111";
+              ctx.lineWidth = 3;
+              ctx.lineCap = "round";
+              ctx.stroke();
+              const ba = 0.38;
+              ctx.beginPath();
+              ctx.moveTo(tx, ty);
+              ctx.lineTo(
+                tx - 9 * Math.cos(ang - ba),
+                ty - 9 * Math.sin(ang - ba),
+              );
+              ctx.lineTo(
+                tx - 9 * Math.cos(ang + ba),
+                ty - 9 * Math.sin(ang + ba),
+              );
+              ctx.closePath();
+              ctx.fillStyle = "#111";
+              ctx.fill();
+              ctx.beginPath();
+              ctx.arc(cx, cy, 8, 0, Math.PI * 2);
+              ctx.fillStyle = "#111";
+              ctx.fill();
+              ctx.beginPath();
+              ctx.arc(cx, cy, 4, 0, Math.PI * 2);
+              ctx.fillStyle = "#fff";
+              ctx.fill();
+              ctx.font = '700 15px "Noto Sans TC",sans-serif';
+              ctx.fillStyle = "#111";
+              ctx.textAlign = "center";
+              ctx.textBaseline = "top";
+              ctx.fillText("風險等級：" + lv.text, cx, cy + 14);
+              ctx.restore();
+            },
+          },
+        ],
+      });
+
+      new Chart(document.getElementById("radarChart"), {
+        type: "radar",
+        data: {
+          labels: ["平衡", "起坐", "步行"],
+          datasets: [
+            {
+              data: [3, 3, 3],
+              backgroundColor: "rgba(111,78,55,0.12)",
+              borderColor: "#6f4e37",
+              borderWidth: 2.5,
+              pointRadius: 4,
+              pointBackgroundColor: "#6f4e37",
+            },
+          ],
+        },
+        options: {
+          scales: {
+            r: {
+              min: 0,
+              max: 4,
+              ticks: { display: false },
+              pointLabels: { display: false },
+              grid: { color: "rgba(111,78,55,0.15)" },
+              angleLines: { color: "rgba(111,78,55,0.15)" },
+            },
+          },
+          plugins: { legend: { display: false } },
+        },
+      });
+    </script>
+  </body>
+</html>
