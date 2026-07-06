@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>商品上架後台</title>
+    <style>
+      :root {
+        --primary-color: #4f46e5;
+        --primary-hover: #4338ca;
+        --bg-color: #f9fafb;
+        --card-bg: #ffffff;
+        --text-color: #111827;
+        --border-color: #e5e7eb;
+        --danger-color: #ef4444;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+          Arial, sans-serif;
+      }
+
+      body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        padding: 30px;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      header {
+        margin-bottom: 24px;
+      }
+
+      header h1 {
+        font-size: 24px;
+        font-weight: 600;
+      }
+
+      /* 左右雙欄佈局 */
+      .layout {
+        display: flex;
+        gap: 24px;
+      }
+
+      .main-col {
+        flex: 7;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .side-col {
+        flex: 3;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      /* 卡片樣式 */
+      .card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 24px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      }
+
+      .card h2 {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 16px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      /* 表單元素 */
+      .form-group {
+        margin-bottom: 16px;
+      }
+
+      .form-group:last-child {
+        margin-bottom: 0;
+      }
+
+      label {
+        display: block;
+        font-size: 14px;
+        font-weight: 500;
+        margin-bottom: 6px;
+      }
+
+      label .required {
+        color: var(--danger-color);
+      }
+
+      input[type="text"],
+      input[type="number"],
+      textarea,
+      select {
+        width: 100%;
+        padding: 10px 14px;
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        font-size: 14px;
+        outline: none;
+        transition: border 0.2s;
+      }
+
+      input:focus,
+      textarea:focus,
+      select:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+      }
+
+      /* 區塊 2: 圖片上傳區 */
+      .upload-zone {
+        border: 2px dashed var(--border-color);
+        border-radius: 6px;
+        padding: 30px;
+        text-align: center;
+        cursor: pointer;
+        background: #fafafa;
+        transition: background 0.2s;
+      }
+
+      .upload-zone:hover {
+        background: #f3f4f6;
+        border-color: var(--primary-color);
+      }
+
+      .preview-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 16px;
+      }
+
+      .preview-item {
+        position: relative;
+        width: 80px;
+        height: 80px;
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        overflow: hidden;
+      }
+
+      .preview-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .preview-item .remove-btn {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        background: rgba(0, 0, 0, 0.6);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 18px;
+        height: 18px;
+        font-size: 12px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* 區塊 4: 規格標籤 */
+      .tag-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 8px;
+      }
+
+      .tag {
+        background: #eedfcc;
+        background: rgba(79, 70, 229, 0.1);
+        color: var(--primary-color);
+        padding: 4px 10px;
+        border-radius: 16px;
+        font-size: 12px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .tag .remove-tag {
+        cursor: pointer;
+        font-weight: bold;
+      }
+
+      /* 區塊 5: 開關與按鈕 */
+      .switch-group {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 44px;
+        height: 24px;
+      }
+
+      .switch input {
+        display: none;
+      }
+
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: 0.4s;
+        border-radius: 24px;
+      }
+
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 16px;
+        width: 16px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: 0.4s;
+        border-radius: 50%;
+      }
+
+      input:checked + .slider {
+        background-color: var(--primary-color);
+      }
+      input:checked + .slider:before {
+        transform: translateX(20px);
+      }
+
+      .actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 24px;
+        border-top: 1px solid var(--border-color);
+        padding-top: 24px;
+      }
+
+      .btn {
+        padding: 10px 20px;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        border: 1px solid transparent;
+      }
+
+      .btn-secondary {
+        background: white;
+        border-color: var(--border-color);
+        color: #4b5563;
+      }
+
+      .btn-secondary:hover {
+        background: #f9fafb;
+      }
+
+      .btn-primary {
+        background: var(--primary-color);
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background: var(--primary-hover);
+      }
+
+      /* 錯誤提示樣式 */
+      .error-message {
+        color: var(--danger-color);
+        font-size: 12px;
+        margin-top: 4px;
+        display: none;
+      }
+
+      .has-error input {
+        border-color: var(--danger-color);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>新增商品</h1>
+      </header>
+
+      <form id="productForm" onsubmit="handleSubmit(event)">
+        <div class="layout">
+          <div class="main-col">
+            <div class="card">
+              <h2>1. 商品基本資訊</h2>
+              <div class="form-group" id="group-title">
+                <label for="p-title"
+                  >商品名稱 <span class="required">*</span></label
+                >
+                <input type="text" id="p-title" placeholder="請輸入商品名稱" />
+                <div class="error-message">請輸入商品名稱</div>
+              </div>
+              <div class="form-group">
+                <label for="p-desc">商品描述</label>
+                <textarea
+                  id="p-desc"
+                  rows="4"
+                  placeholder="請輸入商品詳細描述..."
+                ></textarea>
+              </div>
+            </div>
+
+            <div class="card">
+              <h2>2. 商品圖片</h2>
+              <label class="upload-zone" for="p-image">
+                <p>📸 點擊選擇圖片上傳</p>
+                <input
+                  type="file"
+                  id="p-image"
+                  accept="image/*"
+                  multiple
+                  style="display: none"
+                  onchange="handleImageUpload(event)"
+                />
+              </label>
+              <div class="preview-container" id="imagePreviewContainer"></div>
+            </div>
+
+            <div class="card">
+              <h2>4. 商品規格 (例如：尺寸或顏色)</h2>
+              <div class="form-group">
+                <label for="p-tag-input"
+                  >新增規格標籤 (輸入後按 Enter 鍵新增)</label
+                >
+                <input
+                  type="text"
+                  id="p-tag-input"
+                  placeholder="例如：M、L、紅色"
+                  onkeydown="handleTagKeyDown(event)"
+                />
+                <div class="tag-container" id="tagContainer"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="side-col">
+            <div class="card">
+              <h2>5. 上架狀態</h2>
+              <div class="switch-group">
+                <span>是否直接上架公開？</span>
+                <label class="switch">
+                  <input type="checkbox" id="p-status" checked />
+                  <span class="slider"></span>
+                </label>
+              </div>
+            </div>
+
+            <div class="card">
+              <h2>3. 價格與庫存</h2>
+              <div class="form-group" id="group-price">
+                <label for="p-price"
+                  >商品售價 <span class="required">*</span></label
+                >
+                <input type="number" id="p-price" min="0" placeholder="0" />
+                <div class="error-message">價格必須大於或等於 0</div>
+              </div>
+              <div class="form-group" id="group-stock">
+                <label for="p-stock"
+                  >商品庫存 <span class="required">*</span></label
+                >
+                <input type="number" id="p-stock" min="0" placeholder="0" />
+                <div class="error-message">庫存必須大於或等於 0</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            onclick="alert('已取消輸入')"
+          >
+            取消
+          </button>
+          <button type="submit" class="btn btn-primary">確認上架</button>
+        </div>
+      </form>
+    </div>
+
+    <script>
+      // --- 2. 圖片預覽邏輯 ---
+      function handleImageUpload(event) {
+        const container = document.getElementById("imagePreviewContainer");
+        const files = event.target.files;
+
+        for (let i = 0; i < files.length; i++) {
+          const file = files[i];
+          if (!file.type.startsWith("image/")) continue;
+
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            const div = document.createElement("div");
+            div.className = "preview-item";
+            div.innerHTML = `
+                    <img src="${e.target.result}" alt="preview">
+                    <button type="button" class="remove-btn" onclick="this.parentElement.remove()">×</button>
+                `;
+            container.appendChild(div);
+          };
+          reader.readAsDataURL(file);
+        }
+        // 清空 input 讓同一張圖可以重複測試上傳
+        event.target.value = "";
+      }
+
+      // --- 4. 規格標籤邏輯 ---
+      const tags = new Set();
+      function handleTagKeyDown(event) {
+        if (event.key === "Enter") {
+          event.preventDefault(); // 阻止表單預設的 Enter 送出動作
+          const input = event.target;
+          const value = input.value.trim();
+
+          if (value && !tags.has(value)) {
+            tags.add(value);
+            renderTags();
+          }
+          input.value = "";
+        }
+      }
+
+      function renderTags() {
+        const container = document.getElementById("tagContainer");
+        container.innerHTML = "";
+        tags.forEach((tag) => {
+          const span = document.createElement("span");
+          span.className = "tag";
+          span.innerHTML = `${tag} <span class="remove-tag" onclick="removeTag('${tag}')">×</span>`;
+          container.appendChild(span);
+        });
+      }
+
+      function removeTag(tag) {
+        tags.delete(tag);
+        renderTags();
+      }
+
+      // --- 表單防呆驗證與模擬送出 ---
+      function handleSubmit(event) {
+        event.preventDefault();
+
+        // 抓取欄位
+        const titleInput = document.getElementById("p-title");
+        const priceInput = document.getElementById("p-price");
+        const stockInput = document.getElementById("p-stock");
+        const statusInput = document.getElementById("p-status");
+        const descInput = document.getElementById("p-desc");
+
+        let isPass = true;
+
+        // 驗證商品名稱
+        if (!titleInput.value.trim()) {
+          document.getElementById("group-title").classList.add("has-error");
+          document
+            .getElementById("group-title")
+            .querySelector(".error-message").style.display = "block";
+          isPass = false;
+        } else {
+          document.getElementById("group-title").classList.remove("has-error");
+          document
+            .getElementById("group-title")
+            .querySelector(".error-message").style.display = "none";
+        }
+
+        // 驗證價格
+        if (priceInput.value === "" || Number(priceInput.value) < 0) {
+          document.getElementById("group-price").classList.add("has-error");
+          document
+            .getElementById("group-price")
+            .querySelector(".error-message").style.display = "block";
+          isPass = false;
+        } else {
+          document.getElementById("group-price").classList.remove("has-error");
+          document
+            .getElementById("group-price")
+            .querySelector(".error-message").style.display = "none";
+        }
+
+        // 驗證庫存
+        if (stockInput.value === "" || Number(stockInput.value) < 0) {
+          document.getElementById("group-stock").classList.add("has-error");
+          document
+            .getElementById("group-stock")
+            .querySelector(".error-message").style.display = "block";
+          isPass = false;
+        } else {
+          document.getElementById("group-stock").classList.remove("has-error");
+          document
+            .getElementById("group-stock")
+            .querySelector(".error-message").style.display = "none";
+        }
+
+        // 驗證通過，撈取資料模擬 console 印出
+        if (isPass) {
+          const formData = {
+            title: titleInput.value.trim(),
+            description: descInput.value.trim(),
+            price: Number(priceInput.value),
+            stock: Number(stockInput.value),
+            variants: Array.from(tags),
+            isPublished: statusInput.checked,
+          };
+
+          console.log("前端準備送出的資料結構：", formData);
+          alert(
+            `🎉 商品儲存成功！\n名稱：${formData.title}\n狀態：${formData.isPublished ? "直接上架" : "暫不上架"}\n詳情請開啟 F12 開發者工具查看 Console`,
+          );
+        }
+      }
+    </script>
+  </body>
+</html>
