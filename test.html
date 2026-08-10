@@ -1,541 +1,147 @@
 <!doctype html>
-<html lang="zh-TW">
+<html lang="zh-Hant">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>商品上架後台</title>
+    <title>自訂捲軸樣式示範</title>
     <style>
-      :root {
-        --primary-color: #4f46e5;
-        --primary-hover: #4338ca;
-        --bg-color: #f9fafb;
-        --card-bg: #ffffff;
-        --text-color: #111827;
-        --border-color: #e5e7eb;
-        --danger-color: #ef4444;
-      }
-
       * {
-        box-sizing: border-box;
         margin: 0;
         padding: 0;
-        font-family:
-          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
-          Arial, sans-serif;
+        box-sizing: border-box;
       }
 
       body {
-        background-color: var(--bg-color);
-        color: var(--text-color);
-        padding: 30px;
-      }
-
-      .container {
-        max-width: 1200px;
-        margin: 0 auto;
+        font-family: "Microsoft JhengHei", sans-serif;
+        background: #0d1117;
+        color: #e6edf3;
+        line-height: 1.8;
       }
 
       header {
-        margin-bottom: 24px;
+        padding: 40px 24px;
+        text-align: center;
+        background: linear-gradient(135deg, #6366f1, #00b894);
       }
 
       header h1 {
-        font-size: 24px;
-        font-weight: 600;
+        font-size: 2rem;
+        margin-bottom: 8px;
+      }
+      header p {
+        opacity: 0.85;
       }
 
-      /* 左右雙欄佈局 */
-      .layout {
-        display: flex;
-        gap: 24px;
+      main {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 40px 24px;
       }
 
-      .main-col {
-        flex: 7;
-        display: flex;
-        flex-direction: column;
-        gap: 24px;
-      }
-
-      .side-col {
-        flex: 3;
-        display: flex;
-        flex-direction: column;
-        gap: 24px;
-      }
-
-      /* 卡片樣式 */
-      .card {
-        background: var(--card-bg);
-        border: 1px solid var(--border-color);
-        border-radius: 8px;
+      section {
+        margin-bottom: 40px;
         padding: 24px;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        background: #161b22;
+        border: 1px solid #30363d;
+        border-radius: 12px;
       }
 
-      .card h2 {
-        font-size: 16px;
-        font-weight: 600;
-        margin-bottom: 16px;
-        padding-bottom: 8px;
-        border-bottom: 1px solid var(--border-color);
+      h2 {
+        color: #58a6ff;
+        margin-bottom: 12px;
+      }
+      p {
+        color: #8b949e;
+        margin-bottom: 10px;
       }
 
-      /* 表單元素 */
-      .form-group {
-        margin-bottom: 16px;
+      /* ══════ 自訂捲軸樣式（重點在這裡）══════ */
+
+      /* Chrome / Edge / Safari 用這組（Webkit 核心瀏覽器）*/
+      ::-webkit-scrollbar {
+        width: 10px; /* 捲軸寬度，原生通常是 15~17px，這裡改細 */
       }
 
-      .form-group:last-child {
-        margin-bottom: 0;
+      ::-webkit-scrollbar-track {
+        background: #0d1117; /* 軌道背景色 */
       }
 
-      label {
-        display: block;
-        font-size: 14px;
-        font-weight: 500;
-        margin-bottom: 6px;
+      ::-webkit-scrollbar-thumb {
+        background: #30363d; /* 滑塊顏色 */
+        border-radius: 10px; /* 滑塊圓角，做出膠囊型 */
+        border: 2px solid #0d1117; /* 讓滑塊看起來比軌道細一點 */
       }
 
-      label .required {
-        color: var(--danger-color);
+      ::-webkit-scrollbar-thumb:hover {
+        background: #58a6ff; /* 滑鼠移過去變色 */
       }
 
-      input[type="text"],
-      input[type="number"],
-      textarea,
-      select {
-        width: 100%;
-        padding: 10px 14px;
-        border: 1px solid var(--border-color);
-        border-radius: 6px;
-        font-size: 14px;
-        outline: none;
-        transition: border 0.2s;
-      }
-
-      input:focus,
-      textarea:focus,
-      select:focus {
-        border-color: var(--primary-color);
-        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-      }
-
-      /* 區塊 2: 圖片上傳區 */
-      .upload-zone {
-        border: 2px dashed var(--border-color);
-        border-radius: 6px;
-        padding: 30px;
-        text-align: center;
-        cursor: pointer;
-        background: #fafafa;
-        transition: background 0.2s;
-      }
-
-      .upload-zone:hover {
-        background: #f3f4f6;
-        border-color: var(--primary-color);
-      }
-
-      .preview-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        margin-top: 16px;
-      }
-
-      .preview-item {
-        position: relative;
-        width: 80px;
-        height: 80px;
-        border: 1px solid var(--border-color);
-        border-radius: 4px;
-        overflow: hidden;
-      }
-
-      .preview-item img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-
-      .preview-item .remove-btn {
-        position: absolute;
-        top: 2px;
-        right: 2px;
-        background: rgba(0, 0, 0, 0.6);
-        color: white;
-        border: none;
-        border-radius: 50%;
-        width: 18px;
-        height: 18px;
-        font-size: 12px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      /* 區塊 4: 規格標籤 */
-      .tag-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin-top: 8px;
-      }
-
-      .tag {
-        background: #eedfcc;
-        background: rgba(79, 70, 229, 0.1);
-        color: var(--primary-color);
-        padding: 4px 10px;
-        border-radius: 16px;
-        font-size: 12px;
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-      }
-
-      .tag .remove-tag {
-        cursor: pointer;
-        font-weight: bold;
-      }
-
-      /* 區塊 5: 開關與按鈕 */
-      .switch-group {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
-
-      .switch {
-        position: relative;
-        display: inline-block;
-        width: 44px;
-        height: 24px;
-      }
-
-      .switch input {
-        display: none;
-      }
-
-      .slider {
-        position: absolute;
-        cursor: pointer;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: #ccc;
-        transition: 0.4s;
-        border-radius: 24px;
-      }
-
-      .slider:before {
-        position: absolute;
-        content: "";
-        height: 16px;
-        width: 16px;
-        left: 4px;
-        bottom: 4px;
-        background-color: white;
-        transition: 0.4s;
-        border-radius: 50%;
-      }
-
-      input:checked + .slider {
-        background-color: var(--primary-color);
-      }
-      input:checked + .slider:before {
-        transform: translateX(20px);
-      }
-
-      .actions {
-        display: flex;
-        justify-content: flex-end;
-        gap: 12px;
-        margin-top: 24px;
-        border-top: 1px solid var(--border-color);
-        padding-top: 24px;
-      }
-
-      .btn {
-        padding: 10px 20px;
-        border-radius: 6px;
-        font-size: 14px;
-        font-weight: 500;
-        cursor: pointer;
-        border: 1px solid transparent;
-      }
-
-      .btn-secondary {
-        background: white;
-        border-color: var(--border-color);
-        color: #4b5563;
-      }
-
-      .btn-secondary:hover {
-        background: #f9fafb;
-      }
-
-      .btn-primary {
-        background: var(--primary-color);
-        color: white;
-      }
-
-      .btn-primary:hover {
-        background: var(--primary-hover);
-      }
-
-      /* 錯誤提示樣式 */
-      .error-message {
-        color: var(--danger-color);
-        font-size: 12px;
-        margin-top: 4px;
-        display: none;
-      }
-
-      .has-error input {
-        border-color: var(--danger-color);
+      /* Firefox 用這組（沒有 ::-webkit-scrollbar 語法）*/
+      html {
+        scrollbar-width: thin; /* auto / thin / none */
+        scrollbar-color: #30363d #0d1117; /* 滑塊色 軌道色 */
       }
     </style>
   </head>
   <body>
-    <div class="container">
-      <header>
-        <h1>新增商品</h1>
-      </header>
+    <header>
+      <h1>自訂捲軸樣式示範</h1>
+      <p>往下捲動看看右邊捲軸的樣子，跟瀏覽器預設的粗黑捲軸做對比</p>
+    </header>
 
-      <form id="productForm" onsubmit="handleSubmit(event)">
-        <div class="layout">
-          <div class="main-col">
-            <div class="card">
-              <h2>1. 商品基本資訊</h2>
-              <div class="form-group" id="group-title">
-                <label for="p-title"
-                  >商品名稱 <span class="required">*</span></label
-                >
-                <input type="text" id="p-title" placeholder="請輸入商品名稱" />
-                <div class="error-message">請輸入商品名稱</div>
-              </div>
-              <div class="form-group">
-                <label for="p-desc">商品描述</label>
-                <textarea
-                  id="p-desc"
-                  rows="4"
-                  placeholder="請輸入商品詳細描述..."
-                ></textarea>
-              </div>
-            </div>
+    <main>
+      <section>
+        <h2>這是第一段內容</h2>
+        <p>
+          這裡隨便打一些文字撐高頁面，方便你看到捲軸的效果。捲軸樣式主要靠
+          ::-webkit-scrollbar 這組偽元素選擇器控制，這是 Webkit
+          核心瀏覽器（Chrome、Edge、Safari）專屬的語法。
+        </p>
+        <p>
+          Firefox 用的是完全不同的語法：scrollbar-width 跟
+          scrollbar-color，兩組語法要一起寫才能兼顧不同瀏覽器。
+        </p>
+      </section>
 
-            <div class="card">
-              <h2>2. 商品圖片</h2>
-              <label class="upload-zone" for="p-image">
-                <p>📸 點擊選擇圖片上傳</p>
-                <input
-                  type="file"
-                  id="p-image"
-                  accept="image/*"
-                  multiple
-                  style="display: none"
-                  onchange="handleImageUpload(event)"
-                />
-              </label>
-              <div class="preview-container" id="imagePreviewContainer"></div>
-            </div>
+      <section>
+        <h2>第二段：捲軸寬度</h2>
+        <p>
+          原生捲軸通常是 15~17px 寬，這裡示範改成
+          10px，看起來會比較細緻、不那麼佔畫面空間。
+        </p>
+      </section>
 
-            <div class="card">
-              <h2>4. 商品規格 (例如：尺寸或顏色)</h2>
-              <div class="form-group">
-                <label for="p-tag-input"
-                  >新增規格標籤 (輸入後按 Enter 鍵新增)</label
-                >
-                <input
-                  type="text"
-                  id="p-tag-input"
-                  placeholder="例如：M、L、紅色"
-                  onkeydown="handleTagKeyDown(event)"
-                />
-                <div class="tag-container" id="tagContainer"></div>
-              </div>
-            </div>
-          </div>
+      <section>
+        <h2>第三段：滑塊圓角與邊框</h2>
+        <p>
+          border-radius 讓滑塊變成膠囊形狀，border
+          則是用「跟背景同色的邊框」製造出滑塊比軌道還細一圈的視覺效果，這是很常見的技巧。
+        </p>
+      </section>
 
-          <div class="side-col">
-            <div class="card">
-              <h2>5. 上架狀態</h2>
-              <div class="switch-group">
-                <span>是否直接上架公開？</span>
-                <label class="switch">
-                  <input type="checkbox" id="p-status" checked />
-                  <span class="slider"></span>
-                </label>
-              </div>
-            </div>
+      <section>
+        <h2>第四段：hover 變色</h2>
+        <p>
+          把滑鼠移到右邊捲軸的滑塊上，顏色會從灰色變成藍色，這是
+          ::-webkit-scrollbar-thumb:hover 做出來的互動效果。
+        </p>
+      </section>
 
-            <div class="card">
-              <h2>3. 價格與庫存</h2>
-              <div class="form-group" id="group-price">
-                <label for="p-price"
-                  >商品售價 <span class="required">*</span></label
-                >
-                <input type="number" id="p-price" min="0" placeholder="0" />
-                <div class="error-message">價格必須大於或等於 0</div>
-              </div>
-              <div class="form-group" id="group-stock">
-                <label for="p-stock"
-                  >商品庫存 <span class="required">*</span></label
-                >
-                <input type="number" id="p-stock" min="0" placeholder="0" />
-                <div class="error-message">庫存必須大於或等於 0</div>
-              </div>
-            </div>
-          </div>
-        </div>
+      <section>
+        <h2>第五段：繼續撐高頁面</h2>
+        <p>
+          多加幾段文字，確保頁面夠長，能明顯看到捲軸拖曳的效果。你可以試著把上面
+          CSS 裡的數值改一改，例如把 width 改成 20px，或把顏色換掉，看看差異。
+        </p>
+        <p>
+          也可以試著把整段 ::-webkit-scrollbar 相關的 CSS
+          刪掉，重新整理頁面，比較一下瀏覽器預設捲軸長什麼樣子。
+        </p>
+      </section>
 
-        <div class="actions">
-          <button
-            type="button"
-            class="btn btn-secondary"
-            onclick="alert('已取消輸入')"
-          >
-            取消
-          </button>
-          <button type="submit" class="btn btn-primary">確認上架</button>
-        </div>
-      </form>
-    </div>
-
-    <script>
-      // --- 2. 圖片預覽邏輯 ---
-      function handleImageUpload(event) {
-        const container = document.getElementById("imagePreviewContainer");
-        const files = event.target.files;
-
-        for (let i = 0; i < files.length; i++) {
-          const file = files[i];
-          if (!file.type.startsWith("image/")) continue;
-
-          const reader = new FileReader();
-          reader.onload = function (e) {
-            const div = document.createElement("div");
-            div.className = "preview-item";
-            div.innerHTML = `
-                    <img src="${e.target.result}" alt="preview">
-                    <button type="button" class="remove-btn" onclick="this.parentElement.remove()">×</button>
-                `;
-            container.appendChild(div);
-          };
-          reader.readAsDataURL(file);
-        }
-        // 清空 input 讓同一張圖可以重複測試上傳
-        event.target.value = "";
-      }
-
-      // --- 4. 規格標籤邏輯 ---
-      const tags = new Set();
-      function handleTagKeyDown(event) {
-        if (event.key === "Enter") {
-          event.preventDefault(); // 阻止表單預設的 Enter 送出動作
-          const input = event.target;
-          const value = input.value.trim();
-
-          if (value && !tags.has(value)) {
-            tags.add(value);
-            renderTags();
-          }
-          input.value = "";
-        }
-      }
-
-      function renderTags() {
-        const container = document.getElementById("tagContainer");
-        container.innerHTML = "";
-        tags.forEach((tag) => {
-          const span = document.createElement("span");
-          span.className = "tag";
-          span.innerHTML = `${tag} <span class="remove-tag" onclick="removeTag('${tag}')">×</span>`;
-          container.appendChild(span);
-        });
-      }
-
-      function removeTag(tag) {
-        tags.delete(tag);
-        renderTags();
-      }
-
-      // --- 表單防呆驗證與模擬送出 ---
-      function handleSubmit(event) {
-        event.preventDefault();
-
-        // 抓取欄位
-        const titleInput = document.getElementById("p-title");
-        const priceInput = document.getElementById("p-price");
-        const stockInput = document.getElementById("p-stock");
-        const statusInput = document.getElementById("p-status");
-        const descInput = document.getElementById("p-desc");
-
-        let isPass = true;
-
-        // 驗證商品名稱
-        if (!titleInput.value.trim()) {
-          document.getElementById("group-title").classList.add("has-error");
-          document
-            .getElementById("group-title")
-            .querySelector(".error-message").style.display = "block";
-          isPass = false;
-        } else {
-          document.getElementById("group-title").classList.remove("has-error");
-          document
-            .getElementById("group-title")
-            .querySelector(".error-message").style.display = "none";
-        }
-
-        // 驗證價格
-        if (priceInput.value === "" || Number(priceInput.value) < 0) {
-          document.getElementById("group-price").classList.add("has-error");
-          document
-            .getElementById("group-price")
-            .querySelector(".error-message").style.display = "block";
-          isPass = false;
-        } else {
-          document.getElementById("group-price").classList.remove("has-error");
-          document
-            .getElementById("group-price")
-            .querySelector(".error-message").style.display = "none";
-        }
-
-        // 驗證庫存
-        if (stockInput.value === "" || Number(stockInput.value) < 0) {
-          document.getElementById("group-stock").classList.add("has-error");
-          document
-            .getElementById("group-stock")
-            .querySelector(".error-message").style.display = "block";
-          isPass = false;
-        } else {
-          document.getElementById("group-stock").classList.remove("has-error");
-          document
-            .getElementById("group-stock")
-            .querySelector(".error-message").style.display = "none";
-        }
-
-        // 驗證通過，撈取資料模擬 console 印出
-        if (isPass) {
-          const formData = {
-            title: titleInput.value.trim(),
-            description: descInput.value.trim(),
-            price: Number(priceInput.value),
-            stock: Number(stockInput.value),
-            variants: Array.from(tags),
-            isPublished: statusInput.checked,
-          };
-
-          console.log("前端準備送出的資料結構：", formData);
-          alert(
-            `🎉 商品儲存成功！\n名稱：${formData.title}\n狀態：${formData.isPublished ? "直接上架" : "暫不上架"}\n詳情請開啟 F12 開發者工具查看 Console`,
-          );
-        }
-      }
-    </script>
+      <section>
+        <h2>第六段：結尾</h2>
+        <p>捲到底了，這就是自訂捲軸樣式的完整示範。</p>
+      </section>
+    </main>
   </body>
 </html>

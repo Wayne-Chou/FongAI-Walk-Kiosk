@@ -227,7 +227,10 @@
 
       /* ==================== 底部導引雙卡列：手動登入(左) / 健保卡插入處(右) ====================
          不使用 position 定位，改用 flex 排版當作畫面最後一排內容，
-         justify-content: space-between 讓兩張卡片自然分靠左右兩側。 */
+         justify-content: space-between 讓兩張卡片自然分靠左右兩側。
+         - 手動登入：藍色漸層卡片，呼吸縮放幅度加大加明顯＋右下角手指點按教學動畫
+         - 健保卡插入：綠色卡片，無動畫，下方接一個放大版的三角形尖角，
+           尖角大小至少是卡片本身的一半，比之前的小尖角明顯很多 */
       .bottom-guides {
         display: flex;
         justify-content: space-between;
@@ -240,31 +243,51 @@
       .health-card-guide,
       .manual-login-guide {
         flex: 1 1 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        padding: 16px 20px;
         min-height: 118px;
         border-radius: 18px;
         text-align: center;
       }
 
-      /* 健保卡插入處：加粗邊框、加深文字拉高對比，尺寸維持精簡以免版面放不下 */
       .health-card-guide {
-        background: rgba(255, 255, 255, 0.94);
-        border: 2px solid #00a884;
-        backdrop-filter: blur(10px);
-        box-shadow: 0 12px 28px rgba(164, 185, 206, 0.32);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        padding: 16px 20px;
       }
 
-      .health-card-guide .guide-title {
-        font-size: 1.4rem;
-        font-weight: 700;
-        letter-spacing: 2px;
-        line-height: 1.3;
-        color: #16362e;
+      /* 健保卡插入處：配色改用跟「基本資料填寫」頁一致的青色系
+         （--secondary #0f766e → --secondary-light #14b8a6），
+         兩個頁面視覺語言連起來。邊框改雙層描邊：外層柔和光暈 +
+         內層實線白邊，做出「有厚度的面板」質感。另外加兩個點綴：
+         1) 標題下方一條短底線，把標題單獨強調出來
+         2) 卡片右上角一個很淡的柔光圓斑，當作低調的背景紋理 */
+      .health-card-guide {
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(135deg, #0f766e, #14b8a6);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        box-shadow:
+          0 0 0 4px rgba(20, 184, 166, 0.18),
+          0 12px 28px rgba(15, 118, 110, 0.4);
+      }
+
+      /* 點綴 2：右上角柔光圓斑，低調背景紋理 */
+      .health-card-guide::before {
+        content: "";
+        position: absolute;
+        top: -30px;
+        right: -30px;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.22) 0%,
+          transparent 70%
+        );
+        pointer-events: none;
       }
 
       .health-card-guide .guide-arrow {
@@ -277,40 +300,64 @@
         border-radius: 50%;
         font-size: 1.7rem;
         line-height: 1;
-        color: #fff;
-        background: linear-gradient(135deg, #00c9a0, #00a884);
-        box-shadow: 0 8px 18px rgba(0, 168, 132, 0.4);
-        animation: float 3s ease-in-out infinite;
+        color: #0f766e;
+        background: rgba(255, 255, 255, 0.92);
+        box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
       }
 
-      /* 手動登入：回歸原本玻璃卡片風格，藍色 accent 加深加粗以拉高對比，尺寸維持精簡 */
+      .health-card-guide .guide-title {
+        position: relative;
+        font-size: 1.5rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        line-height: 1.3;
+        color: #fff;
+        padding-bottom: 8px;
+      }
+
+      .guide-subtext {
+        font-size: 0.82rem;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+      }
+
+      /* 手動登入：藍色漸層背景，按鈕本身持續呼吸縮放（幅度加大，更明顯），
+         另外在右下角放一個手指點按的教學動畫（含波紋），刻意讓手指固定在
+         角落、不經過文字中央區域，避免動畫時蓋到「手動登入」標題文字 */
       .manual-login-guide {
         position: relative;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        background: rgba(255, 255, 255, 0.94);
-        border: 2px solid #0984e3;
-        backdrop-filter: blur(10px);
-        box-shadow: 0 12px 28px rgba(164, 185, 206, 0.32);
+        gap: 6px;
+        padding: 16px 20px;
+        background: linear-gradient(135deg, #0984e3, #0868b3);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 12px 28px rgba(9, 132, 227, 0.4);
         cursor: pointer;
-        overflow: hidden; /* 手指落下時只在按鈕範圍內示範，不外溢到卡片外 */
+        overflow: hidden; /* 手指與波紋只在卡片範圍內示範，不外溢 */
+        animation: button-breath 3.2s infinite ease-in-out;
         transition:
           transform 0.15s ease,
           box-shadow 0.15s ease,
           background 0.15s ease;
       }
 
-      /* 內層包住文字內容，示範按下時輕微縮小，模擬按鈕被點的回饋，
-         跟外層分開是為了不影響使用者真正點擊時 :active 的縮放效果 */
+      .manual-login-guide:active {
+        animation: none;
+        transform: scale(0.97);
+        box-shadow: 0 8px 18px rgba(9, 132, 227, 0.35);
+      }
+
       .login-card-inner {
+        position: relative;
+        z-index: 2; /* 文字疊在手指、波紋之上，就算動畫範圍有重疊也不會被蓋住 */
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 8px;
-        animation: button-press-demo 3.4s ease-in-out infinite;
+        gap: 6px;
       }
 
       .manual-login-guide .guide-title {
@@ -318,51 +365,48 @@
         font-weight: 700;
         letter-spacing: 2px;
         line-height: 1.3;
-        color: #05508f;
+        color: #fff;
       }
 
-      .manual-login-guide:active {
-        transform: scale(0.97);
-        background: rgba(255, 255, 255, 0.98);
-        box-shadow: 0 8px 18px rgba(164, 185, 206, 0.35);
+      .manual-login-guide .guide-subtext {
+        color: rgba(255, 255, 255, 0.85);
       }
 
       .tap-hint-text {
         font-size: 0.9rem;
         font-weight: 500;
-        color: #0984e3;
+        color: rgba(255, 255, 255, 0.85);
         letter-spacing: 1px;
       }
 
-      /* 教學提示手勢：手指從上方淡入、落到按鈕上示範點按，停留一下後淡出抬起，
-         覆蓋整張卡片置中顯示，不影響卡片版面尺寸 */
-      .tap-guide-wrap {
-        position: absolute;
-        inset: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        pointer-events: none;
-      }
-
+      /* 手指教學動畫：固定在卡片右下角示範點按，跟置中的文字保持距離，
+         波紋在手指觸碰的瞬間同步擴散淡出 */
       .tap-ripple {
         position: absolute;
-        width: 60px;
-        height: 60px;
+        right: 14px;
+        bottom: 6px;
+        width: 36px;
+        height: 36px;
         border-radius: 50%;
-        border: 3px solid rgba(9, 132, 227, 0.6);
+        border: 2px solid rgba(255, 255, 255, 0.65);
         opacity: 0;
+        pointer-events: none;
+        z-index: 1;
         animation: ripple-wave-tap 3.4s ease-in-out infinite;
       }
 
       .tap-guide-finger {
         position: absolute;
-        font-size: 6.3rem;
+        right: 12px;
+        bottom: 4px;
+        font-size: 2.3rem;
         line-height: 1;
-        color: #0984e3;
-        filter: drop-shadow(0 6px 10px rgba(9, 132, 227, 0.35));
-        transform-origin: 60% 15%;
-        animation: tap-demo 3.4s ease-in-out infinite;
+        color: rgba(255, 255, 255, 0.95);
+        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.25));
+        pointer-events: none;
+        z-index: 1;
+        transform-origin: 70% 20%;
+        animation: tap-demo-corner 3.4s ease-in-out infinite;
       }
 
       /* ==================== 跑馬燈：品牌色底 + 白色粗體大字，更顯眼 ==================== */
@@ -407,34 +451,34 @@
         }
       }
 
-      /* 手指淡入落到按鈕上示範點按，停留一下後淡出抬起，接著停頓約 1.5 秒再重複循環 */
-      @keyframes tap-demo {
+      /* 手指在卡片右下角小幅度上下點按示範，不經過文字區域 */
+      @keyframes tap-demo-corner {
         0%,
         8% {
           opacity: 0;
-          transform: translateY(-46px) scale(1);
+          transform: translateY(-20px) scale(1);
         }
         22% {
           opacity: 1;
-          transform: translateY(-8px) scale(1);
+          transform: translateY(-4px) scale(1);
         }
         34%,
         46% {
           opacity: 1;
-          transform: translateY(8px) scale(0.94);
+          transform: translateY(4px) scale(0.92);
         }
         58% {
           opacity: 1;
-          transform: translateY(-8px) scale(1);
+          transform: translateY(-4px) scale(1);
         }
         68%,
         100% {
           opacity: 0;
-          transform: translateY(-46px) scale(1);
+          transform: translateY(-20px) scale(1);
         }
       }
 
-      /* 波紋在手指觸碰按鈕的瞬間擴散淡出，與 tap-demo 同步 */
+      /* 波紋在手指觸碰的瞬間擴散淡出，與 tap-demo-corner 同步 */
       @keyframes ripple-wave-tap {
         0%,
         30% {
@@ -455,19 +499,18 @@
         }
       }
 
-      /* 按鈕文字內容在手指觸碰的瞬間輕微縮小，模擬被按下的回饋，與 tap-demo 同步 */
-      @keyframes button-press-demo {
+      /* 按鈕本身持續放大縮小，像呼吸一樣提示「這裡可以點」——
+         幅度加大（scale 最高到 1.08）、陰影也跟著放大變亮，
+         比原本的 1.03 明顯很多，同時週期縮短到 3.2s，呼吸感更強烈 */
+      @keyframes button-breath {
         0%,
-        30% {
-          transform: scale(1);
-        }
-        34%,
-        46% {
-          transform: scale(0.95);
-        }
-        60%,
         100% {
           transform: scale(1);
+          box-shadow: 0 12px 28px rgba(9, 132, 227, 0.4);
+        }
+        50% {
+          transform: scale(1.08);
+          box-shadow: 0 22px 46px rgba(9, 132, 227, 0.6);
         }
       }
 
@@ -539,7 +582,9 @@
         </div>
       </div>
 
-      <!-- 【第 5 層】底部導引雙卡：手動登入(左) / 健保卡插入處(右)，flex 排版取代 position -->
+      <!-- 【第 5 層】底部導引雙卡：手動登入(左) / 健保卡插入處(右)，flex 排版取代 position。
+           左卡＝藍色漸層卡片，呼吸縮放幅度加大更明顯，右下角搭配手指點按教學動畫；
+           右卡＝綠色卡片，無動畫，下方接一個放大版三角形尖角 -->
       <div class="bottom-guides">
         <div
           class="manual-login-guide"
@@ -548,12 +593,9 @@
         >
           <div class="login-card-inner">
             <div class="guide-title">手動登入</div>
-            <div class="tap-hint-text">點一下開始</div>
           </div>
-          <div class="tap-guide-wrap">
-            <div class="tap-ripple"></div>
-            <i class="fa-solid fa-hand-pointer tap-guide-finger"></i>
-          </div>
+          <div class="tap-ripple"></div>
+          <i class="fa-solid fa-hand-pointer tap-guide-finger"></i>
         </div>
 
         <div class="health-card-guide">
