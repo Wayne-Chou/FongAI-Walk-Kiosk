@@ -321,9 +321,6 @@
         letter-spacing: 0.5px;
       }
 
-      /* 手動登入：藍色漸層背景，按鈕本身持續呼吸縮放（幅度加大，更明顯），
-         另外在右下角放一個手指點按的教學動畫（含波紋），刻意讓手指固定在
-         角落、不經過文字中央區域，避免動畫時蓋到「手動登入」標題文字 */
       .manual-login-guide {
         position: relative;
         display: flex;
@@ -352,7 +349,7 @@
 
       .login-card-inner {
         position: relative;
-        z-index: 2; /* 文字疊在手指、波紋之上，就算動畫範圍有重疊也不會被蓋住 */
+        z-index: 2;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -379,8 +376,6 @@
         letter-spacing: 1px;
       }
 
-      /* 手指教學動畫：固定在卡片右下角示範點按，跟置中的文字保持距離，
-         波紋在手指觸碰的瞬間同步擴散淡出 */
       .tap-ripple {
         position: absolute;
         right: 14px;
@@ -499,9 +494,6 @@
         }
       }
 
-      /* 按鈕本身持續放大縮小，像呼吸一樣提示「這裡可以點」——
-         幅度加大（scale 最高到 1.08）、陰影也跟著放大變亮，
-         比原本的 1.03 明顯很多，同時週期縮短到 3.2s，呼吸感更強烈 */
       @keyframes button-breath {
         0%,
         100% {
@@ -582,9 +574,6 @@
         </div>
       </div>
 
-      <!-- 【第 5 層】底部導引雙卡：手動登入(左) / 健保卡插入處(右)，flex 排版取代 position。
-           左卡＝藍色漸層卡片，呼吸縮放幅度加大更明顯，右下角搭配手指點按教學動畫；
-           右卡＝綠色卡片，無動畫，下方接一個放大版三角形尖角 -->
       <div class="bottom-guides">
         <div
           class="manual-login-guide"
