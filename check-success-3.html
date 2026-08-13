@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>檢測成功</title>
+<style>
+  :root{
+    --bg: #ffffff;
+    --ink: #16181c;
+    --frame: #caa43a;
+    --line: #e9e9e9;
+    --gray: #9a9a9a;
+  }
+
+  *{ box-sizing: border-box; }
+
+  html, body{
+    margin:0;
+    height:100%;
+    background: var(--bg);
+    font-family: "PingFang TC","Microsoft JhengHei","Noto Sans TC", -apple-system, sans-serif;
+    overflow:hidden;
+  }
+
+  /* ---------- 展示用的「檢測中」畫面 ---------- */
+  .demo-screen{
+    position:relative;
+    width:100%;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:22px;
+    transition: opacity 0.3s ease;
+  }
+  .demo-screen.hidden{ opacity:0; pointer-events:none; }
+
+  .demo-title{ font-size:14px; letter-spacing:3px; color: var(--gray); }
+
+  .demo-btn{
+    padding: 12px 28px;
+    background: var(--ink);
+    color:#fff;
+    border:none;
+    border-radius: 999px;
+    font-size:14px;
+    letter-spacing:2px;
+    cursor:pointer;
+    transition: opacity .2s ease;
+  }
+  .demo-btn:hover{ opacity:.85; }
+  .demo-btn:disabled{ opacity:.4; cursor:default; }
+
+  /* ---------- 疊加層 ---------- */
+  .success-overlay{
+    position:fixed;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background: transparent;
+    opacity:0;
+    pointer-events:none;
+    z-index:999;
+    transition: opacity 0.4s ease;
+    overflow:hidden;
+  }
+  .success-overlay.active{ opacity:1; }
+  .success-overlay.fade-out{ opacity:0; }
+
+  /* ---------- 氣球 ---------- */
+  .balloon-field{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    z-index: 1;
+  }
+
+  .fireworks-canvas{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    z-index: 1;
+  }
+
+  .balloon-rise{
+    position:absolute;
+    bottom: -140px;
+    opacity: 0;
+  }
+  .balloon-rise.play{
+    animation-name: rise;
+    animation-timing-function: cubic-bezier(0.3, 0, 0.4, 1);
+    animation-fill-mode: forwards;
+  }
+  @keyframes rise{
+    0%{ transform: translateY(0); opacity: 0; }
+    6%{ opacity: 1; }
+    88%{ opacity: 1; }
+    100%{ transform: translateY(-135vh); opacity: 0; }
+  }
+
+  .balloon-sway{
+    animation-name: sway;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+  }
+  @keyframes sway{
+    0%{ transform: translateX(calc(var(--sway) * -1)) rotate(-4deg); }
+    100%{ transform: translateX(var(--sway)) rotate(4deg); }
+  }
+
+  .balloon-shape{
+    position:relative;
+    width: 46px;
+    height: 58px;
+    border-radius: 50% 50% 50% 50% / 58% 58% 42% 42%;
+    box-shadow: inset -6px -8px 0 rgba(0,0,0,0.08), inset 6px 6px 10px rgba(255,255,255,0.35);
+  }
+  .balloon-shape::before{
+    /* 氣球結 */
+    content:"";
+    position:absolute;
+    left:50%; bottom:-6px;
+    width:0; height:0;
+    border-left:5px solid transparent;
+    border-right:5px solid transparent;
+    border-top: 7px solid currentColor;
+    transform: translateX(-50%);
+  }
+  .balloon-shape::after{
+    /* 細線 */
+    content:"";
+    position:absolute;
+    left:50%; bottom:-58px;
+    width:1px; height:52px;
+    background: rgba(120,120,120,0.35);
+    transform: translateX(-50%);
+  }
+
+  /* ---------- 文字：中性深色，放進一張淺色浮島卡片裡，獨立於氣球色彩之外 ---------- */
+  .success-card{
+    position:absolute;
+    top:50%; left:50%;
+    transform: translate(-50%, calc(-50% + 10px)) scale(0.92);
+    background: #fbfbfa;
+    border-radius: 999px;
+    padding: clamp(20px, 3.4vw, 30px) clamp(38px, 7vw, 58px);
+    box-shadow: 0 14px 36px rgba(0,0,0,0.09);
+    opacity: 0;
+    z-index: 2;
+  }
+  .success-card.play{
+    animation: island-in 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  @keyframes island-in{
+    to{ opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  }
+
+  .title{
+    font-size: clamp(34px, 7vw, 58px);
+    font-weight: 900;
+    letter-spacing: 3px;
+    white-space: nowrap;
+    color: var(--ink);
+    pointer-events:none;
+  }
+
+  /* 卡片周圍的小點綴，呼應氣球色盤但不搶文字風頭 */
+  .dot{
+    position:absolute;
+    border-radius: 50%;
+    opacity: 0;
+    transform: scale(0);
+  }
+  .dot.d1{ top:-7px;  left:16%;  width:14px; height:14px; background:#ff6b6b; }
+  .dot.d2{ top:8%;    right:-9px;width:13px; height:13px; background:#5cc8ff; }
+  .dot.d3{ bottom:-9px;left:26%; width:11px; height:11px; background:#ffd66b; }
+  .dot.d4{ bottom:4%; right:9%;  width:12px; height:12px; background:#8a7dff; }
+
+  .dot.play{
+    animation: dot-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+  .dot.d1.play{ animation-delay: 0.85s; }
+  .dot.d2.play{ animation-delay: 0.95s; }
+  .dot.d3.play{ animation-delay: 1.05s; }
+  .dot.d4.play{ animation-delay: 1.15s; }
+
+  @keyframes dot-pop{
+    to{ opacity: 1; transform: scale(1); }
+  }
+
+  .replay{
+    position:absolute;
+    bottom: 34px;
+    left:50%;
+    transform: translateX(-50%);
+    padding: 9px 20px;
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--gray);
+    font-size: 12px;
+    letter-spacing: 2px;
+    border-radius: 999px;
+    cursor:pointer;
+    transition: all .2s ease;
+    z-index:3;
+    pointer-events:auto;
+  }
+  .replay:hover{
+    border-color: var(--frame);
+    color: var(--frame);
+  }
+</style>
+</head>
+<body>
+
+  <div class="demo-screen">
+    <div class="demo-title">這裡模擬你原本的檢測畫面</div>
+    <button class="demo-btn" id="startDemo">模擬檢測完成</button>
+  </div>
+
+  <div class="success-overlay" id="successOverlay">
+    <div class="balloon-field" id="balloonField"></div>
+    <canvas class="fireworks-canvas" id="fireworksCanvas"></canvas>
+
+    <div class="success-card" id="successCard">
+      <div class="title">檢測成功</div>
+      <span class="dot d1"></span>
+      <span class="dot d2"></span>
+      <span class="dot d3"></span>
+      <span class="dot d4"></span>
+    </div>
+
+    <button class="replay" id="replayBtn">重新播放</button>
+  </div>
+
+<script>
+  const BALLOON_COLORS = ['#ff6b6b', '#ffa64d', '#ffd66b', '#6bd68a', '#5cc8ff', '#8a7dff', '#ff8ac8'];
+  const BALLOON_COUNT = 16;
+
+  const field = document.getElementById('balloonField');
+  const overlay = document.getElementById('successOverlay');
+  const successCard = document.getElementById('successCard');
+  const dots = document.querySelectorAll('.dot');
+  const fwCanvas = document.getElementById('fireworksCanvas');
+  const fwCtx = fwCanvas.getContext('2d');
+
+  let dismissTimer = null;
+  let balloonEls = [];
+
+  /* ============================================================
+     小煙花：顏色直接沿用四個點綴圓點的顏色，安排在卡片下方（z-index 較低），
+     就算噴到卡片範圍也會被卡片蓋住，不會擋到文字。時間跟氣球同步在 5.6s 結束。
+     ============================================================ */
+  const FIREWORK_COLORS = ['#ff6b6b', '#5cc8ff', '#ffd66b', '#8a7dff']; // 對應 d1~d4
+  const FW_SCHEDULE = [
+    { delay: 850,  color: FIREWORK_COLORS[0], x: 0.30, y: 0.33 },
+    { delay: 950,  color: FIREWORK_COLORS[1], x: 0.70, y: 0.35 },
+    { delay: 1050, color: FIREWORK_COLORS[2], x: 0.32, y: 0.64 },
+    { delay: 1150, color: FIREWORK_COLORS[3], x: 0.68, y: 0.63 },
+    { delay: 2400, color: FIREWORK_COLORS[0], x: 0.50, y: 0.30 },
+    { delay: 3400, color: FIREWORK_COLORS[1], x: 0.50, y: 0.68 },
+  ];
+  const FW_PARTICLE_LIFE = 800; // ms
+
+  let fwParticles = [];
+  let fwNextIndex = 0;
+  let fwRAF = null;
+  let fwStart = null;
+
+  function resizeFwCanvas(){
+    fwCanvas.width = overlay.clientWidth;
+    fwCanvas.height = overlay.clientHeight;
+  }
+  window.addEventListener('resize', resizeFwCanvas);
+
+  function spawnBurst(xr, yr, color){
+    const x = xr * fwCanvas.width;
+    const y = yr * fwCanvas.height;
+    const count = 11;
+    for (let i = 0; i < count; i++){
+      const angle = (i / count) * Math.PI * 2 + Math.random() * 0.3;
+      const speed = 1.2 + Math.random() * 2.2;
+      fwParticles.push({
+        x, y,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        color,
+        born: performance.now(),
+        size: 2 + Math.random() * 1.8
+      });
+    }
+  }
+
+  function runFireworksSmall(){
+    fwStart = performance.now();
+    fwNextIndex = 0;
+    fwParticles = [];
+    resizeFwCanvas();
+
+    function step(now){
+      const elapsed = now - fwStart;
+
+      while (fwNextIndex < FW_SCHEDULE.length && elapsed >= FW_SCHEDULE[fwNextIndex].delay){
+        const b = FW_SCHEDULE[fwNextIndex];
+        spawnBurst(b.x, b.y, b.color);
+        fwNextIndex++;
+      }
+
+      fwCtx.clearRect(0, 0, fwCanvas.width, fwCanvas.height);
+      fwCtx.globalCompositeOperation = 'lighter';
+
+      fwParticles = fwParticles.filter(p => (now - p.born) < FW_PARTICLE_LIFE);
+      fwParticles.forEach(p => {
+        const t = (now - p.born) / FW_PARTICLE_LIFE;
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.028; // 一點點重力
+        p.vx *= 0.985;
+        p.vy *= 0.985;
+
+        const alpha = Math.max(0, 1 - t);
+        fwCtx.beginPath();
+        fwCtx.fillStyle = p.color;
+        fwCtx.globalAlpha = alpha;
+        fwCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        fwCtx.fill();
+      });
+
+      fwCtx.globalAlpha = 1;
+      fwCtx.globalCompositeOperation = 'source-over';
+
+      const lastDelay = FW_SCHEDULE[FW_SCHEDULE.length - 1].delay + FW_PARTICLE_LIFE;
+      if (elapsed < lastDelay || fwParticles.length > 0){
+        fwRAF = requestAnimationFrame(step);
+      }
+    }
+    fwRAF = requestAnimationFrame(step);
+  }
+
+  function resetFireworks(){
+    if (fwRAF) cancelAnimationFrame(fwRAF);
+    fwParticles = [];
+    fwNextIndex = 0;
+    if (fwCtx) fwCtx.clearRect(0, 0, fwCanvas.width, fwCanvas.height);
+  }
+
+  function buildBalloons(){
+    field.innerHTML = '';
+    balloonEls = [];
+    for (let i = 0; i < BALLOON_COUNT; i++){
+      const rise = document.createElement('div');
+      rise.className = 'balloon-rise';
+
+      const leftPct = Math.random() * 100;
+      const duration = 4600 + Math.random() * 2200;      // 4.6s ~ 6.8s 慢慢飄
+      const delay = Math.random() * 1400;                 // 陸續冒出，不整齊
+      const swayAmp = 14 + Math.random() * 18;             // 左右搖擺幅度
+      const swayDur = 1.8 + Math.random() * 1.6;           // 搖擺週期
+      const scale = 0.75 + Math.random() * 0.55;
+      const color = BALLOON_COLORS[Math.floor(Math.random() * BALLOON_COLORS.length)];
+
+      rise.style.left = `${leftPct}%`;
+      rise.style.animationDuration = `${duration}ms`;
+      rise.style.animationDelay = `${delay}ms`;
+
+      const sway = document.createElement('div');
+      sway.className = 'balloon-sway';
+      sway.style.setProperty('--sway', `${swayAmp}px`);
+      sway.style.animationDuration = `${swayDur}s`;
+
+      const shape = document.createElement('div');
+      shape.className = 'balloon-shape';
+      shape.style.background = color;
+      shape.style.color = color;
+      shape.style.transform = `scale(${scale})`;
+
+      sway.appendChild(shape);
+      rise.appendChild(sway);
+      field.appendChild(rise);
+      balloonEls.push(rise);
+    }
+  }
+
+  function resetVisualState(){
+    successCard.classList.remove('play');
+    dots.forEach(el => el.classList.remove('play'));
+    balloonEls.forEach(el => el.classList.remove('play'));
+    resetFireworks();
+    if (dismissTimer) clearTimeout(dismissTimer);
+  }
+
+  function showDetectionSuccess(){
+    resetVisualState();
+    buildBalloons();
+
+    overlay.classList.remove('fade-out');
+    overlay.classList.add('active');
+
+    // 氣球先開始緩緩升起
+    requestAnimationFrame(() => {
+      balloonEls.forEach(el => el.classList.add('play'));
+    });
+
+    void successCard.offsetWidth;
+    successCard.classList.add('play');
+    dots.forEach(el => { void el.offsetWidth; el.classList.add('play'); });
+
+    // 小煙花跟氣球同步開始，時間排到 5.6s 前結束
+    runFireworksSmall();
+
+    // 氣球飄完一輪、停留一下後整體淡出（維持約 5.5 秒以上）
+    dismissTimer = setTimeout(() => {
+      overlay.classList.add('fade-out');
+      setTimeout(() => {
+        overlay.classList.remove('active');
+        resetVisualState();
+        document.querySelector('.demo-screen').classList.remove('hidden');
+      }, 500);
+    }, 5600);
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const startDemo = document.getElementById('startDemo');
+    const replayBtn = document.getElementById('replayBtn');
+    const demoScreen = document.querySelector('.demo-screen');
+
+    if (!startDemo || !replayBtn || !demoScreen){
+      console.error('初始化失敗：找不到必要的元素，請確認 HTML 結構完整。');
+      return;
+    }
+
+    startDemo.addEventListener('click', () => {
+      startDemo.disabled = true;
+      startDemo.textContent = '檢測中...';
+      setTimeout(() => {
+        demoScreen.classList.add('hidden');
+        showDetectionSuccess();
+        startDemo.disabled = false;
+        startDemo.textContent = '模擬檢測完成';
+      }, 1200);
+    });
+
+    replayBtn.addEventListener('click', showDetectionSuccess);
+  });
+</script>
+
+</body>
+</html>

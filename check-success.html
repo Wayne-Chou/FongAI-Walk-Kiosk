@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>FongAI - 檢測成功</title>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+    }
+
+    body {
+      overflow: hidden;
+      background: #ffffff;
+
+      font-family:
+        "Noto Sans TC",
+        "PingFang TC",
+        "Microsoft JhengHei",
+        sans-serif;
+    }
+
+
+    /* =====================================================
+       測試按鈕
+    ===================================================== */
+
+    #testButton {
+
+      position: fixed;
+
+      left: 50%;
+      bottom: 30px;
+
+      transform: translateX(-50%);
+
+      z-index: 1000;
+
+      padding: 14px 28px;
+
+      border: none;
+
+      border-radius: 12px;
+
+      background: #222;
+
+      color: white;
+
+      font-size: 18px;
+
+      cursor: pointer;
+
+    }
+
+
+    /* =====================================================
+       成功畫面
+    ===================================================== */
+
+    #successScreen {
+
+      position: fixed;
+
+      inset: 0;
+
+      z-index: 10;
+
+      background: #ffffff;
+
+      opacity: 0;
+
+      visibility: hidden;
+
+      pointer-events: none;
+
+      transition:
+        opacity .5s ease,
+        visibility .5s ease;
+
+    }
+
+
+    #successScreen.show {
+
+      opacity: 1;
+
+      visibility: visible;
+
+    }
+
+
+    /* =====================================================
+       Three.js Canvas
+    ===================================================== */
+
+    #canvas {
+
+      position: absolute;
+
+      inset: 0;
+
+      width: 100%;
+      height: 100%;
+
+      display: block;
+
+      pointer-events: none;
+
+    }
+
+
+    /* =====================================================
+       中央內容
+    ===================================================== */
+
+    .content {
+
+      position: absolute;
+
+      inset: 0;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      z-index: 20;
+
+      pointer-events: none;
+
+    }
+
+
+    /* =====================================================
+       中央柔光
+    ===================================================== */
+
+    .centerGlow {
+
+      position: absolute;
+
+      width: min(900px, 85vw);
+
+      height: min(500px, 50vh);
+
+      left: 50%;
+      top: 50%;
+
+      transform:
+        translate(-50%, -50%)
+        scale(.65);
+
+      border-radius: 50%;
+
+      background:
+
+        radial-gradient(
+
+          ellipse,
+
+          rgba(
+            65,
+            190,
+            119,
+            .16
+          ) 0%,
+
+          rgba(
+            65,
+            190,
+            119,
+            .09
+          ) 30%,
+
+          rgba(
+            65,
+            190,
+            119,
+            .035
+          ) 55%,
+
+          transparent 75%
+
+        );
+
+      filter: blur(45px);
+
+      opacity: 0;
+
+    }
+
+
+    #successScreen.show .centerGlow {
+
+      animation:
+
+        centerGlow
+        5.2s
+        ease-out
+        .05s
+        forwards;
+
+    }
+
+
+    @keyframes centerGlow {
+
+      0% {
+
+        opacity: 0;
+
+        transform:
+          translate(-50%, -50%)
+          scale(.65);
+
+      }
+
+      25% {
+
+        opacity: 1;
+
+      }
+
+      60% {
+
+        opacity: .75;
+
+        transform:
+          translate(-50%, -50%)
+          scale(1);
+
+      }
+
+      100% {
+
+        opacity: .35;
+
+        transform:
+          translate(-50%, -50%)
+          scale(1.08);
+
+      }
+
+    }
+
+
+    /* =====================================================
+       成功文字
+    ===================================================== */
+
+    .title {
+
+      position: relative;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      gap: 9px;
+
+      white-space: nowrap;
+
+      font-size:
+        clamp(
+          72px,
+          8vw,
+          125px
+        );
+
+      font-weight: 700;
+
+      letter-spacing: .04em;
+
+      line-height: 1;
+
+      background:
+
+        linear-gradient(
+
+          135deg,
+
+          #75d49d 0%,
+
+          #38aa70 35%,
+
+          #64c98d 60%,
+
+          #2e9861 100%
+
+        );
+
+      -webkit-background-clip: text;
+
+      background-clip: text;
+
+      -webkit-text-fill-color: transparent;
+
+      filter:
+
+        drop-shadow(
+          0 10px 28px
+          rgba(
+            44,
+            155,
+            94,
+            .12
+          )
+        );
+
+    }
+
+
+    /* =====================================================
+       單字
+    ===================================================== */
+
+    .char {
+
+      display: inline-block;
+
+      opacity: 0;
+
+      transform:
+        translateY(30px)
+        scale(.86);
+
+      filter: blur(12px);
+
+    }
+
+
+    /* =====================================================
+       四個字依序出現
+    ===================================================== */
+
+    #successScreen.show
+    .char:nth-child(1) {
+
+      animation:
+
+        charIn
+        .9s
+        cubic-bezier(
+          .16,
+          1,
+          .3,
+          1
+        )
+        .10s
+        forwards;
+
+    }
+
+
+    #successScreen.show
+    .char:nth-child(2) {
+
+      animation:
+
+        charIn
+        .9s
+        cubic-bezier(
+          .16,
+          1,
+          .3,
+          1
+        )
+        .28s
+        forwards;
+
+    }
+
+
+    #successScreen.show
+    .char:nth-child(3) {
+
+      animation:
+
+        charIn
+        .9s
+        cubic-bezier(
+          .16,
+          1,
+          .3,
+          1
+        )
+        .46s
+        forwards;
+
+    }
+
+
+    #successScreen.show
+    .char:nth-child(4) {
+
+      animation:
+
+        charIn
+        .9s
+        cubic-bezier(
+          .16,
+          1,
+          .3,
+          1
+        )
+        .64s
+        forwards;
+
+    }
+
+
+    @keyframes charIn {
+
+      0% {
+
+        opacity: 0;
+
+        transform:
+          translateY(30px)
+          scale(.86);
+
+        filter: blur(12px);
+
+      }
+
+      45% {
+
+        opacity: 1;
+
+        filter: blur(2px);
+
+      }
+
+      70% {
+
+        transform:
+          translateY(-4px)
+          scale(1.035);
+
+      }
+
+      100% {
+
+        opacity: 1;
+
+        transform:
+          translateY(0)
+          scale(1);
+
+        filter: blur(0);
+
+      }
+
+    }
+
+
+    @media (max-width: 700px) {
+
+      .title {
+
+        font-size: 58px;
+
+        gap: 5px;
+
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+  <!-- =====================================================
+       測試按鈕
+  ===================================================== -->
+
+  <button id="testButton">
+    模擬檢測完成
+  </button>
+
+
+  <!-- =====================================================
+       成功畫面
+  ===================================================== -->
+
+  <div id="successScreen">
+
+    <canvas id="canvas"></canvas>
+
+
+    <div class="content">
+
+      <div class="centerGlow"></div>
+
+
+      <div class="title">
+
+        <span class="char">檢</span>
+
+        <span class="char">測</span>
+
+        <span class="char">成</span>
+
+        <span class="char">功</span>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       THREE.JS
+  ===================================================== -->
+
+  <script type="module">
+
+    import * as THREE
+      from
+      "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
+
+
+    /* =====================================================
+       DOM
+    ===================================================== */
+
+    const screen =
+      document.getElementById(
+        "successScreen"
+      );
+
+    const button =
+      document.getElementById(
+        "testButton"
+      );
+
+    const canvas =
+      document.getElementById(
+        "canvas"
+      );
+
+
+    /* =====================================================
+       Scene
+    ===================================================== */
+
+    const scene =
+      new THREE.Scene();
+
+
+    /* =====================================================
+       Camera
+    ===================================================== */
+
+    const camera =
+      new THREE.OrthographicCamera(
+
+        -window.innerWidth / 2,
+
+        window.innerWidth / 2,
+
+        window.innerHeight / 2,
+
+        -window.innerHeight / 2,
+
+        .1,
+
+        1000
+
+      );
+
+
+    camera.position.z = 100;
+
+
+    /* =====================================================
+       Renderer
+    ===================================================== */
+
+    const renderer =
+      new THREE.WebGLRenderer({
+
+        canvas,
+
+        alpha: true,
+
+        antialias: true
+
+      });
+
+
+    renderer.setPixelRatio(
+
+      Math.min(
+        window.devicePixelRatio,
+        2
+      )
+
+    );
+
+
+    renderer.setSize(
+
+      window.innerWidth,
+
+      window.innerHeight
+
+    );
+
+
+    /* =====================================================
+       波紋設定
+    ===================================================== */
+
+    const ripples = [];
+
+
+    /*
+      綠色主色
+    */
+
+    const GREEN =
+      new THREE.Color(
+        0x4fbd7d
+      );
+
+
+    /* =====================================================
+       建立波紋
+    ===================================================== */
+
+    function createRipple({
+
+      delay,
+
+      maxRadius,
+
+      thickness,
+
+      opacity
+
+    }) {
+
+
+      /*
+        圓形 geometry
+
+        使用 RingGeometry
+        做真正的圓形波紋
+      */
+
+      const geometry =
+        new THREE.RingGeometry(
+
+          1,
+
+          1 + thickness,
+
+          160
+
+        );
+
+
+      /*
+        材質
+      */
+
+      const material =
+        new THREE.MeshBasicMaterial({
+
+          color: GREEN,
+
+          transparent: true,
+
+          opacity: 0,
+
+          depthWrite: false,
+
+          side: THREE.DoubleSide
+
+        });
+
+
+      const mesh =
+        new THREE.Mesh(
+
+          geometry,
+
+          material
+
+        );
+
+
+      mesh.position.set(
+
+        0,
+
+        0,
+
+        -2
+
+      );
+
+
+      /*
+        一開始非常小
+      */
+
+      mesh.scale.set(
+        .01,
+        .01,
+        1
+      );
+
+
+      scene.add(mesh);
+
+
+      ripples.push({
+
+        mesh,
+
+        material,
+
+        delay,
+
+        age: -delay,
+
+        maxRadius,
+
+        thickness,
+
+        opacity
+
+      });
+
+    }
+
+
+    /* =====================================================
+       建立三層波紋
+    ===================================================== */
+
+    function createRipples() {
+
+
+      /*
+        第一圈
+
+        最明顯
+      */
+
+      createRipple({
+
+        delay: 0,
+
+        maxRadius: 560,
+
+        thickness: 14,
+
+        opacity: .42
+
+      });
+
+
+      /*
+        第二圈
+      */
+
+      createRipple({
+
+        delay: .85,
+
+        maxRadius: 780,
+
+        thickness: 11,
+
+        opacity: .30
+
+      });
+
+
+      /*
+        第三圈
+
+        最淡
+      */
+
+      createRipple({
+
+        delay: 1.7,
+
+        maxRadius: 1000,
+
+        thickness: 9,
+
+        opacity: .20
+
+      });
+
+    }
+
+
+    /* =====================================================
+       Easing
+    ===================================================== */
+
+    function easeOutQuart(t) {
+
+      return 1 -
+        Math.pow(
+          1 - t,
+          4
+        );
+
+    }
+
+
+    /* =====================================================
+       更新波紋
+    ===================================================== */
+
+    function updateRipple(
+
+      ripple,
+
+      delta
+
+    ) {
+
+
+      ripple.age += delta;
+
+
+      /*
+        尚未開始
+      */
+
+      if (
+        ripple.age < 0
+      ) {
+
+        return;
+
+      }
+
+
+      /*
+        每一圈約 3.5 秒
+      */
+
+      const duration =
+        3.5;
+
+
+      const progress =
+        Math.min(
+
+          ripple.age /
+          duration,
+
+          1
+
+        );
+
+
+      /*
+        波紋擴散
+      */
+
+      const eased =
+        easeOutQuart(
+          progress
+        );
+
+
+      const radius =
+        10 +
+        (
+          ripple.maxRadius -
+          10
+        ) *
+        eased;
+
+
+      /*
+        RingGeometry
+        原始尺寸約 1
+
+        直接用 scale
+      */
+
+      ripple.mesh.scale.set(
+
+        radius,
+
+        radius,
+
+        1
+
+      );
+
+
+      /*
+        淡出
+
+        前面保持
+
+        後面慢慢消失
+      */
+
+      let alpha;
+
+
+      if (
+        progress < .12
+      ) {
+
+        alpha =
+          progress / .12;
+
+      }
+
+      else {
+
+        alpha =
+          1 -
+          (
+            progress -
+            .12
+          ) / .88;
+
+      }
+
+
+      /*
+        再乘自己的透明度
+      */
+
+      ripple.material.opacity =
+        Math.max(
+          0,
+          alpha
+        ) *
+        ripple.opacity;
+
+    }
+
+
+    /* =====================================================
+       清除波紋
+    ===================================================== */
+
+    function clearRipples() {
+
+
+      ripples.forEach(
+
+        ripple => {
+
+          scene.remove(
+            ripple.mesh
+          );
+
+
+          ripple.mesh.geometry.dispose();
+
+          ripple.mesh.material.dispose();
+
+        }
+
+      );
+
+
+      ripples.length = 0;
+
+    }
+
+
+    /* =====================================================
+       Animation
+    ===================================================== */
+
+    let lastTime =
+      performance.now();
+
+
+    function animate() {
+
+
+      requestAnimationFrame(
+        animate
+      );
+
+
+      const now =
+        performance.now();
+
+
+      const delta =
+        Math.min(
+
+          (
+            now -
+            lastTime
+          ) / 1000,
+
+          .033
+
+        );
+
+
+      lastTime =
+        now;
+
+
+      ripples.forEach(
+
+        ripple => {
+
+          updateRipple(
+            ripple,
+            delta
+          );
+
+        }
+
+      );
+
+
+      renderer.render(
+        scene,
+        camera
+      );
+
+    }
+
+
+    animate();
+
+
+    /* =====================================================
+       播放成功
+    ===================================================== */
+
+    function playSuccess() {
+
+
+      /*
+        清除舊動畫
+      */
+
+      clearRipples();
+
+
+      /*
+        重置 CSS animation
+      */
+
+      screen.classList.remove(
+        "show"
+      );
+
+
+      void screen.offsetWidth;
+
+
+      /*
+        顯示成功畫面
+      */
+
+      screen.classList.add(
+        "show"
+      );
+
+
+      /*
+        文字先出現
+
+        約 0.8 秒後
+        波紋開始
+      */
+
+      setTimeout(
+
+        () => {
+
+          createRipples();
+
+        },
+
+        800
+
+      );
+
+
+      /*
+        5.5 秒後結束
+      */
+
+      setTimeout(
+
+        () => {
+
+          screen.classList.remove(
+            "show"
+          );
+
+        },
+
+        5500
+
+      );
+
+    }
+
+
+    /* =====================================================
+       測試
+    ===================================================== */
+
+    button.addEventListener(
+
+      "click",
+
+      playSuccess
+
+    );
+
+
+    /* =====================================================
+       Resize
+    ===================================================== */
+
+    window.addEventListener(
+
+      "resize",
+
+      () => {
+
+
+        camera.left =
+          -window.innerWidth / 2;
+
+
+        camera.right =
+          window.innerWidth / 2;
+
+
+        camera.top =
+          window.innerHeight / 2;
+
+
+        camera.bottom =
+          -window.innerHeight / 2;
+
+
+        camera.updateProjectionMatrix();
+
+
+        renderer.setSize(
+
+          window.innerWidth,
+
+          window.innerHeight
+
+        );
+
+      }
+
+    );
+
+  </script>
+
+</body>
+
+</html>

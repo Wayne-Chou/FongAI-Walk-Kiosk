@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>FongAI｜檢測成功</title>
+
+<style>
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+body {
+
+  background: #fff;
+
+  font-family:
+    "Noto Sans TC",
+    "PingFang TC",
+    "Microsoft JhengHei",
+    sans-serif;
+
+  overflow: hidden;
+}
+
+
+/* =====================================================
+   測試按鈕
+===================================================== */
+
+.test-button {
+
+  position: fixed;
+
+  left: 50%;
+  bottom: 30px;
+
+  transform: translateX(-50%);
+
+  z-index: 1000;
+
+  padding: 14px 30px;
+
+  border: none;
+
+  border-radius: 12px;
+
+  background: #222;
+
+  color: #fff;
+
+  font-size: 18px;
+
+  cursor: pointer;
+}
+
+
+/* =====================================================
+   成功畫面
+===================================================== */
+
+.success-screen {
+
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 10;
+
+  background: #fff;
+
+  opacity: 0;
+
+  visibility: hidden;
+
+  pointer-events: none;
+
+  transition:
+    opacity .8s ease,
+    visibility .8s ease;
+}
+
+
+.success-screen.show {
+
+  opacity: 1;
+
+  visibility: visible;
+}
+
+
+/* =====================================================
+   THREE JS
+===================================================== */
+
+#fireworkCanvas {
+
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  pointer-events: none;
+}
+
+
+/* =====================================================
+   中央內容
+===================================================== */
+
+.success-content {
+
+  position: absolute;
+
+  inset: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  z-index: 20;
+
+  pointer-events: none;
+}
+
+
+/* =====================================================
+   中央柔光
+===================================================== */
+
+.center-glow {
+
+  position: absolute;
+
+  width: 700px;
+
+  height: 380px;
+
+  left: 50%;
+  top: 50%;
+
+  transform:
+    translate(-50%, -50%)
+    scale(.6);
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      ellipse,
+
+      rgba(90, 190, 135, .13),
+
+      rgba(90, 190, 135, .055) 35%,
+
+      rgba(90, 190, 135, .015) 60%,
+
+      transparent 78%
+    );
+
+  filter: blur(35px);
+
+  opacity: 0;
+}
+
+
+.success-screen.show
+.center-glow {
+
+  animation:
+    centerGlow
+    3s
+    cubic-bezier(.22,.61,.36,1)
+    forwards;
+}
+
+
+/* =====================================================
+   文字
+===================================================== */
+
+.success-title {
+
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 10px;
+
+  font-size:
+    clamp(80px, 8vw, 125px);
+
+  font-weight: 700;
+
+  line-height: 1;
+
+  white-space: nowrap;
+
+  background:
+    linear-gradient(
+      135deg,
+
+      #55c487 0%,
+
+      #2c9d63 35%,
+
+      #8bd4a8 65%,
+
+      #29945d 100%
+    );
+
+  -webkit-background-clip: text;
+
+  background-clip: text;
+
+  -webkit-text-fill-color: transparent;
+
+  filter:
+    drop-shadow(
+      0 10px 25px
+      rgba(45,155,96,.15)
+    );
+}
+
+
+/* =====================================================
+   每個字
+===================================================== */
+
+.character {
+
+  display: inline-block;
+
+  opacity: 0;
+
+  transform:
+    translateY(50px)
+    scale(.78);
+
+  filter: blur(18px);
+}
+
+
+/* =====================================================
+   四個字依序出現
+===================================================== */
+
+.success-screen.show
+.character:nth-child(1) {
+
+  animation:
+    characterIn
+    1s
+    cubic-bezier(.16,1,.3,1)
+    .15s
+    forwards;
+}
+
+
+.success-screen.show
+.character:nth-child(2) {
+
+  animation:
+    characterIn
+    1s
+    cubic-bezier(.16,1,.3,1)
+    .35s
+    forwards;
+}
+
+
+.success-screen.show
+.character:nth-child(3) {
+
+  animation:
+    characterIn
+    1s
+    cubic-bezier(.16,1,.3,1)
+    .55s
+    forwards;
+}
+
+
+.success-screen.show
+.character:nth-child(4) {
+
+  animation:
+    characterIn
+    1s
+    cubic-bezier(.16,1,.3,1)
+    .75s
+    forwards;
+}
+
+
+/* =====================================================
+   下方光線
+===================================================== */
+
+.bottom-light {
+
+  position: absolute;
+
+  left: 50%;
+
+  top:
+    calc(50% + 120px);
+
+  transform:
+    translateX(-50%);
+
+  width: 0;
+
+  height: 2px;
+
+  background:
+    linear-gradient(
+      90deg,
+
+      transparent,
+
+      rgba(50,165,100,.3),
+
+      transparent
+    );
+
+  opacity: 0;
+}
+
+
+.success-screen.show
+.bottom-light {
+
+  animation:
+    bottomLight
+    1.6s
+    ease
+    1s
+    forwards;
+}
+
+
+/* =====================================================
+   動畫
+===================================================== */
+
+@keyframes characterIn {
+
+  0% {
+
+    opacity: 0;
+
+    transform:
+      translateY(50px)
+      scale(.78);
+
+    filter: blur(18px);
+  }
+
+  45% {
+
+    opacity: 1;
+
+    filter: blur(3px);
+  }
+
+  75% {
+
+    transform:
+      translateY(-5px)
+      scale(1.04);
+  }
+
+  100% {
+
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+
+    filter: blur(0);
+  }
+}
+
+
+@keyframes centerGlow {
+
+  0% {
+
+    opacity: 0;
+
+    transform:
+      translate(-50%, -50%)
+      scale(.6);
+  }
+
+  35% {
+
+    opacity: 1;
+  }
+
+  100% {
+
+    opacity: .85;
+
+    transform:
+      translate(-50%, -50%)
+      scale(1.1);
+  }
+}
+
+
+@keyframes bottomLight {
+
+  0% {
+
+    width: 0;
+
+    opacity: 0;
+  }
+
+  100% {
+
+    width: 380px;
+
+    opacity: .7;
+  }
+}
+
+
+/* =====================================================
+   RWD
+===================================================== */
+
+@media (max-width: 700px) {
+
+  .success-title {
+
+    font-size: 58px;
+
+    gap: 5px;
+  }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<button
+  id="testButton"
+  class="test-button"
+>
+  模擬檢測完成
+</button>
+
+
+<div
+  id="successScreen"
+  class="success-screen"
+>
+
+
+  <canvas
+    id="fireworkCanvas"
+  ></canvas>
+
+
+  <div
+    class="success-content"
+  >
+
+    <div
+      class="center-glow"
+    ></div>
+
+
+    <div
+      class="success-title"
+    >
+
+      <span class="character">檢</span>
+
+      <span class="character">測</span>
+
+      <span class="character">成</span>
+
+      <span class="character">功</span>
+
+    </div>
+
+
+    <div
+      class="bottom-light"
+    ></div>
+
+  </div>
+
+</div>
+
+
+
+<script type="importmap">
+{
+  "imports": {
+    "three":
+      "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js"
+  }
+}
+</script>
+
+
+<script type="module">
+
+import * as THREE
+from "three";
+
+
+/* =====================================================
+   DOM
+===================================================== */
+
+const screen =
+  document.querySelector(
+    "#successScreen"
+  );
+
+
+const button =
+  document.querySelector(
+    "#testButton"
+  );
+
+
+const canvas =
+  document.querySelector(
+    "#fireworkCanvas"
+  );
+
+
+/* =====================================================
+   THREE
+===================================================== */
+
+const scene =
+  new THREE.Scene();
+
+
+const camera =
+  new THREE.OrthographicCamera(
+
+    -window.innerWidth / 2,
+
+    window.innerWidth / 2,
+
+    window.innerHeight / 2,
+
+    -window.innerHeight / 2,
+
+    .1,
+
+    1000
+
+  );
+
+
+camera.position.z = 100;
+
+
+const renderer =
+  new THREE.WebGLRenderer({
+
+    canvas,
+
+    alpha: true,
+
+    antialias: true
+
+  });
+
+
+renderer.setPixelRatio(
+  Math.min(
+    window.devicePixelRatio,
+    2
+  )
+);
+
+
+renderer.setSize(
+  window.innerWidth,
+  window.innerHeight
+);
+
+
+/* =====================================================
+   五顏六色煙火
+===================================================== */
+
+const COLORS = [
+
+  0xff4d6d,   // 粉紅
+
+  0xff6b35,   // 橘
+
+  0xffc857,   // 金黃
+
+  0x4dabf7,   // 藍
+
+  0x8e7dff,   // 紫
+
+  0x61d095,   // 綠
+
+  0xff8fab,   // 淡粉
+
+  0x63e6be    // 青綠
+
+];
+
+
+const fireworks = [];
+
+
+/* =====================================================
+   建立大型煙火
+===================================================== */
+
+function createFirework({
+
+  x,
+
+  y,
+
+  radius = 230,
+
+  particleCount = 150,
+
+  size = 4
+
+}) {
+
+
+  const positions =
+    new Float32Array(
+      particleCount * 3
+    );
+
+
+  const velocities = [];
+
+
+  for (
+    let i = 0;
+    i < particleCount;
+    i++
+  ) {
+
+
+    positions[
+      i * 3
+    ] = x;
+
+
+    positions[
+      i * 3 + 1
+    ] = y;
+
+
+    positions[
+      i * 3 + 2
+    ] = 0;
+
+
+    /*
+      圓形放射
+    */
+
+    const angle =
+      Math.random() *
+      Math.PI *
+      2;
+
+
+    /*
+      讓煙火不是完美圓形
+    */
+
+    const speed =
+      (
+        .65 +
+        Math.random() * .5
+      ) *
+      radius /
+      100;
+
+
+    velocities.push({
+
+      x:
+        Math.cos(angle) *
+        speed,
+
+      y:
+        Math.sin(angle) *
+        speed,
+
+      gravity:
+        .006 +
+        Math.random() * .010,
+
+      drag:
+        .975 +
+        Math.random() * .012
+
+    });
+
+  }
+
+
+  const geometry =
+    new THREE.BufferGeometry();
+
+
+  geometry.setAttribute(
+
+    "position",
+
+    new THREE.BufferAttribute(
+      positions,
+      3
+    )
+
+  );
+
+
+  /*
+    每一朵煙火隨機顏色
+  */
+
+  const color =
+    COLORS[
+      Math.floor(
+        Math.random() *
+        COLORS.length
+      )
+    ];
+
+
+  const material =
+    new THREE.PointsMaterial({
+
+      color,
+
+      size,
+
+      sizeAttenuation: true,
+
+      transparent: true,
+
+      opacity: 1,
+
+      depthWrite: false,
+
+      blending:
+        THREE.AdditiveBlending
+
+    });
+
+
+  const points =
+    new THREE.Points(
+      geometry,
+      material
+    );
+
+
+  scene.add(points);
+
+
+  fireworks.push({
+
+    points,
+
+    positions,
+
+    velocities,
+
+    age: 0,
+
+    duration:
+      4.5 +
+      Math.random() * 1
+
+  });
+
+}
+
+
+/* =====================================================
+   全畫面大型煙火
+===================================================== */
+
+function launchFireworks() {
+
+
+  /*
+    左上
+  */
+
+  setTimeout(
+    () => {
+
+      createFirework({
+
+        x:
+          -window.innerWidth * .34,
+
+        y:
+          window.innerHeight * .30,
+
+        radius:
+          270,
+
+        particleCount:
+          190,
+
+        size:
+          4.5
+
+      });
+
+    },
+    250
+  );
+
+
+  /*
+    右上
+  */
+
+  setTimeout(
+    () => {
+
+      createFirework({
+
+        x:
+          window.innerWidth * .34,
+
+        y:
+          window.innerHeight * .30,
+
+        radius:
+          290,
+
+        particleCount:
+          200,
+
+        size:
+          4.5
+
+      });
+
+    },
+    550
+  );
+
+
+  /*
+    左側中間
+  */
+
+  setTimeout(
+    () => {
+
+      createFirework({
+
+        x:
+          -window.innerWidth * .43,
+
+        y:
+          -window.innerHeight * .05,
+
+        radius:
+          220,
+
+        particleCount:
+          150,
+
+        size:
+          4
+
+      });
+
+    },
+    900
+  );
+
+
+  /*
+    右側中間
+  */
+
+  setTimeout(
+    () => {
+
+      createFirework({
+
+        x:
+          window.innerWidth * .43,
+
+        y:
+          -window.innerHeight * .05,
+
+        radius:
+          230,
+
+        particleCount:
+          160,
+
+        size:
+          4
+
+      });
+
+    },
+    1150
+  );
+
+
+  /*
+    左下
+  */
+
+  setTimeout(
+    () => {
+
+      createFirework({
+
+        x:
+          -window.innerWidth * .32,
+
+        y:
+          -window.innerHeight * .32,
+
+        radius:
+          230,
+
+        particleCount:
+          160,
+
+        size:
+          4.2
+
+      });
+
+    },
+    1450
+  );
+
+
+  /*
+    右下
+  */
+
+  setTimeout(
+    () => {
+
+      createFirework({
+
+        x:
+          window.innerWidth * .32,
+
+        y:
+          -window.innerHeight * .32,
+
+        radius:
+          230,
+
+        particleCount:
+          160,
+
+        size:
+          4.2
+
+      });
+
+    },
+    1700
+  );
+
+
+  /*
+    最上方中央
+  */
+
+  setTimeout(
+    () => {
+
+      createFirework({
+
+        x: 0,
+
+        y:
+          window.innerHeight * .40,
+
+        radius:
+          300,
+
+        particleCount:
+          220,
+
+        size:
+          5
+
+      });
+
+    },
+    2050
+  );
+
+
+  /*
+    最後再補左右兩朵
+  */
+
+  setTimeout(
+    () => {
+
+      createFirework({
+
+        x:
+          -window.innerWidth * .18,
+
+        y:
+          window.innerHeight * .15,
+
+        radius:
+          190,
+
+        particleCount:
+          130,
+
+        size:
+          3.8
+
+      });
+
+    },
+    2500
+  );
+
+
+  setTimeout(
+    () => {
+
+      createFirework({
+
+        x:
+          window.innerWidth * .18,
+
+        y:
+          window.innerHeight * .15,
+
+        radius:
+          190,
+
+        particleCount:
+          130,
+
+        size:
+          3.8
+
+      });
+
+    },
+    2800
+  );
+
+}
+
+
+/* =====================================================
+   更新煙火
+===================================================== */
+
+function updateFireworks(
+  delta
+) {
+
+
+  for (
+    let i = fireworks.length - 1;
+    i >= 0;
+    i--
+  ) {
+
+
+    const firework =
+      fireworks[i];
+
+
+    firework.age +=
+      delta;
+
+
+    const positions =
+      firework.positions;
+
+
+    for (
+      let j = 0;
+      j <
+      firework.velocities.length;
+      j++
+    ) {
+
+
+      const velocity =
+        firework.velocities[j];
+
+
+      /*
+        空氣阻力
+      */
+
+      velocity.x *=
+        velocity.drag;
+
+
+      velocity.y *=
+        velocity.drag;
+
+
+      /*
+        重力
+      */
+
+      velocity.y -=
+        velocity.gravity;
+
+
+      /*
+        移動
+      */
+
+      positions[
+        j * 3
+      ] +=
+        velocity.x;
+
+
+      positions[
+        j * 3 + 1
+      ] +=
+        velocity.y;
+
+    }
+
+
+    firework.points
+      .geometry
+      .attributes
+      .position
+      .needsUpdate = true;
+
+
+    /*
+      5 秒左右慢慢消失
+    */
+
+    const progress =
+      firework.age /
+      firework.duration;
+
+
+    firework.points
+      .material
+      .opacity =
+      Math.max(
+        0,
+        1 -
+        Math.pow(
+          progress,
+          1.6
+        )
+      );
+
+
+    /*
+      粒子逐漸縮小
+    */
+
+    firework.points
+      .material
+      .size =
+      Math.max(
+        .8,
+        5 -
+        progress * 3.8
+      );
+
+
+    /*
+      結束
+    */
+
+    if (
+      progress >= 1
+    ) {
+
+
+      scene.remove(
+        firework.points
+      );
+
+
+      firework.points
+        .geometry
+        .dispose();
+
+
+      firework.points
+        .material
+        .dispose();
+
+
+      fireworks.splice(
+        i,
+        1
+      );
+
+    }
+
+  }
+
+}
+
+
+/* =====================================================
+   Animation Loop
+===================================================== */
+
+let previousTime =
+  performance.now();
+
+
+function animate() {
+
+
+  requestAnimationFrame(
+    animate
+  );
+
+
+  const now =
+    performance.now();
+
+
+  const delta =
+    Math.min(
+
+      (
+        now -
+        previousTime
+      ) / 1000,
+
+      .033
+
+    );
+
+
+  previousTime =
+    now;
+
+
+  updateFireworks(
+    delta
+  );
+
+
+  renderer.render(
+    scene,
+    camera
+  );
+
+}
+
+
+animate();
+
+
+/* =====================================================
+   顯示成功
+===================================================== */
+
+function showSuccess() {
+
+
+  /*
+    清除舊煙火
+  */
+
+  fireworks.forEach(
+    firework => {
+
+      scene.remove(
+        firework.points
+      );
+
+      firework.points
+        .geometry
+        .dispose();
+
+      firework.points
+        .material
+        .dispose();
+
+    }
+  );
+
+
+  fireworks.length = 0;
+
+
+  /*
+    重新播放 CSS
+  */
+
+  screen.classList.remove(
+    "show"
+  );
+
+
+  void screen.offsetWidth;
+
+
+  screen.classList.add(
+    "show"
+  );
+
+
+  /*
+    開始全畫面煙火
+  */
+
+  launchFireworks();
+
+
+  /*
+    整個成功畫面
+    維持約 7 秒
+  */
+
+  setTimeout(
+    () => {
+
+      screen.classList.remove(
+        "show"
+      );
+
+    },
+    7000
+  );
+
+}
+
+
+/* =====================================================
+   測試
+===================================================== */
+
+button.addEventListener(
+  "click",
+  showSuccess
+);
+
+
+/* =====================================================
+   Resize
+===================================================== */
+
+window.addEventListener(
+  "resize",
+  () => {
+
+
+    camera.left =
+      -window.innerWidth / 2;
+
+
+    camera.right =
+      window.innerWidth / 2;
+
+
+    camera.top =
+      window.innerHeight / 2;
+
+
+    camera.bottom =
+      -window.innerHeight / 2;
+
+
+    camera.updateProjectionMatrix();
+
+
+    renderer.setSize(
+      window.innerWidth,
+      window.innerHeight
+    );
+
+  }
+);
+
+</script>
+
+</body>
+</html>
