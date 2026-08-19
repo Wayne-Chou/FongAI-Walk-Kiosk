@@ -47,7 +47,7 @@
       }
       .app-shell {
         width: 100%;
-        /* max-width: 480px; */
+
         min-height: 100vh;
         background: var(--white);
         position: relative;
@@ -61,6 +61,14 @@
       }
       .screen.active {
         display: flex;
+      }
+
+      #screen-question,
+      #screen-identity,
+      #screen-home {
+        min-height: 0;
+        height: 100vh;
+        height: 100dvh;
       }
       .app-header {
         background: linear-gradient(135deg, var(--sage) 0%, #4e342e 100%);
@@ -176,6 +184,11 @@
         flex: 1;
         padding: 20px;
         overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        justify-content: safe center;
       }
       .question-card {
         background: linear-gradient(135deg, var(--sage) 0%, #5a3e2c 100%);
@@ -184,6 +197,9 @@
         margin-bottom: 16px;
         position: relative;
         overflow: hidden;
+        /* 避免在空間不足時被 flex 引擎壓縮到裁切文字，改由
+           #question-body 既有的 overflow-y:auto 捲動來承接溢出內容 */
+        flex-shrink: 0;
       }
       .question-card::before {
         content: "";
@@ -275,14 +291,24 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        /* 避免在空間不足時被 flex 引擎壓縮到裁切圖片，改由
+           #question-body 既有的 overflow-y:auto 捲動來承接溢出內容 */
+        flex-shrink: 0;
       }
       .illustration-wrap svg,
       .illustration-wrap .illustration-img {
         width: 100%;
-        /* max-height: 240px; */
+
+        max-height: 40vh;
         height: auto;
         display: block;
         object-fit: contain;
+      }
+      /* 計時題（.question-body 底下有 .timer-card）畫面本身已經比較擁擠，
+         插圖改用比是非題（40vh）更保守的專屬上限，不分裝置寬度都套用 */
+      #screen-question .question-body:has(.timer-card) .illustration-wrap svg,
+      #screen-question .question-body:has(.timer-card) .illustration-wrap .illustration-img {
+        max-height: 31vh;
       }
       .answer-buttons {
         display: grid;
@@ -293,8 +319,8 @@
       .btn-answer {
         border: none;
         border-radius: 14px;
-        padding: 18px;
-        font-size: 20px;
+        padding: 16px;
+        font-size: 19px;
         font-weight: 900;
         cursor: pointer;
         font-family: "Noto Serif TC", serif;
@@ -471,6 +497,39 @@
         line-height: 1.6;
         color: var(--ink);
         font-family: "Noto Serif TC", serif;
+      }
+      /* ===== 身分判別畫面專屬調整：只影響 #screen-identity，不動共用 .identity-* / .question-body 規則 ===== */
+      #screen-identity .question-body {
+        justify-content: flex-start;
+      }
+      #screen-identity .identity-card {
+        padding: 28px 24px;
+        margin-bottom: 28px;
+      }
+      #screen-identity .identity-prompt {
+        font-size: 20px;
+        line-height: 1.7;
+      }
+      #screen-identity .identity-options {
+        gap: 20px;
+      }
+      #screen-identity .identity-option {
+        padding: 24px;
+        gap: 16px;
+      }
+      #screen-identity .identity-check {
+        width: 30px;
+        height: 30px;
+        border-radius: 9px;
+        margin-top: 3px;
+      }
+      #screen-identity .identity-check svg {
+        width: 18px;
+        height: 18px;
+      }
+      #screen-identity .identity-label {
+        font-size: 19px;
+        line-height: 1.7;
       }
       .nav-bar {
         display: flex;
@@ -815,7 +874,7 @@
           #3b2620 60%,
           var(--ink) 100%
         );
-        padding: 48px 24px 40px;
+        padding: clamp(20px, 5dvh, 48px) 24px clamp(16px, 4dvh, 40px);
         text-align: center;
         position: relative;
         overflow: hidden;
@@ -832,71 +891,86 @@
         line-height: 1;
       }
       .home-icon {
-        width: 72px;
-        height: 72px;
+        width: clamp(52px, 9dvh, 72px);
+        height: clamp(52px, 9dvh, 72px);
         background: rgba(255, 255, 255, 0.15);
         border-radius: 22px;
         display: flex;
         align-items: center;
         justify-content: center;
         margin: 0 auto 20px;
-        font-size: 36px;
+      }
+      /* 圖示框改用 clamp() 縮放後，裡面寫死 width/height 的 <svg> 也要跟著等比縮放 */
+      .home-icon svg {
+        width: 55%;
+        height: 55%;
       }
       .home-title {
         font-family: "Noto Serif TC", serif;
-        font-size: 28px;
+        font-size: clamp(22px, 4.6dvh, 30px);
         font-weight: 900;
         color: white;
         margin-bottom: 8px;
         line-height: 1.3;
       }
       .home-subtitle {
-        font-size: 13px;
+        font-size: clamp(12px, 1.6dvh, 13px);
         color: rgba(255, 255, 255, 0.65);
         line-height: 1.6;
       }
       .home-body {
-        padding: 24px 20px;
+        padding: clamp(16px, 3dvh, 24px) 20px;
         flex: 1;
+        overflow-y: auto;
       }
       .domain-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 10px;
-        margin-bottom: 24px;
+        gap: 0;
+        margin-bottom: clamp(14px, 2.4dvh, 24px);
       }
       .domain-card {
-        background: white;
-        border: 1.5px solid var(--border);
-        border-radius: 14px;
-        padding: 14px;
+        padding: clamp(8px, 1.6dvh, 12px) 10px;
         display: flex;
         align-items: center;
         gap: 10px;
-        box-shadow: 0 2px 8px var(--shadow);
+      }
+      /* 直向分隔線：僅畫在左欄（單數項目）右側，剛好落在兩欄中間 */
+      .domain-card:nth-child(odd) {
+        border-right: 1.5px solid var(--sage-light);
+      }
+      /* 橫向分隔線：只畫在列與列之間，最後一列（最後兩個項目）不畫，
+         避免變成把整個網格框起來的外框 */
+      .domain-card:not(:nth-last-child(-n + 2)) {
+        border-bottom: 1.5px solid var(--sage-light);
       }
       .domain-icon {
-        width: 32px;
-        height: 32px;
+        width: clamp(24px, 4dvh, 32px);
+        height: clamp(24px, 4dvh, 32px);
         flex-shrink: 0;
         display: flex;
         align-items: center;
         justify-content: center;
       }
+      /* 同 .home-icon svg，讓向度圖示的 <svg> 跟著容器一起縮放 */
+      .domain-icon svg {
+        width: 85%;
+        height: 85%;
+      }
       .domain-name {
-        font-size: 13px;
+        font-size: clamp(13px, 2dvh, 14px);
         font-weight: 700;
         color: var(--ink);
         font-family: "Noto Serif TC", serif;
       }
       .user-form {
-        margin-bottom: 24px;
+        margin-bottom: clamp(14px, 2.4dvh, 24px);
       }
       .form-group {
-        margin-bottom: 14px;
+        margin-bottom: clamp(8px, 1.6dvh, 14px);
       }
       .form-label {
-        font-size: 13px;
+        font-size: clamp(12px, 1.6dvh, 13px);
         font-weight: 600;
         color: var(--ink-light);
         margin-bottom: 6px;
@@ -906,8 +980,8 @@
         width: 100%;
         border: 1.5px solid var(--border);
         border-radius: 10px;
-        padding: 11px 14px;
-        font-size: 15px;
+        padding: clamp(9px, 1.8dvh, 11px) 14px;
+        font-size: clamp(15px, 2.2dvh, 16px);
         font-family: "Noto Sans TC", sans-serif;
         color: var(--ink);
         background: white;
@@ -916,6 +990,15 @@
       }
       .form-input:focus {
         border-color: var(--sage);
+      }
+      /* .btn-action 是跨畫面共用 class（歷史紀錄/報告頁按鈕也在用），
+         這裡只針對首頁按鈕加大縮放，用 #screen-home 前綴限定範圍，
+         不影響其他畫面既有的按鈕樣式。垂直 padding 下限抓 13px，
+         搭配 15px 字級，確保按鈕實際高度不低於長者可觸控的 44px 門檻。 */
+      #screen-home .btn-action {
+        padding: clamp(13px, 2.2dvh, 14px) 20px;
+        font-size: clamp(16px, 2.2dvh, 17px);
+        margin-bottom: clamp(6px, 1.2dvh, 10px);
       }
       @keyframes slideIn {
         from {
@@ -929,6 +1012,168 @@
       }
       .screen.active {
         animation: slideIn 0.25s ease;
+      }
+
+      /* ===== #screen-home 平板放大（僅調整寬度 >=768px 時的上限，
+         手機沿用上面各 clamp() 的中低段數值） ===== */
+      @media (min-width: 768px) {
+        .home-hero {
+          padding: clamp(36px, 6dvh, 64px) 32px clamp(28px, 5dvh, 56px);
+        }
+        .home-icon {
+          width: clamp(72px, 9dvh, 96px);
+          height: clamp(72px, 9dvh, 96px);
+        }
+        .home-title {
+          font-size: clamp(28px, 4.3dvh, 52px);
+        }
+        .home-subtitle {
+          font-size: clamp(13px, 1.8dvh, 22px);
+        }
+        .home-body {
+          padding: clamp(20px, 3dvh, 32px) 28px;
+        }
+        .domain-grid {
+          margin-bottom: clamp(20px, 3dvh, 32px);
+        }
+        .domain-card {
+          padding: clamp(12px, 2dvh, 16px) 14px;
+        }
+        .domain-icon {
+          width: clamp(32px, 5dvh, 40px);
+          height: clamp(32px, 5dvh, 40px);
+        }
+        .domain-name {
+          font-size: clamp(14px, 2.2dvh, 24px);
+        }
+        .user-form {
+          margin-bottom: clamp(20px, 3dvh, 32px);
+        }
+        .form-group {
+          margin-bottom: clamp(12px, 2dvh, 18px);
+        }
+        .form-label {
+          font-size: clamp(13px, 2dvh, 22px);
+        }
+        .form-input {
+          padding: clamp(12px, 2.4dvh, 16px) 16px;
+          font-size: clamp(16px, 2.6dvh, 26px);
+        }
+        #screen-home .btn-action {
+          padding: clamp(16px, 2.6dvh, 20px) 24px;
+          font-size: clamp(17px, 2.4dvh, 26px);
+          margin-bottom: clamp(8px, 1.4dvh, 12px);
+        }
+      }
+
+      /* ===== #screen-question 平板放大：僅套用在「非計時題」畫面
+         （.question-body 底下沒有 .timer-card），計時題（目前僅
+         f_mob1 一題）在 iPad Air 上已經沒有安全餘裕，維持手機版
+         固定值不動，避免溢出捲動 ===== */
+      @media (min-width: 768px) {
+        #screen-question .question-body:not(:has(.timer-card)) .illustration-wrap {
+          min-height: 260px;
+        }
+        #screen-question .question-body:not(:has(.timer-card)) .illustration-wrap svg,
+        #screen-question .question-body:not(:has(.timer-card)) .illustration-wrap .illustration-img {
+          max-height: 38vh;
+        }
+        #screen-question .question-body:not(:has(.timer-card)) .question-text {
+          font-size: 30px;
+        }
+        #screen-question .question-body:not(:has(.timer-card)) .btn-answer {
+          padding: 15px;
+          font-size: 30px;
+        }
+        #screen-question .question-body:not(:has(.timer-card)) .question-card {
+          padding: 24px;
+        }
+        /* question-num/sub-text 不分是非題/計時題，統一放大 */
+        .question-num {
+          font-size: 14px;
+        }
+        .sub-text {
+          font-size: 20px;
+        }
+      }
+
+      /* ===== #screen-identity 平板字級放大：.identity-prompt/.identity-label
+         原本是不分手機/平板的固定值，這裡新增平板專用覆寫（僅字級，版面
+         padding/gap 沿用前一輪已經設定好的數值不變） ===== */
+      @media (min-width: 768px) {
+        #screen-identity .identity-prompt {
+          font-size: 28px;
+        }
+        #screen-identity .identity-label {
+          font-size: 27px;
+        }
+      }
+
+      /* ===== #screen-question / #screen-identity 共用外殼平板放大：
+         header-label/name/badge、category-name、progress-pill、
+         audio-controls、nav-bar 都是兩個畫面共用的元件，放大會同時
+         套用到兩邊（這是預期效果，讓頂部/底部列視覺一致） ===== */
+      @media (min-width: 768px) {
+        .header-label {
+          font-size: 15px;
+        }
+        .header-name {
+          font-size: 30px;
+        }
+        .header-badge {
+          font-size: 16px;
+        }
+        .category-name {
+          font-size: 24px;
+        }
+        .progress-pill {
+          font-size: 15px;
+        }
+        .btn-audio {
+          font-size: 17px;
+        }
+        .lang-select {
+          font-size: 17px;
+        }
+        .btn-nav {
+          font-size: 18px;
+        }
+        .btn-nav-home {
+          font-size: 17px;
+        }
+      }
+
+      /* ===== #screen-question 極矮螢幕（如 iPhone SE 375x667）微調：
+         縮小題目文字與插圖等區塊，減少需要靠捲動才能看完整題目的機率。
+         這是輔助手段，主要安全網是上面 .question-card / .illustration-wrap
+         的 flex-shrink:0（見下方） ===== */
+      @media (max-height: 700px) {
+        .question-text {
+          font-size: 16px;
+        }
+        .sub-text {
+          font-size: 15px;
+          margin-bottom: 10px;
+        }
+        .question-card {
+          padding: 16px;
+          margin-bottom: 12px;
+        }
+        .audio-controls {
+          margin-bottom: 10px;
+        }
+        .illustration-wrap {
+          min-height: 160px;
+          margin-bottom: 10px;
+        }
+        .illustration-wrap svg,
+        .illustration-wrap .illustration-img {
+          max-height: 32vh;
+        }
+        .btn-answer {
+          padding: 14px;
+          font-size: 18px;
+        }
       }
     </style>
   </head>
@@ -1097,15 +1342,6 @@
                 value=""
               />
             </div>
-            <div class="form-group">
-              <label class="form-label">評估語言</label>
-              <select class="form-input" id="home-lang">
-                <option value="zh">國語</option>
-                <option value="tw">台語</option>
-                <option value="en">English</option>
-                <option value="hk">客語</option>
-              </select>
-            </div>
           </div>
           <button class="btn-action btn-primary" onclick="startAssessment()">
             <svg
@@ -1122,23 +1358,20 @@
             </svg>
             開始自評
           </button>
-          <button class="btn-action btn-secondary" onclick="goToResults()">
+          <button class="btn-action btn-secondary">
             <svg
               width="18"
               height="18"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              stroke-width="2"
+              stroke-width="2.5"
               stroke-linecap="round"
               stroke-linejoin="round"
             >
-              <path
-                d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
-              ></path>
-              <polyline points="14 2 14 8 20 8"></polyline>
+              <polyline points="15 18 9 12 15 6"></polyline>
             </svg>
-            查看歷史紀錄
+            返回
           </button>
         </div>
       </div>
@@ -1285,7 +1518,41 @@
           <div class="category-name" id="category-name">認知功能</div>
           <div class="progress-pill" id="progress-text">1 / 12</div>
         </div>
-        <div class="question-body" id="question-body"></div>
+        <div class="question-body" id="question-body">
+          <div class="question-card">
+            <div class="question-num" id="question-num"></div>
+            <div class="question-text" id="question-text"></div>
+          </div>
+          <div class="audio-controls">
+            <button class="btn-audio">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"
+                />
+              </svg>
+              點我朗讀
+            </button>
+            <select
+              class="lang-select"
+              id="q-lang"
+              onchange="changeLang(this.value)"
+            >
+              <option value="zh">國語</option>
+              <option value="tw">台語</option>
+              <option value="en">English</option>
+              <option value="hk">客語</option>
+            </select>
+          </div>
+          <div
+            class="sub-text"
+            id="question-subtext"
+            style="display: none"
+          ></div>
+          <div class="illustration-wrap" id="illustration-wrap">
+            <img id="illustration-img" class="illustration-img" alt="" />
+          </div>
+          <div id="answer-area"></div>
+        </div>
         <div class="nav-bar">
           <div class="nav-left">
             <button
@@ -1621,28 +1888,67 @@
       const QUESTION_SETS = { self: QUESTIONS_SELF, family: QUESTIONS_FAMILY };
 
       const ILLUSTRATIONS = {
-        memory: '<img src="assets/illustrations/memory.png" alt="" class="illustration-img" loading="lazy">',
+        memory:
+          '<img src="assets/illustrations/memory.png" alt="" class="illustration-img" loading="lazy">',
         recall: `<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg"><rect width="320" height="200" fill="#f7f3ef"/><text x="160" y="40" text-anchor="middle" font-size="14" fill="#6f4e37" font-weight="600">記住這3件事</text><rect x="40" y="60" width="70" height="60" rx="12" fill="white" stroke="#e3d7c8" stroke-width="2"/><text x="75" y="98" text-anchor="middle" font-size="32">🍎</text><text x="75" y="134" text-anchor="middle" font-size="12" fill="#6f4e37" font-weight="700">蘋果</text><rect x="126" y="60" width="70" height="60" rx="12" fill="white" stroke="#e3d7c8" stroke-width="2"/><text x="161" y="98" text-anchor="middle" font-size="32">🚂</text><text x="161" y="134" text-anchor="middle" font-size="12" fill="#6f4e37" font-weight="700">火車</text><rect x="212" y="60" width="70" height="60" rx="12" fill="white" stroke="#e3d7c8" stroke-width="2"/><text x="247" y="98" text-anchor="middle" font-size="32">💚</text><text x="247" y="134" text-anchor="middle" font-size="12" fill="#6f4e37" font-weight="700">誠實</text><text x="160" y="170" text-anchor="middle" font-size="12" fill="#888">請問長者能記住幾個?</text></svg>`,
-        chair: '<img src="assets/illustrations/chair.png" alt="" class="illustration-img" loading="lazy">',
-        weight: '<img src="assets/illustrations/weight.png" alt="" class="illustration-img" loading="lazy">',
-        vision: '<img src="assets/illustrations/vision.png" alt="" class="illustration-img" loading="lazy">',
+        chair:
+          '<img src="assets/illustrations/chair.png" alt="" class="illustration-img" loading="lazy">',
+        weight:
+          '<img src="assets/illustrations/weight.png" alt="" class="illustration-img" loading="lazy">',
+        vision:
+          '<img src="assets/illustrations/vision.png" alt="" class="illustration-img" loading="lazy">',
         hearing: `<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg"><rect width="320" height="200" fill="#f7f3ef"/><circle cx="100" cy="80" r="24" fill="#D4A989"/><rect x="76" y="102" width="48" height="52" rx="8" fill="#6A8FA8"/><path d="M145 65 Q155 80 145 95" stroke="#6f4e37" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M155 55 Q172 80 155 105" stroke="#6f4e37" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M165 45 Q189 80 165 115" stroke="#6f4e37" stroke-width="3" fill="none" stroke-linecap="round"/><line x1="175" y1="55" x2="195" y2="75" stroke="#C74B3A" stroke-width="4" stroke-linecap="round"/><line x1="195" y1="55" x2="175" y2="75" stroke="#C74B3A" stroke-width="4" stroke-linecap="round"/><circle cx="100" cy="80" r="5" fill="#8D6440"/><ellipse cx="78" cy="85" rx="8" ry="12" fill="#D4A989"/><text x="160" y="165" text-anchor="middle" font-size="13" fill="#6f4e37" font-weight="600">聽力是否有困難?</text></svg>`,
         depression: `<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg"><rect width="320" height="200" fill="#F0EEF8"/><circle cx="160" cy="60" r="28" fill="#D4A989"/><circle cx="150" cy="57" r="4" fill="#8D6440"/><circle cx="170" cy="57" r="4" fill="#8D6440"/><path d="M148 73 Q160 65 172 73" stroke="#8D6440" stroke-width="2.5" fill="none" stroke-linecap="round"/><rect x="132" y="86" width="56" height="56" rx="8" fill="#9090C8"/><rect x="100" y="92" width="34" height="12" rx="6" fill="#7878B8"/><rect x="186" y="92" width="34" height="12" rx="6" fill="#7878B8"/><rect x="138" y="140" width="18" height="36" rx="9" fill="#6060A0"/><rect x="164" y="140" width="18" height="36" rx="9" fill="#6060A0"/><text x="90" y="50" font-size="20" fill="#9090C8">💧</text><text x="230" y="50" font-size="20" fill="#9090C8">💧</text><text x="60" y="90" font-size="16" fill="#9090C8">💧</text><text x="250" y="90" font-size="16" fill="#9090C8">💧</text><text x="160" y="190" text-anchor="middle" font-size="12" fill="#7070A0">長者是否常感到沮喪或絕望?</text></svg>`,
         protein: `<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg"><rect width="320" height="200" fill="#f7f3ef"/><text x="160" y="35" text-anchor="middle" font-size="14" fill="#6f4e37" font-weight="600">每日蛋白質攝取</text><rect x="30" y="55" width="60" height="65" rx="12" fill="white" stroke="#e3d7c8" stroke-width="2"/><text x="60" y="93" text-anchor="middle" font-size="32">🥚</text><text x="60" y="130" text-anchor="middle" font-size="11" fill="#6f4e37" font-weight="600">蛋</text><rect x="105" y="55" width="60" height="65" rx="12" fill="white" stroke="#e3d7c8" stroke-width="2"/><text x="135" y="93" text-anchor="middle" font-size="32">🥩</text><text x="135" y="130" text-anchor="middle" font-size="11" fill="#6f4e37" font-weight="600">肉</text><rect x="180" y="55" width="60" height="65" rx="12" fill="white" stroke="#e3d7c8" stroke-width="2"/><text x="210" y="93" text-anchor="middle" font-size="32">🐟</text><text x="210" y="130" text-anchor="middle" font-size="11" fill="#6f4e37" font-weight="600">魚</text><rect x="255" y="55" width="60" height="65" rx="12" fill="white" stroke="#e3d7c8" stroke-width="2"/><text x="285" y="93" text-anchor="middle" font-size="32">🫘</text><text x="285" y="130" text-anchor="middle" font-size="11" fill="#6f4e37" font-weight="600">豆</text><text x="160" y="168" text-anchor="middle" font-size="12" fill="#888">每天是否至少攝取一份?</text></svg>`,
         walk: `<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg"><rect width="320" height="200" fill="#f7f3ef"/><rect x="20" y="155" width="280" height="4" rx="2" fill="#e3d7c8"/><circle cx="120" cy="70" r="22" fill="#D4A989"/><rect x="100" y="90" width="40" height="48" rx="8" fill="#6f4e37"/><line x1="95" y1="105" x2="80" y2="155" stroke="#8D6440" stroke-width="4" stroke-linecap="round"/><line x1="72" y1="155" x2="88" y2="155" stroke="#8D6440" stroke-width="4" stroke-linecap="round"/><rect x="100" y="136" width="16" height="30" rx="8" fill="#2C3E6E" transform="rotate(-10 108 136)"/><rect x="120" y="136" width="16" height="30" rx="8" fill="#2C3E6E" transform="rotate(10 128 136)"/><polygon points="180,68 200,100 160,100" fill="#C98B2A" opacity="0.9"/><line x1="180" y1="78" x2="180" y2="90" stroke="white" stroke-width="3" stroke-linecap="round"/><circle cx="180" cy="95" r="2" fill="white"/><text x="160" y="185" text-anchor="middle" font-size="12" fill="#888">步態是否不穩?</text></svg>`,
-        eyecheck: '<img src="assets/illustrations/eyecheck.png" alt="" class="illustration-img" loading="lazy">',
-        repeat: '<img src="assets/illustrations/repeat.png" alt="" class="illustration-img" loading="lazy">',
-        interest: '<img src="assets/illustrations/interest.png" alt="" class="illustration-img" loading="lazy">',
+        eyecheck:
+          '<img src="assets/illustrations/eyecheck.png" alt="" class="illustration-img" loading="lazy">',
+        repeat:
+          '<img src="assets/illustrations/repeat.png" alt="" class="illustration-img" loading="lazy">',
+        interest:
+          '<img src="assets/illustrations/interest.png" alt="" class="illustration-img" loading="lazy">',
 
         /* ===== 長者本人新增插圖 ===== */
-        fall_worry: '<img src="assets/illustrations/fall_worry.png" alt="" class="illustration-img" loading="lazy">',
-        fall_past: '<img src="assets/illustrations/fall_past.png" alt="" class="illustration-img" loading="lazy">',
-        chair_grip: '<img src="assets/illustrations/chair_grip.png" alt="" class="illustration-img" loading="lazy">',
-        appetite: '<img src="assets/illustrations/appetite.png" alt="" class="illustration-img" loading="lazy">',
-        phone_hear: '<img src="assets/illustrations/phone_hear.png" alt="" class="illustration-img" loading="lazy">',
-        tv_loud: '<img src="assets/illustrations/tv_loud.png" alt="" class="illustration-img" loading="lazy">',
-        social_avoid: '<img src="assets/illustrations/social_avoid.png" alt="" class="illustration-img" loading="lazy">',
-        gloomy: '<img src="assets/illustrations/gloomy.png" alt="" class="illustration-img" loading="lazy">',
+        fall_worry:
+          '<img src="assets/illustrations/fall_worry.png" alt="" class="illustration-img" loading="lazy">',
+        fall_past:
+          '<img src="assets/illustrations/fall_past.png" alt="" class="illustration-img" loading="lazy">',
+        chair_grip:
+          '<img src="assets/illustrations/chair_grip.png" alt="" class="illustration-img" loading="lazy">',
+        appetite:
+          '<img src="assets/illustrations/appetite.png" alt="" class="illustration-img" loading="lazy">',
+        phone_hear:
+          '<img src="assets/illustrations/phone_hear.png" alt="" class="illustration-img" loading="lazy">',
+        tv_loud:
+          '<img src="assets/illustrations/tv_loud.png" alt="" class="illustration-img" loading="lazy">',
+        social_avoid:
+          '<img src="assets/illustrations/social_avoid.png" alt="" class="illustration-img" loading="lazy">',
+        gloomy:
+          '<img src="assets/illustrations/gloomy.png" alt="" class="illustration-img" loading="lazy">',
+      };
+
+      /* ===== 插圖圖片來源（供 renderQuestion 更新 <img src>、preload 用） =====
+         注意：目前 QUESTIONS_SELF / QUESTIONS_FAMILY 用到的 illustration 全部是
+         PNG，所以這裡只列出這 15 個對應路徑；ILLUSTRATIONS 裡另外還有
+         recall/hearing/depression/protein/walk 5 組 inline SVG，目前沒有任何
+         題目在用，此表沒有涵蓋——若之後要讓某一題改用 inline SVG 插圖，
+         這裡跟 renderQuestion() 的 <img> 更新方式都需要一併調整。 */
+      const ILLUSTRATION_SRC = {
+        memory: "assets/illustrations/memory.png",
+        chair: "assets/illustrations/chair.png",
+        weight: "assets/illustrations/weight.png",
+        vision: "assets/illustrations/vision.png",
+        eyecheck: "assets/illustrations/eyecheck.png",
+        repeat: "assets/illustrations/repeat.png",
+        interest: "assets/illustrations/interest.png",
+        fall_worry: "assets/illustrations/fall_worry.png",
+        fall_past: "assets/illustrations/fall_past.png",
+        chair_grip: "assets/illustrations/chair_grip.png",
+        appetite: "assets/illustrations/appetite.png",
+        phone_hear: "assets/illustrations/phone_hear.png",
+        tv_loud: "assets/illustrations/tv_loud.png",
+        social_avoid: "assets/illustrations/social_avoid.png",
+        gloomy: "assets/illustrations/gloomy.png",
       };
 
       let state = {
@@ -1702,7 +2008,6 @@
       /* ===== 開始評估 → 先進入身分判別 ===== */
       function startAssessment() {
         state.userName = document.getElementById("input-name").value || "長輩";
-        state.language = document.getElementById("home-lang").value;
         state.answers = {};
         state.currentIndex = 0;
         state.role = null;
@@ -1740,6 +2045,25 @@
         showScreen("screen-question");
       }
 
+      const preloadedIllustrations = new Set();
+      function preloadIllustration(illustrationId) {
+        const src = ILLUSTRATION_SRC[illustrationId];
+        if (!src || preloadedIllustrations.has(src)) return;
+        preloadedIllustrations.add(src);
+        const img = new Image();
+        img.src = src;
+      }
+      function preloadAdjacentIllustrations() {
+        const nextIdx = findNextIndex(state.currentIndex);
+        const prevIdx = findPrevIndex(state.currentIndex);
+        if (nextIdx !== -1) {
+          preloadIllustration(state.questions[nextIdx].illustration);
+        }
+        if (prevIdx !== -1) {
+          preloadIllustration(state.questions[prevIdx].illustration);
+        }
+      }
+
       function renderQuestion() {
         const q = state.questions[state.currentIndex];
         const visible = getVisibleQuestions();
@@ -1751,36 +2075,40 @@
           `${current} / ${total}`;
         document.getElementById("category-name").innerHTML =
           (CATEGORY_ICONS[q.category] || "") + " " + q.category;
-        const body = document.getElementById("question-body");
         const ans = state.answers[q.id];
 
-        let content = `
-          <div class="question-card">
-            <div class="question-num">問題 ${current}</div>
-            <div class="question-text">${q.text}</div>
-          </div>
-          <div class="audio-controls">
-            <button class="btn-audio">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
-              點我朗讀
-            </button>
-            <select class="lang-select" id="q-lang" onchange="changeLang(this.value)">
-              <option value="zh" ${state.language === "zh" ? "selected" : ""}>國語</option>
-              <option value="tw" ${state.language === "tw" ? "selected" : ""}>台語</option>
-              <option value="en" ${state.language === "en" ? "selected" : ""}>English</option>
-              <option value="hk" ${state.language === "hk" ? "selected" : ""}>客語</option>
-            </select>
-          </div>
-          ${q.subText ? `<div class="sub-text">${q.subText}</div>` : ""}
-          <div class="illustration-wrap">${ILLUSTRATIONS[q.illustration] || ""}</div>`;
+        document.getElementById("question-num").textContent = `問題 ${current}`;
+        document.getElementById("question-text").textContent = q.text;
 
+        document.getElementById("q-lang").value = state.language;
+
+        const subtextEl = document.getElementById("question-subtext");
+        if (q.subText) {
+          subtextEl.textContent = q.subText;
+          subtextEl.style.display = "";
+        } else {
+          subtextEl.textContent = "";
+          subtextEl.style.display = "none";
+        }
+
+        const illustrationImg = document.getElementById("illustration-img");
+        const illustrationSrc = ILLUSTRATION_SRC[q.illustration] || "";
+        if (illustrationImg.getAttribute("src") !== illustrationSrc) {
+          if (illustrationSrc) {
+            illustrationImg.src = illustrationSrc;
+          } else {
+            illustrationImg.removeAttribute("src");
+          }
+        }
+
+        const answerArea = document.getElementById("answer-area");
         if (q.type === "yesno") {
-          content += `<div class="answer-buttons">
+          answerArea.innerHTML = `<div class="answer-buttons">
             <button class="btn-answer btn-yes ${ans === "yes" ? "selected" : ""}" onclick="answer('yes')">✓ 是</button>
             <button class="btn-answer btn-no ${ans === "no" ? "selected" : ""}" onclick="answer('no')">✗ 否</button>
           </div>`;
         } else if (q.type === "timer") {
-          content += `<div class="timer-card">
+          answerArea.innerHTML = `<div class="timer-card">
             <div class="timer-label">計時器</div>
             <div class="timer-display" id="timer-disp">${formatTimer(state.timerVal)}</div>
             <div class="timer-buttons">
@@ -1796,7 +2124,6 @@
           if (!state.timerRunning && !ans) startTimer();
         }
 
-        body.innerHTML = content;
         const isLast = findNextIndex(state.currentIndex) === -1;
         document.getElementById("btn-prev").disabled = false;
         const nextBtn = document.getElementById("btn-next");
@@ -1811,6 +2138,8 @@
             ? "完成評估 ✓"
             : '下一題 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>';
         }
+
+        preloadAdjacentIllustrations();
       }
 
       function formatTimer(sec) {
