@@ -1,0 +1,674 @@
+<!doctype html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>FongAI - 工作人員解鎖</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary: #6f4e37;
+        --primary-dark: #4e342e;
+        --secondary: #8a6a4f;
+        --secondary-light: #a07e5e;
+        --text-dark: #2b2018;
+        --text-body: #5c4d40;
+        --text-light: #8a7d6f;
+        --line: #e3d7c8;
+        --input-bg: #faf7f3;
+        --input-border: #e3d7c8;
+        --warning-soft: #fff8ec;
+        --warning-border: #f0dbb0;
+        --warning-icon: #b9862f;
+        --danger: #dc2626;
+        --danger-soft: #fef2f2;
+        --danger-border: #fecaca;
+        --shadow-lg: 0 24px 60px rgba(60, 40, 28, 0.12);
+        --shadow-md: 0 12px 28px rgba(111, 78, 55, 0.08);
+      }
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+      }
+      body {
+        font-family: "Noto Sans TC", sans-serif;
+      }
+      body {
+        width: 100vw;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f3efe9;
+        padding: 24px;
+      }
+      .tablet-shell {
+        width: 920px;
+        max-width: 100%;
+        min-height: 600px;
+        background: rgba(255, 255, 255, 0.65);
+        border: 1px solid rgba(255, 255, 255, 0.7);
+        overflow: hidden;
+        box-shadow: var(--shadow-lg);
+        backdrop-filter: blur(20px);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 40px 48px;
+        position: relative;
+      }
+      .tablet-shell::before {
+        content: "";
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        background: linear-gradient(
+          135deg,
+          rgba(111, 78, 55, 0.05),
+          rgba(160, 126, 94, 0.05)
+        );
+        top: -50px;
+        left: -50px;
+        pointer-events: none;
+      }
+
+      /* ── Header ── */
+      .app-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 1;
+      }
+      .brand-mark {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .logo-box {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        background: linear-gradient(
+          135deg,
+          var(--primary),
+          var(--primary-dark)
+        );
+        display: grid;
+        place-items: center;
+        box-shadow: 0 8px 18px rgba(111, 78, 55, 0.18);
+      }
+      .logo-box img {
+        width: 28px;
+        height: auto;
+      }
+      .brand-mark h1 {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: var(--primary);
+        letter-spacing: 0.5px;
+      }
+
+      /* ── 返回按鈕（次要／outline 樣式） ── */
+      .btn-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.7);
+        border: 1px solid var(--line);
+        color: var(--text-body);
+        padding: 10px 18px;
+        border-radius: 12px;
+        font-family: "Noto Sans TC", sans-serif;
+        font-size: 0.9rem;
+        font-weight: 700;
+        cursor: pointer;
+        backdrop-filter: blur(5px);
+        transition: all 0.2s ease;
+      }
+      .btn-back:hover {
+        background: #fff;
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-md);
+      }
+      .btn-back:active {
+        transform: scale(0.97);
+      }
+      .btn-back svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      /* ── 主區域 ── */
+      .main-action-area {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 24px;
+        z-index: 1;
+        padding: 32px 0;
+      }
+      .unlock-card {
+        width: 100%;
+        max-width: 460px;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 24px;
+      }
+      .back-nav {
+        display: flex;
+        justify-content: flex-start;
+      }
+
+      /* ── 安全提醒（警示區塊） ── */
+      .alert-box {
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+        background: var(--warning-soft);
+        border: 1.5px solid var(--warning-border);
+        border-radius: 18px;
+        padding: 20px 22px;
+      }
+      .alert-icon {
+        flex: 0 0 auto;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(185, 134, 47, 0.14);
+        display: grid;
+        place-items: center;
+        color: var(--warning-icon);
+        font-size: 1.15rem;
+      }
+      .alert-content {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .alert-title {
+        font-size: 1.05rem;
+        font-weight: 800;
+        color: var(--text-dark);
+        letter-spacing: 0.5px;
+      }
+      .alert-text {
+        font-size: 0.92rem;
+        color: var(--text-body);
+        line-height: 1.7;
+      }
+
+      /* ── 主要按鈕 ── */
+      .btn-primary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        height: 58px;
+        padding: 0 28px;
+        border: none;
+        border-radius: 16px;
+        background: linear-gradient(
+          135deg,
+          var(--primary),
+          var(--primary-dark)
+        );
+        color: #fff;
+        font-family: "Noto Sans TC", sans-serif;
+        font-size: 1.05rem;
+        font-weight: 800;
+        letter-spacing: 1px;
+        cursor: pointer;
+        box-shadow: 0 16px 32px rgba(111, 78, 55, 0.28);
+        transition:
+          transform 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+      .btn-primary:hover {
+        box-shadow: 0 20px 40px rgba(111, 78, 55, 0.38);
+      }
+      .btn-primary:active {
+        transform: scale(0.97);
+      }
+      .btn-primary i {
+        font-size: 1rem;
+      }
+
+      /* ── 解鎖展開區塊 ── */
+      .unlock-panel {
+        background: #ffffff;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        box-shadow: var(--shadow-md);
+        padding: 0 24px;
+        max-height: 0;
+        opacity: 0;
+        overflow: hidden;
+        transition:
+          max-height 0.32s ease,
+          opacity 0.28s ease,
+          padding 0.32s ease;
+      }
+      .unlock-panel.open {
+        max-height: 420px;
+        opacity: 1;
+        padding: 24px;
+      }
+
+      .form-group label {
+        display: block;
+        font-size: 0.92rem;
+        color: var(--text-dark);
+        margin-bottom: 10px;
+        font-weight: 700;
+      }
+
+      .input-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+      .input-wrapper input {
+        width: 100%;
+        height: 54px;
+        padding: 0 52px 0 18px;
+        border-radius: 14px;
+        background: var(--input-bg);
+        border: 1.5px solid var(--input-border);
+        color: var(--text-dark);
+        font-size: 1rem;
+        font-family: "Noto Sans TC", sans-serif;
+        outline: none;
+        transition: all 0.2s ease;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+      }
+      .input-wrapper input:focus {
+        border-color: rgba(111, 78, 55, 0.4);
+        background-color: #ffffff;
+        box-shadow: 0 0 0 4px rgba(111, 78, 55, 0.1);
+      }
+      .input-wrapper input.input-error {
+        border-color: var(--danger);
+        background-color: var(--danger-soft);
+      }
+      .input-wrapper input.input-error:focus {
+        box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.12);
+      }
+
+      .toggle-password {
+        position: absolute;
+        right: 8px;
+        width: 38px;
+        height: 38px;
+        border: none;
+        border-radius: 10px;
+        background: transparent;
+        display: grid;
+        place-items: center;
+        cursor: pointer;
+        color: var(--text-light);
+        transition: all 0.2s ease;
+      }
+      .toggle-password:hover {
+        background: rgba(111, 78, 55, 0.08);
+        color: var(--primary);
+      }
+      .toggle-password svg {
+        width: 22px;
+        height: 22px;
+      }
+
+      .field-error {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 8px;
+        font-size: 0.85rem;
+        color: var(--danger);
+        font-weight: 600;
+      }
+      .field-error.show {
+        display: flex;
+      }
+      .field-error:not(.show) {
+        display: none;
+      }
+
+      .panel-actions {
+        display: flex;
+        gap: 14px;
+        margin-top: 22px;
+      }
+      .panel-actions button {
+        flex: 1;
+        height: 52px;
+        border-radius: 14px;
+        border: none;
+        font-family: "Noto Sans TC", sans-serif;
+        font-size: 0.98rem;
+        font-weight: 800;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition:
+          transform 0.15s ease,
+          box-shadow 0.15s ease,
+          background 0.15s ease;
+      }
+      .btn-cancel {
+        background: rgba(111, 78, 55, 0.06);
+        border: 1px solid var(--line);
+        color: var(--text-body);
+      }
+      .btn-cancel:hover {
+        background: rgba(111, 78, 55, 0.1);
+      }
+      .btn-cancel:active {
+        transform: scale(0.97);
+      }
+      .btn-confirm {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        color: #fff;
+        box-shadow: 0 12px 24px rgba(111, 78, 55, 0.24);
+      }
+      .btn-confirm:hover {
+        box-shadow: 0 16px 30px rgba(111, 78, 55, 0.32);
+      }
+      .btn-confirm:active {
+        transform: scale(0.97);
+      }
+
+      /* ── 頁尾 ── */
+      .footer-info {
+        color: var(--text-light);
+        font-size: 0.82rem;
+        text-align: center;
+        z-index: 1;
+      }
+
+      /* ── 響應式設計 ── */
+      @media (max-width: 640px) {
+        body {
+          padding: 12px;
+        }
+        .tablet-shell {
+          min-height: auto;
+          padding: 28px 22px;
+          border-radius: 20px;
+        }
+        .brand-mark h1 {
+          font-size: 1.4rem;
+        }
+        .logo-box {
+          width: 44px;
+          height: 44px;
+        }
+        .main-action-area {
+          padding: 24px 0;
+          gap: 20px;
+        }
+        .alert-box {
+          padding: 16px 18px;
+          border-radius: 14px;
+        }
+        .btn-primary {
+          width: 100%;
+          height: 54px;
+          font-size: 1rem;
+        }
+        .unlock-panel.open {
+          padding: 20px;
+        }
+        .panel-actions {
+          flex-direction: column-reverse;
+        }
+        .btn-back {
+          padding: 12px 16px;
+          font-size: 0.95rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="tablet-shell">
+      <header class="app-header">
+        <div class="brand-mark">
+          <div class="logo-box">
+            <img
+              src="/assets/logo.png"
+              alt="Logo"
+              onerror="this.style.display = 'none'"
+            />
+          </div>
+          <h1>FongAI</h1>
+        </div>
+      </header>
+
+      <main class="main-action-area">
+        <div class="unlock-card">
+          <div class="alert-box">
+            <div class="alert-icon">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <div class="alert-content">
+              <div class="alert-title">安全提醒</div>
+              <p class="alert-text">
+                為確保測驗安全,測驗期間請務必有人陪同。請洽工作人員協助解鎖
+              </p>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            class="btn-primary"
+            id="unlockToggleBtn"
+            aria-expanded="false"
+            aria-controls="unlockPanel"
+          >
+            <i class="fa-solid fa-lock"></i>
+            <span>工作人員解鎖</span>
+          </button>
+
+          <div class="back-nav" id="backNav">
+            <button
+              type="button"
+              class="btn-back"
+              id="backBtn"
+              aria-label="返回"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M19 12H5"></path>
+                <path d="M12 19l-7-7 7-7"></path>
+              </svg>
+              <span>返回</span>
+            </button>
+          </div>
+
+          <div class="unlock-panel" id="unlockPanel">
+            <div class="form-group">
+              <label for="unlockPassword">密碼</label>
+              <div class="input-wrapper">
+                <input
+                  type="password"
+                  id="unlockPassword"
+                  placeholder="請輸入解鎖密碼"
+                  autocomplete="off"
+                  aria-required="true"
+                />
+                <button
+                  type="button"
+                  class="toggle-password"
+                  id="togglePasswordBtn"
+                  aria-label="顯示密碼"
+                >
+                  <svg
+                    id="eyeOpenIcon"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"
+                    ></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                  <svg
+                    id="eyeClosedIcon"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                    style="display: none"
+                  >
+                    <path d="M3 3l18 18"></path>
+                    <path d="M10.6 10.6a2 2 0 0 0 2.83 2.83"></path>
+                    <path
+                      d="M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 7 11 7a17.7 17.7 0 0 1-3.06 4.14M6.34 6.34C3.7 8.06 2 11 2 11s4 7 11 7a10.87 10.87 0 0 0 4.24-.86"
+                    ></path>
+                  </svg>
+                </button>
+              </div>
+              <p class="field-error" id="passwordError">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                請輸入解鎖密碼
+              </p>
+            </div>
+
+            <div class="panel-actions">
+              <button type="button" class="btn-cancel" id="cancelBtn">
+                取消
+              </button>
+              <button type="button" class="btn-confirm" id="confirmBtn">
+                確認
+              </button>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <footer class="footer-info">© 2026 Fong Health Technology // v2.0</footer>
+    </div>
+
+    <script>
+      const unlockToggleBtn = document.getElementById("unlockToggleBtn");
+      const unlockPanel = document.getElementById("unlockPanel");
+      const passwordInput = document.getElementById("unlockPassword");
+      const passwordError = document.getElementById("passwordError");
+      const togglePasswordBtn = document.getElementById("togglePasswordBtn");
+      const eyeOpenIcon = document.getElementById("eyeOpenIcon");
+      const eyeClosedIcon = document.getElementById("eyeClosedIcon");
+      const cancelBtn = document.getElementById("cancelBtn");
+      const confirmBtn = document.getElementById("confirmBtn");
+      const backBtn = document.getElementById("backBtn");
+      const backNav = document.getElementById("backNav");
+
+      function openPanel() {
+        unlockPanel.classList.add("open");
+        unlockToggleBtn.setAttribute("aria-expanded", "true");
+        unlockPanel.after(backNav);
+        passwordInput.focus();
+      }
+
+      function closePanel() {
+        unlockPanel.classList.remove("open");
+        unlockToggleBtn.setAttribute("aria-expanded", "false");
+        unlockToggleBtn.after(backNav);
+      }
+
+      function resetPanel() {
+        passwordInput.value = "";
+        clearError();
+      }
+
+      function showError() {
+        passwordError.classList.add("show");
+        passwordInput.classList.add("input-error");
+        passwordInput.setAttribute("aria-invalid", "true");
+      }
+
+      function clearError() {
+        passwordError.classList.remove("show");
+        passwordInput.classList.remove("input-error");
+        passwordInput.removeAttribute("aria-invalid");
+      }
+
+      unlockToggleBtn.addEventListener("click", () => {
+        const isOpen = unlockPanel.classList.contains("open");
+        if (isOpen) {
+          closePanel();
+        } else {
+          openPanel();
+        }
+      });
+
+      togglePasswordBtn.addEventListener("click", () => {
+        const isPassword = passwordInput.type === "password";
+        passwordInput.type = isPassword ? "text" : "password";
+        eyeOpenIcon.style.display = isPassword ? "none" : "block";
+        eyeClosedIcon.style.display = isPassword ? "block" : "none";
+        togglePasswordBtn.setAttribute(
+          "aria-label",
+          isPassword ? "隱藏密碼" : "顯示密碼",
+        );
+      });
+
+      passwordInput.addEventListener("input", () => {
+        if (passwordInput.value.trim()) clearError();
+      });
+
+      cancelBtn.addEventListener("click", () => {
+        resetPanel();
+        closePanel();
+      });
+
+      confirmBtn.addEventListener("click", () => {
+        if (!passwordInput.value.trim()) {
+          showError();
+          passwordInput.focus();
+          return;
+        }
+        clearError();
+        // TODO: 串接實際解鎖驗證流程
+      });
+
+      backBtn.addEventListener("click", () => {
+        if (unlockPanel.classList.contains("open")) {
+          resetPanel();
+          closePanel();
+        }
+        history.back();
+      });
+    </script>
+  </body>
+</html>

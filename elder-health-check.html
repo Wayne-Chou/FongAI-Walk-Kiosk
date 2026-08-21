@@ -64,82 +64,12 @@
       }
 
       #screen-question,
-      #screen-identity,
-      #screen-home {
+      #screen-home,
+      #screen-report,
+      #screen-results {
         min-height: 0;
         height: 100vh;
         height: 100dvh;
-      }
-      .app-header {
-        background: linear-gradient(135deg, var(--sage) 0%, #4e342e 100%);
-        padding: 20px 20px 24px;
-        position: relative;
-        overflow: hidden;
-      }
-      .app-header::before {
-        content: "";
-        position: absolute;
-        top: -30px;
-        right: -30px;
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.07);
-      }
-      .app-header::after {
-        content: "";
-        position: absolute;
-        bottom: -20px;
-        left: 20px;
-        width: 80px;
-        height: 80px;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.05);
-      }
-      .header-label {
-        font-size: 11px;
-        color: rgba(255, 255, 255, 0.65);
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        font-family: "Noto Serif TC", serif;
-        margin-bottom: 4px;
-      }
-      .header-name {
-        font-size: 22px;
-        font-weight: 900;
-        color: var(--white);
-        font-family: "Noto Serif TC", serif;
-        letter-spacing: 1px;
-      }
-      .header-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        margin-top: 10px;
-        background: rgba(255, 255, 255, 0.15);
-        border: 1px solid rgba(255, 255, 255, 0.25);
-        border-radius: 20px;
-        padding: 4px 12px;
-        font-size: 12px;
-        color: rgba(255, 255, 255, 0.9);
-      }
-      .header-badge .dot {
-        width: 7px;
-        height: 7px;
-        border-radius: 50%;
-        background: var(--amber-light);
-        animation: pulse 2s infinite;
-      }
-      @keyframes pulse {
-        0%,
-        100% {
-          opacity: 1;
-          transform: scale(1);
-        }
-        50% {
-          opacity: 0.5;
-          transform: scale(1.3);
-        }
       }
       .category-strip {
         background: var(--sage-pale);
@@ -212,7 +142,7 @@
         background: rgba(255, 255, 255, 0.08);
       }
       .question-num {
-        font-size: 11px;
+        font-size: 13px;
         color: rgba(255, 255, 255, 0.6);
         letter-spacing: 2px;
         margin-bottom: 8px;
@@ -248,7 +178,7 @@
         border: none;
         border-radius: 10px;
         padding: 8px 14px;
-        font-size: 13px;
+        font-size: 14px;
         font-weight: 700;
         cursor: pointer;
         font-family: "Noto Sans TC", sans-serif;
@@ -269,7 +199,7 @@
         border: 1.5px solid var(--border);
         border-radius: 10px;
         padding: 7px 10px;
-        font-size: 13px;
+        font-size: 14px;
         color: var(--ink);
         font-family: "Noto Sans TC", sans-serif;
         cursor: pointer;
@@ -411,126 +341,6 @@
         margin-bottom: 10px;
         font-weight: 500;
       }
-      /* ===== 身分判別 ===== */
-      .identity-card {
-        background: linear-gradient(135deg, var(--sage) 0%, #5a3e2c 100%);
-        border-radius: 16px;
-        padding: 18px 20px;
-        margin-bottom: 18px;
-        position: relative;
-        overflow: hidden;
-      }
-      .identity-card::before {
-        content: "";
-        position: absolute;
-        top: -15px;
-        right: -15px;
-        width: 70px;
-        height: 70px;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.08);
-      }
-      .identity-prompt {
-        color: white;
-        font-family: "Noto Serif TC", serif;
-        font-weight: 700;
-        font-size: 16px;
-        line-height: 1.6;
-      }
-      .identity-options {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-      }
-      .identity-option {
-        display: flex;
-        align-items: flex-start;
-        gap: 12px;
-        background: white;
-        border: 2px solid var(--border);
-        border-radius: 14px;
-        padding: 16px;
-        cursor: pointer;
-        transition:
-          border-color 0.15s,
-          background 0.15s,
-          box-shadow 0.15s;
-      }
-      .identity-option:active {
-        transform: scale(0.99);
-      }
-      .identity-option.selected {
-        border-color: var(--sage);
-        background: var(--sage-ghost);
-        box-shadow: 0 4px 14px var(--shadow);
-      }
-      .identity-check {
-        width: 24px;
-        height: 24px;
-        border-radius: 7px;
-        border: 2px solid var(--border);
-        flex-shrink: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-top: 2px;
-        transition:
-          background 0.15s,
-          border-color 0.15s;
-      }
-      .identity-check svg {
-        width: 14px;
-        height: 14px;
-        opacity: 0;
-        transition: opacity 0.15s;
-      }
-      .identity-option.selected .identity-check {
-        background: var(--sage);
-        border-color: var(--sage);
-      }
-      .identity-option.selected .identity-check svg {
-        opacity: 1;
-      }
-      .identity-label {
-        font-size: 16px;
-        font-weight: 600;
-        line-height: 1.6;
-        color: var(--ink);
-        font-family: "Noto Serif TC", serif;
-      }
-      /* ===== 身分判別畫面專屬調整：只影響 #screen-identity，不動共用 .identity-* / .question-body 規則 ===== */
-      #screen-identity .question-body {
-        justify-content: flex-start;
-      }
-      #screen-identity .identity-card {
-        padding: 28px 24px;
-        margin-bottom: 28px;
-      }
-      #screen-identity .identity-prompt {
-        font-size: 20px;
-        line-height: 1.7;
-      }
-      #screen-identity .identity-options {
-        gap: 20px;
-      }
-      #screen-identity .identity-option {
-        padding: 24px;
-        gap: 16px;
-      }
-      #screen-identity .identity-check {
-        width: 30px;
-        height: 30px;
-        border-radius: 9px;
-        margin-top: 3px;
-      }
-      #screen-identity .identity-check svg {
-        width: 18px;
-        height: 18px;
-      }
-      #screen-identity .identity-label {
-        font-size: 19px;
-        line-height: 1.7;
-      }
       .nav-bar {
         display: flex;
         justify-content: space-between;
@@ -638,6 +448,13 @@
         color: #888;
         margin-bottom: 14px;
         font-weight: 500;
+      }
+      /* 卡片內「檢視報告」/「重新評估」按鈕，原本是 inline style，
+         改用 class 才能被下面的 @media 規則響應式放大 */
+      .btn-action.result-card-btn {
+        margin: 0;
+        font-size: 13px;
+        padding: 10px;
       }
       .result-grid {
         display: grid;
@@ -781,10 +598,39 @@
         color: var(--ink);
         border: 1.5px solid var(--border);
       }
+      /* 首頁「返回」按鈕：sage 淡底 + sage 文字，呼應「開始自評」的 sage
+         漸層但降低視覺重量，圖示 svg 用 stroke="currentColor" 會自動
+         跟著 color 一起變成 sage，不需要另外設定 */
+      .btn-sage-pale {
+        background: var(--sage-pale);
+        color: var(--sage);
+      }
+      /* 結果列表末尾「SPPB 體能檢測」/「回首頁」按鈕專屬配色，
+         取代原本兩顆都用 .btn-secondary（白底）沒有區隔的狀況 */
+      .btn-sppb {
+        background: linear-gradient(135deg, var(--amber) 0%, #a06f20 100%);
+        color: white;
+        box-shadow: 0 6px 20px rgba(201, 139, 42, 0.35);
+      }
+      .btn-home-outline {
+        background: white;
+        color: var(--sage);
+        border: 1.5px solid var(--sage);
+      }
       .report-header {
         background: linear-gradient(135deg, var(--sage) 0%, #3b2620 100%);
         padding: 20px;
         color: white;
+      }
+      .report-back-btn {
+        background: none;
+        border: none;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 13px;
+        cursor: pointer;
+        padding: 0;
+        margin-bottom: 12px;
+        font-family: "Noto Sans TC", sans-serif;
       }
       .report-title {
         font-family: "Noto Serif TC", serif;
@@ -874,7 +720,7 @@
           #3b2620 60%,
           var(--ink) 100%
         );
-        padding: clamp(20px, 5dvh, 48px) 24px clamp(16px, 4dvh, 40px);
+        padding: clamp(24px, 5.5dvh, 56px) 24px clamp(20px, 4.5dvh, 48px);
         text-align: center;
         position: relative;
         overflow: hidden;
@@ -891,8 +737,8 @@
         line-height: 1;
       }
       .home-icon {
-        width: clamp(52px, 9dvh, 72px);
-        height: clamp(52px, 9dvh, 72px);
+        width: clamp(60px, 10dvh, 84px);
+        height: clamp(60px, 10dvh, 84px);
         background: rgba(255, 255, 255, 0.15);
         border-radius: 22px;
         display: flex;
@@ -907,19 +753,19 @@
       }
       .home-title {
         font-family: "Noto Serif TC", serif;
-        font-size: clamp(22px, 4.6dvh, 30px);
+        font-size: clamp(26px, 5.2dvh, 36px);
         font-weight: 900;
         color: white;
         margin-bottom: 8px;
         line-height: 1.3;
       }
       .home-subtitle {
-        font-size: clamp(12px, 1.6dvh, 13px);
+        font-size: clamp(13px, 1.8dvh, 15px);
         color: rgba(255, 255, 255, 0.65);
         line-height: 1.6;
       }
       .home-body {
-        padding: clamp(16px, 3dvh, 24px) 20px;
+        padding: clamp(18px, 3.4dvh, 28px) 20px;
         flex: 1;
         overflow-y: auto;
       }
@@ -927,26 +773,17 @@
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 0;
-        margin-bottom: clamp(14px, 2.4dvh, 24px);
+        margin-bottom: clamp(16px, 2.8dvh, 28px);
       }
       .domain-card {
-        padding: clamp(8px, 1.6dvh, 12px) 10px;
+        padding: clamp(10px, 2dvh, 16px) 10px;
         display: flex;
         align-items: center;
         gap: 10px;
       }
-      /* 直向分隔線：僅畫在左欄（單數項目）右側，剛好落在兩欄中間 */
-      .domain-card:nth-child(odd) {
-        border-right: 1.5px solid var(--sage-light);
-      }
-      /* 橫向分隔線：只畫在列與列之間，最後一列（最後兩個項目）不畫，
-         避免變成把整個網格框起來的外框 */
-      .domain-card:not(:nth-last-child(-n + 2)) {
-        border-bottom: 1.5px solid var(--sage-light);
-      }
       .domain-icon {
-        width: clamp(24px, 4dvh, 32px);
-        height: clamp(24px, 4dvh, 32px);
+        width: clamp(28px, 4.6dvh, 38px);
+        height: clamp(28px, 4.6dvh, 38px);
         flex-shrink: 0;
         display: flex;
         align-items: center;
@@ -958,7 +795,7 @@
         height: 85%;
       }
       .domain-name {
-        font-size: clamp(13px, 2dvh, 14px);
+        font-size: clamp(14px, 2.2dvh, 16px);
         font-weight: 700;
         color: var(--ink);
         font-family: "Noto Serif TC", serif;
@@ -996,9 +833,15 @@
          不影響其他畫面既有的按鈕樣式。垂直 padding 下限抓 13px，
          搭配 15px 字級，確保按鈕實際高度不低於長者可觸控的 44px 門檻。 */
       #screen-home .btn-action {
-        padding: clamp(13px, 2.2dvh, 14px) 20px;
-        font-size: clamp(16px, 2.2dvh, 17px);
-        margin-bottom: clamp(6px, 1.2dvh, 10px);
+        padding: clamp(15px, 2.6dvh, 17px) 20px;
+        font-size: clamp(17px, 2.4dvh, 19px);
+        margin-bottom: clamp(7px, 1.4dvh, 11px);
+        gap: 9px;
+      }
+      /* 圖示原本寫死 width="18" height="18"，改用 CSS 覆蓋讓它能響應式縮放 */
+      #screen-home .btn-action svg {
+        width: 20px;
+        height: 20px;
       }
       @keyframes slideIn {
         from {
@@ -1018,33 +861,33 @@
          手機沿用上面各 clamp() 的中低段數值） ===== */
       @media (min-width: 768px) {
         .home-hero {
-          padding: clamp(36px, 6dvh, 64px) 32px clamp(28px, 5dvh, 56px);
+          padding: clamp(44px, 7dvh, 76px) 32px clamp(34px, 5.8dvh, 64px);
         }
         .home-icon {
-          width: clamp(72px, 9dvh, 96px);
-          height: clamp(72px, 9dvh, 96px);
+          width: clamp(84px, 10dvh, 112px);
+          height: clamp(84px, 10dvh, 112px);
         }
         .home-title {
-          font-size: clamp(28px, 4.3dvh, 52px);
+          font-size: clamp(34px, 5dvh, 64px);
         }
         .home-subtitle {
-          font-size: clamp(13px, 1.8dvh, 22px);
+          font-size: clamp(15px, 2dvh, 25px);
         }
         .home-body {
-          padding: clamp(20px, 3dvh, 32px) 28px;
+          padding: clamp(24px, 3.6dvh, 38px) 28px;
         }
         .domain-grid {
-          margin-bottom: clamp(20px, 3dvh, 32px);
+          margin-bottom: clamp(24px, 3.6dvh, 38px);
         }
         .domain-card {
-          padding: clamp(12px, 2dvh, 16px) 14px;
+          padding: clamp(16px, 2.6dvh, 22px) 14px;
         }
         .domain-icon {
-          width: clamp(32px, 5dvh, 40px);
-          height: clamp(32px, 5dvh, 40px);
+          width: clamp(38px, 5.6dvh, 46px);
+          height: clamp(38px, 5.6dvh, 46px);
         }
         .domain-name {
-          font-size: clamp(14px, 2.2dvh, 24px);
+          font-size: clamp(16px, 2.6dvh, 28px);
         }
         .user-form {
           margin-bottom: clamp(20px, 3dvh, 32px);
@@ -1060,9 +903,14 @@
           font-size: clamp(16px, 2.6dvh, 26px);
         }
         #screen-home .btn-action {
-          padding: clamp(16px, 2.6dvh, 20px) 24px;
-          font-size: clamp(17px, 2.4dvh, 26px);
-          margin-bottom: clamp(8px, 1.4dvh, 12px);
+          padding: clamp(20px, 3dvh, 26px) 24px;
+          font-size: clamp(20px, 2.8dvh, 30px);
+          margin-bottom: clamp(10px, 1.6dvh, 14px);
+          gap: 10px;
+        }
+        #screen-home .btn-action svg {
+          width: 22px;
+          height: 22px;
         }
       }
 
@@ -1090,39 +938,16 @@
         }
         /* question-num/sub-text 不分是非題/計時題，統一放大 */
         .question-num {
-          font-size: 14px;
+          font-size: 18px;
         }
         .sub-text {
-          font-size: 20px;
+          font-size: 26px;
         }
       }
 
-      /* ===== #screen-identity 平板字級放大：.identity-prompt/.identity-label
-         原本是不分手機/平板的固定值，這裡新增平板專用覆寫（僅字級，版面
-         padding/gap 沿用前一輪已經設定好的數值不變） ===== */
+      /* ===== #screen-question 共用外殼平板放大：category-name、
+         progress-pill、audio-controls、nav-bar ===== */
       @media (min-width: 768px) {
-        #screen-identity .identity-prompt {
-          font-size: 28px;
-        }
-        #screen-identity .identity-label {
-          font-size: 27px;
-        }
-      }
-
-      /* ===== #screen-question / #screen-identity 共用外殼平板放大：
-         header-label/name/badge、category-name、progress-pill、
-         audio-controls、nav-bar 都是兩個畫面共用的元件，放大會同時
-         套用到兩邊（這是預期效果，讓頂部/底部列視覺一致） ===== */
-      @media (min-width: 768px) {
-        .header-label {
-          font-size: 15px;
-        }
-        .header-name {
-          font-size: 30px;
-        }
-        .header-badge {
-          font-size: 16px;
-        }
         .category-name {
           font-size: 24px;
         }
@@ -1130,16 +955,28 @@
           font-size: 15px;
         }
         .btn-audio {
-          font-size: 17px;
+          font-size: 22px;
         }
         .lang-select {
-          font-size: 17px;
+          font-size: 22px;
+        }
+        .nav-bar {
+          padding: 20px 16px;
         }
         .btn-nav {
-          font-size: 18px;
+          padding: 16px 12px;
+          font-size: 26px;
         }
         .btn-nav-home {
-          font-size: 17px;
+          padding: 18px 24px;
+          font-size: 24px;
+        }
+        .btn-nav-next {
+          padding: 18px 32px;
+        }
+        .btn-nav svg {
+          width: 26px;
+          height: 26px;
         }
       }
 
@@ -1152,8 +989,8 @@
           font-size: 16px;
         }
         .sub-text {
-          font-size: 15px;
-          margin-bottom: 10px;
+          font-size: 17px;
+          margin-bottom: 12px;
         }
         .question-card {
           padding: 16px;
@@ -1173,6 +1010,247 @@
         .btn-answer {
           padding: 14px;
           font-size: 18px;
+        }
+      }
+
+      /* ===== #screen-report 極矮螢幕微調：小幅放大提升可讀性，
+         最壞情境（六項全部異常）在 iPhone SE 上本來就會超出可視高度，
+         這裡不強求消除捲動，安全網是 .report-body 的 overflow-y:auto ===== */
+      @media (max-height: 700px) {
+        .info-section-head {
+          font-size: 15px;
+        }
+        .eval-item {
+          font-size: 16px;
+        }
+        .badge-normal,
+        .badge-abnormal {
+          font-size: 13px;
+        }
+        #screen-report .score-num {
+          font-size: 30px;
+        }
+        #screen-report .score-unit {
+          font-size: 13px;
+        }
+        .advice-title,
+        .advice-text {
+          font-size: 14px;
+        }
+      }
+
+      /* ===== #screen-results 極矮螢幕微調：小幅放大提升可讀性，
+         不強求消除捲動，安全網是 .result-body 的 overflow-y:auto ===== */
+      @media (max-height: 700px) {
+        .result-title {
+          font-size: 12px;
+        }
+        .result-date {
+          font-size: 14px;
+        }
+        .result-item-label {
+          font-size: 13px;
+        }
+        .result-item-value {
+          font-size: 16px;
+        }
+        .tag {
+          font-size: 13px;
+        }
+        #screen-results .score-num {
+          font-size: 30px;
+        }
+        #screen-results .score-unit {
+          font-size: 13px;
+        }
+        .btn-action.result-card-btn {
+          font-size: 14px;
+          padding: 12px;
+        }
+      }
+
+      /* ===== #screen-report 平板放大 ===== */
+      @media (min-width: 768px) {
+        .report-header {
+          padding: 32px;
+        }
+        .report-back-btn {
+          font-size: 22px;
+        }
+        .report-title {
+          font-size: 36px;
+        }
+        .report-subtitle {
+          font-size: 24px;
+        }
+        .report-body {
+          padding: 28px;
+        }
+        .info-section-head {
+          font-size: 28px;
+        }
+        .eval-item {
+          font-size: 26px;
+        }
+        .badge-normal,
+        .badge-abnormal {
+          font-size: 18px;
+          padding: 4px 14px;
+          border-radius: 22px;
+        }
+        #screen-report .score-num {
+          font-size: 38px;
+        }
+        #screen-report .score-unit {
+          font-size: 15px;
+        }
+        .advice-title,
+        .advice-text {
+          font-size: 22px;
+        }
+        .disclaimer {
+          font-size: 16px;
+        }
+        #screen-report .btn-action {
+          padding: 22px 32px;
+          font-size: 24px;
+        }
+      }
+
+      /* ===== #screen-report iPad Pro 專屬加碼（寬度 >=1024px），
+         在 768px 層的基礎上再放大一階，善用 Pro 較充裕的餘裕 ===== */
+      @media (min-width: 1024px) {
+        .report-header {
+          padding: 40px;
+        }
+        .report-back-btn {
+          font-size: 26px;
+        }
+        .report-title {
+          font-size: 46px;
+        }
+        .report-subtitle {
+          font-size: 30px;
+        }
+        .report-body {
+          padding: 34px;
+        }
+        .info-section-head {
+          font-size: 36px;
+        }
+        .eval-item {
+          font-size: 34px;
+        }
+        .badge-normal,
+        .badge-abnormal {
+          font-size: 22px;
+          padding: 6px 16px;
+          border-radius: 24px;
+        }
+        .advice-title,
+        .advice-text {
+          font-size: 28px;
+        }
+        .disclaimer {
+          font-size: 19px;
+        }
+        #screen-report .btn-action {
+          padding: 26px 36px;
+          font-size: 30px;
+        }
+      }
+
+      /* ===== #screen-results 平板放大（涵蓋 iPad Air / Galaxy Tab S6 Lite） ===== */
+      @media (min-width: 768px) {
+        .result-header {
+          padding: 48px 38px 38px;
+        }
+        .result-title {
+          font-size: 17px;
+        }
+        .result-body {
+          padding: 32px;
+        }
+        .result-summary-card {
+          padding: 32px;
+        }
+        .result-date {
+          font-size: 21px;
+        }
+        .result-item {
+          padding: 19px 20px;
+        }
+        .result-item-label {
+          font-size: 17px;
+        }
+        .result-item-value {
+          font-size: 23px;
+        }
+        .tag {
+          font-size: 18px;
+          padding: 7px 18px;
+          border-radius: 26px;
+        }
+        #screen-results .score-num {
+          font-size: 40px;
+        }
+        #screen-results .score-unit {
+          font-size: 17px;
+        }
+        #screen-results .btn-action.result-card-btn {
+          font-size: 19px;
+          padding: 16px;
+        }
+        #screen-results .btn-action {
+          padding: 20px 28px;
+          font-size: 21px;
+        }
+      }
+
+      /* ===== #screen-results iPad Pro 專屬加碼（寬度 >=1024px） ===== */
+      @media (min-width: 1024px) {
+        .result-header {
+          padding: 60px 48px 48px;
+        }
+        .result-title {
+          font-size: 22px;
+        }
+        .result-body {
+          padding: 39px;
+        }
+        .result-summary-card {
+          padding: 39px;
+        }
+        .result-date {
+          font-size: 27px;
+        }
+        .result-item {
+          padding: 23px 25px;
+        }
+        .result-item-label {
+          font-size: 22px;
+        }
+        .result-item-value {
+          font-size: 29px;
+        }
+        .tag {
+          font-size: 23px;
+          padding: 9px 22px;
+          border-radius: 30px;
+        }
+        #screen-results .score-num {
+          font-size: 51px;
+        }
+        #screen-results .score-unit {
+          font-size: 22px;
+        }
+        #screen-results .btn-action.result-card-btn {
+          font-size: 24px;
+          padding: 20px;
+        }
+        #screen-results .btn-action {
+          padding: 24px 36px;
+          font-size: 27px;
         }
       }
     </style>
@@ -1235,7 +1313,7 @@
                   <line x1="9" y1="7" x2="15" y2="7" />
                   <line x1="9" y1="13" x2="15" y2="13" /></svg
               ></span>
-              <span class="domain-name">認知功能</span>
+              <span class="domain-name">認知力</span>
             </div>
             <div class="domain-card">
               <span class="domain-icon"
@@ -1255,7 +1333,7 @@
                   <path d="M10 8.5c1 0 3.5.5 4 3l1 3" />
                   <path d="M8 21h3" /></svg
               ></span>
-              <span class="domain-name">行動功能</span>
+              <span class="domain-name">行動力</span>
             </div>
             <div class="domain-card">
               <span class="domain-icon"
@@ -1271,7 +1349,7 @@
                 >
                   <path d="M3 11l19-9-9 19-2-8-8-2z" /></svg
               ></span>
-              <span class="domain-name">營養不良</span>
+              <span class="domain-name">營養力</span>
             </div>
             <div class="domain-card">
               <span class="domain-icon"
@@ -1288,7 +1366,7 @@
                   <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
                   <circle cx="12" cy="12" r="3" /></svg
               ></span>
-              <span class="domain-name">視力障礙</span>
+              <span class="domain-name">視力</span>
             </div>
             <div class="domain-card">
               <span class="domain-icon"
@@ -1305,7 +1383,7 @@
                   <path d="M6 8a6 6 0 0 1 12 0c0 3.5-2 5-3 6s-1 1.5-1 3" />
                   <circle cx="12" cy="20" r="1" fill="#6f4e37" /></svg
               ></span>
-              <span class="domain-name">聽力障礙</span>
+              <span class="domain-name">聽力</span>
             </div>
             <div class="domain-card">
               <span class="domain-icon"
@@ -1328,19 +1406,7 @@
                     stroke-width="1.8"
                   /></svg
               ></span>
-              <span class="domain-name">憂鬱情緒</span>
-            </div>
-          </div>
-          <div class="user-form">
-            <div class="form-group">
-              <label class="form-label">受評長輩姓名</label>
-              <input
-                class="form-input"
-                id="input-name"
-                type="text"
-                placeholder="請輸入姓名"
-                value=""
-              />
+              <span class="domain-name">情緒力</span>
             </div>
           </div>
           <button class="btn-action btn-primary" onclick="startAssessment()">
@@ -1358,7 +1424,7 @@
             </svg>
             開始自評
           </button>
-          <button class="btn-action btn-secondary">
+          <button class="btn-action btn-sage-pale">
             <svg
               width="18"
               height="18"
@@ -1376,137 +1442,8 @@
         </div>
       </div>
 
-      <!-- ===== IDENTITY SCREEN (身分判別) ===== -->
-      <div class="screen" id="screen-identity">
-        <div class="app-header">
-          <div class="header-label">受評長輩</div>
-          <div class="header-name" id="id-header-name">李佳穎</div>
-          <div class="header-badge">
-            <span class="dot"></span><span id="id-header-lang">國語</span>
-          </div>
-        </div>
-        <div class="category-strip">
-          <div class="category-name">
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="#6f4e37"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <circle cx="12" cy="8" r="4" />
-              <path d="M4 21v-1a6 6 0 0 1 12 0v1" />
-              <path d="M19 8v6M16 11h6" />
-            </svg>
-            身分判別
-          </div>
-        </div>
-        <div class="question-body">
-          <div class="identity-card">
-            <div class="identity-prompt">
-              為提供符合您評估的題組,請選擇您的身分
-            </div>
-          </div>
-          <div class="identity-options">
-            <div
-              class="identity-option"
-              id="role-self"
-              onclick="selectRole('self')"
-            >
-              <div class="identity-check">
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="white"
-                  stroke-width="3.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <polyline points="20 6 9 17 4 12"></polyline>
-                </svg>
-              </div>
-              <div class="identity-label">我是長者本人,自我評估身心功能</div>
-            </div>
-            <div
-              class="identity-option"
-              id="role-family"
-              onclick="selectRole('family')"
-            >
-              <div class="identity-check">
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="white"
-                  stroke-width="3.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <polyline points="20 6 9 17 4 12"></polyline>
-                </svg>
-              </div>
-              <div class="identity-label">
-                我是長者家屬(友人),幫長者評估身心功能
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="nav-bar">
-          <div class="nav-left">
-            <button
-              class="btn-nav btn-nav-home"
-              onclick="showScreen('screen-home')"
-            >
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                <polyline points="9 22 9 12 15 12 15 22"></polyline>
-              </svg>
-              首頁
-            </button>
-          </div>
-          <button
-            class="btn-nav btn-nav-next"
-            id="id-next"
-            onclick="confirmRole()"
-            disabled
-          >
-            下一題
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <polyline points="9 18 15 12 9 6"></polyline>
-            </svg>
-          </button>
-        </div>
-      </div>
-
       <!-- ===== QUESTION SCREEN ===== -->
       <div class="screen" id="screen-question">
-        <div class="app-header">
-          <div class="header-label">受評長輩</div>
-          <div class="header-name" id="q-header-name">李佳穎</div>
-          <div class="header-badge">
-            <span class="dot"></span><span id="q-header-lang">國語</span>
-          </div>
-        </div>
         <div class="progress-bar-wrap">
           <div
             class="progress-bar-fill"
@@ -1515,7 +1452,7 @@
           ></div>
         </div>
         <div class="category-strip">
-          <div class="category-name" id="category-name">認知功能</div>
+          <div class="category-name" id="category-name">認知力</div>
           <div class="progress-pill" id="progress-text">1 / 12</div>
         </div>
         <div class="question-body" id="question-body">
@@ -1618,7 +1555,6 @@
       <div class="screen" id="screen-results">
         <div class="result-header">
           <div class="result-title">ASSESSMENT HISTORY</div>
-          <div class="result-name" id="res-header-name">李佳穎</div>
         </div>
         <div class="result-body" id="results-body"></div>
       </div>
@@ -1626,21 +1562,6 @@
       <!-- ===== REPORT SCREEN ===== -->
       <div class="screen" id="screen-report">
         <div class="report-header">
-          <button
-            style="
-              background: none;
-              border: none;
-              color: rgba(255, 255, 255, 0.7);
-              font-size: 13px;
-              cursor: pointer;
-              padding: 0;
-              margin-bottom: 12px;
-              font-family: &quot;Noto Sans TC&quot;, sans-serif;
-            "
-            onclick="goToResults()"
-          >
-            ← 返回
-          </button>
           <div class="report-title">自評詳細報告</div>
           <div class="report-subtitle" id="report-date-label">
             2026年05月08日
@@ -1655,19 +1576,19 @@
       const ROLE_LABELS = { self: "長者本人", family: "家屬(友人)" };
 
       const CATEGORY_ICONS = {
-        認知功能: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3a4 4 0 0 0-4 4c0 1.1.45 2.1 1.17 2.83A4 4 0 0 0 5 13a4 4 0 0 0 4 4v4"/><path d="M15 3a4 4 0 0 1 4 4c0 1.1-.45 2.1-1.17 2.83A4 4 0 0 1 19 13a4 4 0 0 1-4 4v4"/><line x1="9" y1="21" x2="15" y2="21"/><line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="13" x2="15" y2="13"/></svg>`,
-        行動功能: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13" cy="4" r="2"/><path d="M10 8.5L8 21"/><path d="M10 8.5L14 12l3 4"/><path d="M10 8.5c1 0 3.5.5 4 3l1 3"/><path d="M8 21h3"/></svg>`,
-        營養不良: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>`,
-        視力障礙: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`,
-        聽力障礙: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 3.5-2 5-3 6s-1 1.5-1 3"/><circle cx="12" cy="20" r="1" fill="white"/></svg>`,
-        憂鬱情緒: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`,
+        認知力: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3a4 4 0 0 0-4 4c0 1.1.45 2.1 1.17 2.83A4 4 0 0 0 5 13a4 4 0 0 0 4 4v4"/><path d="M15 3a4 4 0 0 1 4 4c0 1.1-.45 2.1-1.17 2.83A4 4 0 0 1 19 13a4 4 0 0 1-4 4v4"/><line x1="9" y1="21" x2="15" y2="21"/><line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="13" x2="15" y2="13"/></svg>`,
+        行動力: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13" cy="4" r="2"/><path d="M10 8.5L8 21"/><path d="M10 8.5L14 12l3 4"/><path d="M10 8.5c1 0 3.5.5 4 3l1 3"/><path d="M8 21h3"/></svg>`,
+        營養力: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>`,
+        視力: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`,
+        聽力: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 3.5-2 5-3 6s-1 1.5-1 3"/><circle cx="12" cy="20" r="1" fill="white"/></svg>`,
+        情緒力: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`,
       };
 
       /* ===== 家屬友人 題組 ===== */
       const QUESTIONS_FAMILY = [
         {
           id: "f_cog1",
-          category: "認知功能",
+          category: "認知力",
           text: "1. 您是否覺得長者近一年來有記憶減退現象?",
           type: "yesno",
           illustration: "memory",
@@ -1675,7 +1596,7 @@
         },
         {
           id: "f_mob1",
-          category: "行動功能",
+          category: "行動力",
           text: "2. 家屬協助評估長者,椅子起身測試:長者雙手抱胸,完成連續起立坐下5次。",
           type: "timer",
           threshold: 12,
@@ -1685,7 +1606,7 @@
         },
         {
           id: "f_nut1",
-          category: "營養不良",
+          category: "營養力",
           text: "3. 詢問長輩在非刻意減重的情況下,過去三個月,體重是否減輕 3 公斤或以上?",
           type: "yesno",
           illustration: "weight",
@@ -1693,7 +1614,7 @@
         },
         {
           id: "f_nut2",
-          category: "營養不良",
+          category: "營養力",
           text: "詢問長輩過去三個月,是否曾經食欲不好?",
           type: "yesno",
           illustration: "appetite",
@@ -1701,7 +1622,7 @@
         },
         {
           id: "f_vis1",
-          category: "視力障礙",
+          category: "視力",
           text: "5. 詢問長輩眼睛看遠、看近或閱讀是否有困難?",
           type: "yesno",
           illustration: "vision",
@@ -1709,7 +1630,7 @@
         },
         {
           id: "f_vis2",
-          category: "視力障礙",
+          category: "視力",
           text: '您過去1年是否"曾"接受眼睛檢查?',
           type: "yesno",
           illustration: "eyecheck",
@@ -1718,7 +1639,7 @@
         },
         {
           id: "f_aud1",
-          category: "聽力障礙",
+          category: "聽力",
           text: "6. 您的聽力是否出現以下「任一種」情況?",
           subText: "6-1.電話或手機交談時聽不清楚,或因為沒聽到鈴聲常漏接電話?",
           type: "yesno",
@@ -1727,7 +1648,7 @@
         },
         {
           id: "f_aud2",
-          category: "聽力障礙",
+          category: "聽力",
           text: "6. 您的聽力是否出現以下「任一種」情況?",
           subText: "6-2.看電視/聽收音機時,常被家人或朋友說音量開太大聲?",
           type: "yesno",
@@ -1736,7 +1657,7 @@
         },
         {
           id: "f_aud3",
-          category: "聽力障礙",
+          category: "聽力",
           text: "6. 您的聽力是否出現以下「任一種」情況?",
           subText: "6-3.與人交談時,常需要對方提高說話音量或再說一次?",
           type: "yesno",
@@ -1745,7 +1666,7 @@
         },
         {
           id: "f_aud4",
-          category: "聽力障礙",
+          category: "聽力",
           text: "6. 您的聽力是否出現以下「任一種」情況?",
           subText: "6-4.因為聽力問題而不想去參加朋友聚會或活動?",
           type: "yesno",
@@ -1754,7 +1675,7 @@
         },
         {
           id: "f_dep1",
-          category: "憂鬱情緒",
+          category: "情緒力",
           text: "詢問長輩過去兩週,是否常感到厭煩(心煩或「阿雜」),或覺得生活沒有希望?",
           type: "yesno",
           illustration: "gloomy",
@@ -1762,7 +1683,7 @@
         },
         {
           id: "f_dep2",
-          category: "憂鬱情緒",
+          category: "情緒力",
           text: "詢問長輩過去兩週,是否減少很多的活動和原本您感興趣的事?",
           type: "yesno",
           illustration: "interest",
@@ -1774,7 +1695,7 @@
       const QUESTIONS_SELF = [
         {
           id: "s_cog1",
-          category: "認知功能",
+          category: "認知力",
           text: "1. 您最近一年來,是否有記憶明顯減退的情形?",
           type: "yesno",
           illustration: "memory",
@@ -1782,7 +1703,7 @@
         },
         {
           id: "s_mob1",
-          category: "行動功能",
+          category: "行動力",
           text: "2. 您是否出現以下「任一種」情況?",
           subText: "2-1. 非常擔心自己會跌倒",
           type: "yesno",
@@ -1791,7 +1712,7 @@
         },
         {
           id: "s_mob2",
-          category: "行動功能",
+          category: "行動力",
           text: "2. 您是否出現以下「任一種」情況?",
           subText: "2-2. 過去一年內曾跌倒過",
           type: "yesno",
@@ -1800,7 +1721,7 @@
         },
         {
           id: "s_mob3",
-          category: "行動功能",
+          category: "行動力",
           text: "2. 您是否出現以下「任一種」情況?",
           subText: "2-3. 坐著時,必須抓握東西才能從椅子上站起來?",
           type: "yesno",
@@ -1809,7 +1730,7 @@
         },
         {
           id: "s_nut1",
-          category: "營養不良",
+          category: "營養力",
           text: "3. 在非刻意減重的情況下,過去三個月,您的體重是否減輕 3 公斤或以上?",
           type: "yesno",
           illustration: "weight",
@@ -1817,7 +1738,7 @@
         },
         {
           id: "s_nut2",
-          category: "營養不良",
+          category: "營養力",
           text: "4. 過去三個月,您是否曾經食慾不好?",
           type: "yesno",
           illustration: "appetite",
@@ -1825,7 +1746,7 @@
         },
         {
           id: "s_vis1",
-          category: "視力障礙",
+          category: "視力",
           text: "5. 您的眼睛看遠、看近或閱讀是否有困難?",
           type: "yesno",
           illustration: "vision",
@@ -1833,7 +1754,7 @@
         },
         {
           id: "s_aud1",
-          category: "聽力障礙",
+          category: "聽力",
           text: "6. 您的聽力是否出現以下「任一種」情況?",
           subText: "6-1. 電話或手機交談時聽不清楚,或因為沒聽到鈴聲常漏接電話",
           type: "yesno",
@@ -1842,7 +1763,7 @@
         },
         {
           id: "s_aud2",
-          category: "聽力障礙",
+          category: "聽力",
           text: "6. 您的聽力是否出現以下「任一種」情況?",
           subText: "6-2. 看電視／聽收音機時,常被家人或朋友說音量開太大聲?",
           type: "yesno",
@@ -1851,7 +1772,7 @@
         },
         {
           id: "s_aud3",
-          category: "聽力障礙",
+          category: "聽力",
           text: "6. 您的聽力是否出現以下「任一種」情況?",
           subText: "6-3. 與人交談時,常需要對方提高說話音量或再說一次?",
           type: "yesno",
@@ -1860,7 +1781,7 @@
         },
         {
           id: "s_aud4",
-          category: "聽力障礙",
+          category: "聽力",
           text: "6. 您的聽力是否出現以下「任一種」情況?",
           subText: "6-4. 因為聽力問題而不想去參加朋友聚會或活動?",
           type: "yesno",
@@ -1869,7 +1790,7 @@
         },
         {
           id: "s_dep1",
-          category: "憂鬱情緒",
+          category: "情緒力",
           text: "7. 過去兩週,您是否常感到厭煩(心煩或「阿雜」),或覺得生活沒有希望?",
           type: "yesno",
           illustration: "gloomy",
@@ -1877,7 +1798,7 @@
         },
         {
           id: "s_dep2",
-          category: "憂鬱情緒",
+          category: "情緒力",
           text: "8. 過去兩週,您是否減少很多的活動和原本您感興趣的事?",
           type: "yesno",
           illustration: "interest",
@@ -1952,7 +1873,6 @@
       };
 
       let state = {
-        userName: "",
         language: "zh",
         role: null,
         questions: [],
@@ -2005,23 +1925,15 @@
         return results;
       }
 
-      /* ===== 開始評估 → 先進入身分判別 ===== */
+      /* ===== 開始評估 → 直接進入題目畫面，固定使用長者本人題組 ===== */
       function startAssessment() {
-        state.userName = document.getElementById("input-name").value || "長輩";
         state.answers = {};
         state.currentIndex = 0;
-        state.role = null;
-        document.getElementById("id-header-name").textContent = state.userName;
-        document.getElementById("id-header-lang").textContent =
-          LANGUAGES[state.language];
-        document.getElementById("q-header-name").textContent = state.userName;
-        document.getElementById("q-header-lang").textContent =
-          LANGUAGES[state.language];
-        // 重置身分選項
-        document.getElementById("role-self").classList.remove("selected");
-        document.getElementById("role-family").classList.remove("selected");
-        document.getElementById("id-next").disabled = true;
-        showScreen("screen-identity");
+        state.role = "self";
+        state.questions = QUESTIONS_SELF;
+        state.timerVal = 0;
+        renderQuestion();
+        showScreen("screen-question");
       }
 
       function selectRole(role) {
@@ -2178,13 +2090,12 @@
       }
       function changeLang(val) {
         state.language = val;
-        document.getElementById("q-header-lang").textContent = LANGUAGES[val];
       }
       function prevQuestion() {
         endTimer();
         const prev = findPrevIndex(state.currentIndex);
         if (prev === -1) {
-          showScreen("screen-identity");
+          showScreen("screen-home");
         } else {
           state.currentIndex = prev;
           state.timerVal = 0;
@@ -2219,12 +2130,9 @@
           yesCount,
           noCount,
         });
-        goToResults();
+        viewReport(0);
       }
       function goToResults() {
-        state.userName =
-          document.getElementById("input-name")?.value || state.userName;
-        document.getElementById("res-header-name").textContent = state.userName;
         renderResultsList();
         showScreen("screen-results");
       }
@@ -2246,10 +2154,8 @@
             .map(([k]) => k);
           const d = rec.date;
           const dateLabel = `${d.slice(0, 4)}年${d.slice(4, 6)}月${d.slice(6, 8)}日`;
-          const roleLabel = rec.role ? ROLE_LABELS[rec.role] : "";
           html += `<div class="result-summary-card">
             <div class="result-date">${dateLabel} 自評表</div>
-            ${roleLabel ? `<div class="role-badge">受評身分:${roleLabel}</div>` : ""}
             <div class="result-grid">
               ${Object.entries(rec.results)
                 .map(
@@ -2271,13 +2177,12 @@
             </div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px;">
               
-              <button class="btn-action btn-secondary" style="margin:0;font-size:13px;padding:10px;" onclick="viewReport(${i})">👁 檢視報告</button>
-              <button class="btn-action btn-primary" style="margin:0;font-size:13px;padding:10px;" onclick="startAssessment()">↻ 重新評估</button>
+              <button class="btn-action btn-secondary result-card-btn" onclick="viewReport(${i})">👁 檢視報告</button>
+              <button class="btn-action btn-primary result-card-btn" onclick="startAssessment()">↻ 重新評估</button>
             </div>
           </div>`;
         });
-        html += `<button class="btn-action btn-secondary" >接著做 SPPB 體能檢測 →</button>`;
-        html += `<button class="btn-action btn-secondary" onclick="showScreen('screen-home')">← 回首頁</button>`;
+        html += `<button class="btn-action btn-primary" onclick="showScreen('screen-home')">← 回首頁</button>`;
         body.innerHTML = html;
       }
       function viewReport(index) {
@@ -2288,17 +2193,7 @@
         const abnormals = Object.entries(rec.results)
           .filter(([, v]) => v)
           .map(([k]) => k);
-        const roleLabel = rec.role ? ROLE_LABELS[rec.role] : "—";
         let html = `
-          <div class="info-section">
-            <div class="info-section-head">基本資料(註冊資料)</div>
-            <div class="info-section-body">
-              <div class="info-row"><span class="info-key">姓名</span><span class="info-val">${state.userName}</span></div>
-              <div class="info-row"><span class="info-key">受評身分</span><span class="info-val">${roleLabel}</span></div>
-              <div class="info-row"><span class="info-key">評估日期</span><span class="info-val">${d.slice(0, 4)}/${d.slice(4, 6)}/${d.slice(6, 8)}</span></div>
-              <div class="info-row"><span class="info-key">語言</span><span class="info-val">${LANGUAGES[state.language]}</span></div>
-            </div>
-          </div>
           <div class="info-section">
             <div class="info-section-head">評估結果</div>
             <div class="info-section-body">
@@ -2336,8 +2231,8 @@
             <div class="advice-text">恭喜!本次六力評估結果均為正常,請持續維持良好的生活習慣。</div>
           </div>`
           }
-          <button class="btn-action btn-primary" onclick="goToResults()">← 返回歷史紀錄</button>
-          <button class="btn-action btn-secondary" onclick="showScreen('screen-home')">回首頁</button>`;
+          <button class="btn-action btn-sppb">接著做 SPPB 體能檢測 →</button>
+          <button class="btn-action btn-primary" onclick="showScreen('screen-home')">回首頁</button>`;
         document.getElementById("report-body").innerHTML = html;
         showScreen("screen-report");
       }
