@@ -1,0 +1,728 @@
+<!doctype html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>FongAI - 個人資料蒐集與檢測同意 (直式平板專用)</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <style>
+      /* ==================== 色彩變數：沿用 assessment-home-2.html 的配色系統 ====================
+         --primary / --primary-dark / --secondary / --secondary-light / --nhi-start / --nhi-end /
+         --text-light 皆直接取自 assessment-home-2.html 的 :root 定義。
+         --primary-rgb / --primary-dark-rgb / --nhi-end-rgb 為「最小必要延伸色票」：
+         assessment-home-2.html 並未提供可供 rgba() 拆解使用的 RGB 分量，
+         但原 privacy-consent.html 大量使用半透明背景／陰影，
+         因此新增這三組僅為既有 HEX 色碼的 RGB 分量表示，並未引入新色相。 */
+      :root {
+        --primary: #6f4e37;
+        --primary-dark: #4e342e;
+        --secondary: #8a6a4f;
+        --secondary-light: #a07e5e;
+        --nhi-start: #b89a7e;
+        --nhi-end: #8a6a4f;
+        --text-light: #8a7d6f;
+        --primary-rgb: 111, 78, 55;
+        --primary-dark-rgb: 78, 52, 36;
+        --nhi-end-rgb: 138, 106, 79;
+      }
+
+      /* ==================== 全局基礎設定（延續歡迎頁面風格） ==================== */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Noto Sans TC", sans-serif;
+        user-select: none;
+      }
+
+      body,
+      html {
+        width: 100%;
+        height: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
+        background-color: rgba(var(--primary-rgb), 0.04);
+      }
+
+      .container {
+        position: relative;
+        width: 100%;
+        min-height: 100%;
+        padding: 30px 35px 40px 35px;
+        background: #f5f0ea;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* ==================== 標題區：說明本頁面用途 ==================== */
+      .consent-header {
+        text-align: center;
+        margin-bottom: 22px;
+      }
+
+      .consent-header .header-icon {
+        width: 78px;
+        height: 78px;
+        margin: 0 auto 14px auto;
+        border-radius: 50%;
+        background: linear-gradient(
+          135deg,
+          var(--primary),
+          var(--primary-dark)
+        );
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 12px 26px rgba(var(--primary-rgb), 0.4);
+      }
+
+      .consent-header .header-icon i {
+        font-size: 2.1rem;
+        color: #fff;
+      }
+
+      .consent-header h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--primary-dark);
+        letter-spacing: 1px;
+        margin-bottom: 6px;
+      }
+
+      .consent-header p {
+        font-size: 1.3rem;
+        color: var(--secondary);
+        font-weight: 500;
+      }
+
+      /* ==================== 主要同意卡片（呼應 main-board 深色主視覺的對比留白） ==================== */
+      .consent-card {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.92);
+        border-radius: 24px;
+        padding: 34px 34px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        box-shadow: 0 16px 34px rgba(var(--primary-rgb), 0.3);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        margin-bottom: 22px;
+        flex: 1;
+      }
+
+      .purpose-lead {
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: var(--primary-dark);
+        margin-bottom: 18px;
+      }
+
+      .purpose-list {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 18px;
+        margin-bottom: 26px;
+      }
+
+      .purpose-item {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        background: rgba(var(--primary-rgb), 0.04);
+        border: 1px solid rgba(var(--primary-rgb), 0.12);
+        border-radius: 18px;
+        padding: 20px 22px;
+      }
+
+      .purpose-item .item-icon {
+        flex: 0 0 auto;
+        width: 66px;
+        height: 66px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(
+          135deg,
+          var(--primary),
+          var(--primary-dark)
+        );
+        color: #fff;
+        font-size: 1.7rem;
+        box-shadow: 0 6px 14px rgba(var(--primary-rgb), 0.3);
+      }
+
+      .purpose-item.accent-green .item-icon {
+        background: linear-gradient(135deg, var(--nhi-start), var(--nhi-end));
+        box-shadow: 0 6px 14px rgba(var(--nhi-end-rgb), 0.3);
+      }
+
+      .purpose-item span.item-text {
+        font-size: 1.5rem;
+        font-weight: 500;
+        color: var(--primary);
+        line-height: 1.4;
+      }
+
+      /* 免責提醒與隱私權連結 */
+      .disclaimer-box {
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+        background: #fff8e8;
+        border: 1px solid #f5e0a8;
+        border-radius: 16px;
+        padding: 20px 22px;
+        margin-bottom: 22px;
+      }
+
+      .disclaimer-box i {
+        color: #e6a817;
+        font-size: 1.8rem;
+        margin-top: 2px;
+      }
+
+      .disclaimer-box p {
+        font-size: 1.4rem;
+        color: #7a6224;
+        font-weight: 500;
+        line-height: 1.6;
+      }
+
+      .policy-link-row {
+        text-align: center;
+        margin-top: 6px;
+      }
+
+      .policy-btn {
+        display: inline-flex;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        background: #fff;
+        border: 2px solid var(--primary);
+        color: var(--primary-dark);
+        cursor: pointer;
+        font-family: "Noto Sans TC", sans-serif;
+        font-size: 1.25rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        padding: 14px 30px;
+        border-radius: 16px;
+        box-shadow: 0 8px 18px rgba(var(--primary-rgb), 0.18);
+        transition:
+          transform 0.15s ease,
+          box-shadow 0.15s ease,
+          background 0.15s ease;
+      }
+
+      .policy-btn i {
+        font-size: 1.15rem;
+      }
+
+      .policy-btn:active {
+        transform: scale(0.97);
+        background: rgba(var(--primary-rgb), 0.08);
+        box-shadow: 0 6px 12px rgba(var(--primary-rgb), 0.18);
+      }
+
+      /* ==================== 底部行動按鈕列 ==================== */
+      .action-buttons {
+        display: flex;
+        gap: 20px;
+        width: 100%;
+      }
+
+      .action-buttons button {
+        flex: 1;
+        border: none;
+        border-radius: 18px;
+        padding: 24px 10px;
+        font-size: 1.45rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        cursor: pointer;
+        font-family: "Noto Sans TC", sans-serif;
+        transition:
+          transform 0.15s ease,
+          box-shadow 0.15s ease;
+      }
+
+      .btn-decline {
+        background: rgba(255, 255, 255, 0.9);
+        color: var(--text-light);
+        border: 1px solid rgba(var(--primary-rgb), 0.2);
+        box-shadow: 0 8px 20px rgba(var(--primary-rgb), 0.25);
+      }
+
+      .btn-decline:active {
+        transform: scale(0.97);
+      }
+
+      .btn-agree {
+        background: linear-gradient(
+          135deg,
+          var(--primary),
+          var(--primary-dark)
+        );
+        color: #fff;
+        box-shadow: 0 14px 30px rgba(var(--primary-rgb), 0.45);
+        animation: button-breath 3.2s infinite ease-in-out;
+        position: relative;
+      }
+
+      .btn-agree:active {
+        animation: none;
+        transform: scale(0.97);
+        box-shadow: 0 8px 18px rgba(var(--primary-rgb), 0.35);
+      }
+
+      .btn-agree i {
+        margin-right: 8px;
+      }
+
+      @keyframes button-breath {
+        0%,
+        100% {
+          transform: scale(1);
+          box-shadow: 0 14px 30px rgba(var(--primary-rgb), 0.45);
+        }
+        50% {
+          transform: scale(1.04);
+          box-shadow: 0 20px 40px rgba(var(--primary-rgb), 0.6);
+        }
+      }
+
+      /* ==================== 隱私權政策完整內容 Modal ==================== */
+      .modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(var(--primary-dark-rgb), 0.55);
+        backdrop-filter: blur(4px);
+        z-index: 100;
+        align-items: center;
+        justify-content: center;
+        padding: 30px;
+      }
+
+      .modal-overlay.open {
+        display: flex;
+      }
+
+      .modal-sheet {
+        width: 100%;
+        max-width: 760px;
+        max-height: 88vh;
+        background: #f8f5f1;
+        border-radius: 24px;
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      .modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 22px 28px;
+        background: linear-gradient(
+          135deg,
+          var(--primary),
+          var(--primary-dark)
+        );
+        color: #fff;
+      }
+
+      .modal-header h2 {
+        font-size: 1.65rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+      }
+
+      .modal-close {
+        height: 56px;
+        padding: 0 32px;
+        border-radius: 28px;
+        border: none;
+        background: #fff;
+        color: var(--primary-dark);
+        font-size: 2.35rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        font-family: "Noto Sans TC", sans-serif;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        white-space: nowrap;
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+        transition: transform 0.15s ease;
+      }
+
+      .modal-close:active {
+        transform: scale(0.95);
+      }
+
+      .modal-body {
+        padding: 28px 32px 38px 32px;
+        overflow-y: auto;
+        color: var(--primary);
+        line-height: 1.9;
+        font-size: 1.5rem;
+      }
+
+      .modal-body h3 {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: var(--primary-dark);
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .modal-body p {
+        margin-bottom: 16px;
+      }
+
+      .modal-body h4 {
+        font-size: 1.65rem;
+        font-weight: 700;
+        color: var(--primary-dark);
+        margin: 26px 0 12px 0;
+        padding-left: 12px;
+        border-left: 4px solid var(--primary);
+      }
+
+      /* 條列改為對齊的數字編號，取代原本的圓點 */
+      .modal-body ul {
+        list-style: none;
+        counter-reset: item;
+        margin-bottom: 16px;
+      }
+
+      .modal-body ul li {
+        counter-increment: item;
+        position: relative;
+        padding-left: 40px;
+        margin-bottom: 10px;
+      }
+
+      .modal-body ul li::before {
+        content: counter(item) ".";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 32px;
+        font-weight: 700;
+        color: var(--primary);
+        text-align: right;
+      }
+
+      /* 次層條列（例如檢測過程產生之資料的細項）縮排再多一階，維持對齊 */
+      .modal-body ul.sub-list {
+        margin-left: 22px;
+      }
+
+      .modal-body .sub-note {
+        color: #7a6224;
+        background: #fff8e8;
+        border: 1px solid #f5e0a8;
+        border-radius: 12px;
+        padding: 14px 18px;
+        margin-bottom: 16px;
+        font-weight: 500;
+      }
+
+      .modal-body .contact-block {
+        background: rgba(var(--primary-rgb), 0.06);
+        border-radius: 14px;
+        padding: 16px 20px;
+        margin-top: 8px;
+      }
+
+      .modal-body .version-tag {
+        text-align: center;
+        color: var(--text-light);
+        font-size: 1.15rem;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- 標題 -->
+      <div class="consent-header">
+        <div class="header-icon"><i class="fa-solid fa-shield-halved"></i></div>
+        <h1>個人資料蒐集與檢測同意</h1>
+      </div>
+
+      <!-- 主要同意卡片 -->
+      <div class="consent-card">
+        <div class="purpose-lead">檢測前，請您先了解以下事項</div>
+
+        <div class="purpose-list">
+          <div class="purpose-item">
+            <div class="item-icon"><i class="fa-solid fa-id-card"></i></div>
+            <span class="item-text">蒐集您的基本資料</span>
+          </div>
+          <div class="purpose-item">
+            <div class="item-icon"><i class="fa-solid fa-video"></i></div>
+            <span class="item-text">錄製行走畫面</span>
+          </div>
+          <div class="purpose-item">
+            <div class="item-icon"><i class="fa-solid fa-brain"></i></div>
+            <span class="item-text">使用 AI 分析步態與平衡</span>
+          </div>
+          <div class="purpose-item">
+            <div class="item-icon"><i class="fa-solid fa-chart-line"></i></div>
+            <span class="item-text">產出跌倒風險評估</span>
+          </div>
+        </div>
+
+        <div class="disclaimer-box">
+          <i class="fa-solid fa-circle-info"></i>
+          <p>本結果僅供健康評估參考，不等同醫療診斷。</p>
+        </div>
+
+        <div class="policy-link-row">
+          <button class="policy-btn" onclick="openPolicyModal()">
+            查看完整隱私權政策
+          </button>
+        </div>
+      </div>
+
+      <!-- 底部行動按鈕 -->
+      <div class="action-buttons">
+        <button class="btn-decline" onclick="handleDecline()">
+          不同意並離開
+        </button>
+        <button class="btn-agree" onclick="handleAgree()">已瞭解並同意</button>
+      </div>
+    </div>
+
+    <!-- ==================== 完整隱私權政策 Modal ==================== -->
+    <div class="modal-overlay" id="policyModal">
+      <div class="modal-sheet">
+        <div class="modal-header">
+          <h2>隱私權政策</h2>
+          <button class="modal-close" onclick="closePolicyModal()">關閉</button>
+        </div>
+        <div class="modal-body">
+          <h3>隱私權政策</h3>
+
+          <p>
+            建豐健康科技股份有限公司（以下簡稱「本公司」）重視您的個人資料及隱私權保護。為提供「AI
+            人體功能評估與健康篩檢服務」，本公司將依《個人資料保護法》及相關法令，於必要範圍內蒐集、處理及利用您的個人資料。
+          </p>
+          <p>
+            本服務係配合財團法人國家衛生研究院（以下簡稱國家衛生研究院）辦理「AI
+            人體功能評估與健康篩檢系統勞務委託」計畫，請您於使用本服務前詳細閱讀本隱私權政策，當您使用本服務時，即表示您已閱讀、瞭解並同意接受本隱私權政策；如您對本政策內容有任何疑義或不同意，請停止使用本服務。
+          </p>
+
+          <h4>一、適用範圍</h4>
+          <p>
+            本隱私權政策適用於您使用AI
+            人體功能評估與健康篩檢系統、一體機設備、數位問卷及相關後台服務時，所涉及之個人資料蒐集、處理及利用。
+          </p>
+
+          <h4>二、個人資料蒐集單位</h4>
+          <p>本服務涉及之個人資料蒐集及處理單位如下：</p>
+          <ul>
+            <li>
+              建豐健康科技股份有限公司:負責行動力檢測系統之建置、操作、資料儲存、影像分析、檢測結果產出、系統維護及本計畫相關執行事項。
+            </li>
+            <li>
+              本案示範場域:於本計畫執行、服務管理、健康關懷及促進、衛教及後續服務之必要範圍內使用相關資料。
+            </li>
+          </ul>
+
+          <h4>三、蒐集之個人資料</h4>
+          <p>依您所選擇的登入方式，本系統可能蒐集以下資料</p>
+          <ul>
+            <li>（一）手動登入:姓名、性別、出生年、聯絡電話(選填)。</li>
+            <li>
+              （二）健保卡登入:姓名、出生年月日、身分證字號、性別。上述資料為完成本次檢測、建立檢測紀錄及進行風險分析所必要。
+            </li>
+            <li>（三）檢測過程產生之資料</li>
+          </ul>
+          <ul class="sub-list">
+            <li>檢測日期、時間及地點。</li>
+            <li>檢測錄影畫面。</li>
+            <li>人體骨架座標及動作特徵。</li>
+            <li>行走速度、步態、身體搖擺及行動功能相關參數。</li>
+            <li>跌倒風險相關分級結果。</li>
+            <li>檢測紀錄、系統操作紀錄及設備識別資料。</li>
+            <li>
+              健康功能評估資料：包括認知、行動、營養、視力、聽力、情緒／憂鬱等健康功能問卷填答結果，以及相關健康促進與追蹤紀錄。
+            </li>
+          </ul>
+
+          <h4>四、蒐集及利用目的</h4>
+          <p>本公司蒐集、處理及利用前述資料之目的包括：</p>
+          <ul>
+            <li>確認受測者身分。</li>
+            <li>建立檢測紀錄。</li>
+            <li>錄製及分析檢測過程。</li>
+            <li>透過人工智慧技術分析行走、步態、行動功能。</li>
+            <li>產出跌倒風險檢測結果、健康促進建議。</li>
+            <li>
+              進行本計畫之成果統計及服務成效分析，並依本計畫需要提供國家衛生研究院去識別化或彙整之成果資料。
+            </li>
+            <li>供執行本案之示範場域健康促進、追蹤服務。</li>
+            <li>進行系統維護、資訊安全管理、異常排除及服務品質改善。</li>
+            <li>配合法令、司法機關、主管機關或其他依法有權機關之要求。</li>
+          </ul>
+
+          <h4>五、檢測錄影及人工智慧分析</h4>
+          <p>
+            本服務於檢測過程中會錄製受測者之行走畫面，並透過人工智慧技術分析人體骨架、步態、行走速度、身體搖擺及其他行動功能特徵。
+          </p>
+          <p>錄影及分析目的包括：</p>
+          <ul>
+            <li>判斷受測者是否正確完成檢測動作。</li>
+            <li>萃取行走及姿勢特徵。</li>
+            <li>計算行動功能相關參數。</li>
+            <li>產出跌倒或衰弱風險評估結果。</li>
+            <li>供檢測品質確認及必要之異常排除使用。</li>
+          </ul>
+          <div class="sub-note">
+            若您不同意錄影，本系統將無法進行影像分析，也無法完成本次行動力檢測。本檢測結果屬健康風險評估及衛教參考，不等同醫療診斷、疾病診斷或醫療處方。
+          </div>
+
+          <h4>六、資料提供對象</h4>
+          <p>
+            本服務所蒐集之資料，依本計畫執行目的及各單位實際業務需要，採分層權限方式管理，各單位得接觸及利用資料之範圍如下：
+          </p>
+          <ul>
+            <li>
+              （一）建豐健康科技股份有限公司：本公司負責本系統之建置、資料處理與儲存、影像及人體骨架分析、AI
+              分析、檢測結果與報告產出、系統維運、異常排除、資訊安全管理及本計畫相關履約事項，並於上述目的必要範圍內處理受測者個人資料。
+            </li>
+            <li>
+              （二）本案示範場域：執行本案之示範場域僅得於其業務職掌及經授權之必要範圍內，查詢或使用所屬場域受測者之檢測結果及相關資料，以執行健康促進、衛教、追蹤、回測或必要之醫療、長照及其他資源轉介。各示範場域原則上不得查詢其他示範場域受測者之資料。
+            </li>
+            <li>
+              （三）國家衛生研究院：國家衛生研究院原則上取得本計畫履約管理、成果統計、成效分析及研究所必要之去識別化資料或彙整統計資料，不以直接識別特定受測者為原則。如因履約查核、資安事件處理、法令要求或其他本計畫執行上確有必要之情形，須接觸可識別特定個人之資料時，應於必要範圍內，依相關法令、契約約定及適當權限控管程序辦理。
+            </li>
+            <li>
+              （四）依法有權調閱之機關：如有法令規定、司法機關、主管機關或其他依法有權機關之合法要求，本公司得於法令允許之必要範圍內提供相關資料。
+            </li>
+          </ul>
+          <p>
+            除前述情形外，本公司不會任意出售、交換、出租或提供您的個人資料予與本計畫無關之第三人。
+          </p>
+
+          <h4>七、個人資料利用期間</h4>
+          <p>個人資料之利用期間原則如下：</p>
+          <ul>
+            <li>本計畫執行期間。</li>
+            <li>提供檢測服務及管理檢測紀錄所必要之期間。</li>
+            <li>依法令、契約、行政管理或爭議處理所必要之保存期間。</li>
+          </ul>
+          <p>
+            於蒐集目的消失、保存期限屆滿或資料處理完畢後，本公司將依契約及機關要求，將可識別個人資料刪除或進行不可逆之去識別化處理。
+          </p>
+
+          <h4>八、個人資料利用地區</h4>
+          <p>您的個人資料於中華民國境內處理及利用。</p>
+          <p>
+            如因資訊系統、雲端服務或技術維運需要使用第三方服務，本公司仍應採取適當之安全維護措施，並依本計畫契約及相關法令辦理。
+          </p>
+
+          <h4>九、個人資料利用方式</h4>
+          <p>
+            本公司將透過一站式評估系統及分層權限蒐集及儲存您的資料，並進行身分確認、影像與人工智慧分析、風險分級及檢測報告產製。示範場域僅於權限範圍內查詢所屬受測者資料；國衛院原則取得去識別化或彙整資料。
+          </p>
+
+          <h4>十、當事人可行使之權利</h4>
+          <p>
+            依個人資料保護法，您得就自己的個人資料依法申請查詢、閱覽、製給複製本、補充、更正、停止蒐集、處理或利用，以及刪除。
+          </p>
+          <p>
+            前述申請以與申請人本人有關之個人資料為限，不包括其他人的個人資料、系統程式、演算法或內部管理資料。本公司得於確認申請人身分後，依相關法令及實際資料保存情形辦理。
+          </p>
+
+          <h4>十一、不提供資料之影響</h4>
+          <p>
+            如您不同意提供姓名、性別、出生年或健保卡登入所需資料，本系統可能無法：
+          </p>
+          <ul>
+            <li>確認受測者身分。</li>
+            <li>建立檢測紀錄。</li>
+            <li>完成風險分析及檢測報告。</li>
+            <li>提供完整的人體功能評估與健康篩檢。</li>
+          </ul>
+          <p>如您不同意檢測錄影及AI分析，本系統將無法開始本次檢測。</p>
+
+          <h4>十二、隱私權政策之修改</h4>
+          <p>
+            本公司得因法令修正、主管機關要求、系統功能調整或服務內容變更，修改本隱私權政策。
+          </p>
+          <p>
+            政策修改後，將於檢測設備或相關服務頁面公告最新版內容，並標示版本及生效日期。若修改內容涉及重大資料利用方式變更，本公司將依法律規定重新進行告知或取得必要同意。
+          </p>
+
+          <h4>十三、聯絡方式</h4>
+          <p>
+            若您對本隱私權政策、個人資料利用方式或個資權利行使有任何疑問，可透過以下方式聯繫：
+          </p>
+          <div class="contact-block">
+            <p
+              style="
+                margin-bottom: 4px;
+                font-weight: 700;
+                color: var(--primary-dark);
+              "
+            >
+              建豐健康科技股份有限公司
+            </p>
+            <p style="margin-bottom: 4px">地址：臺北市內湖區瑞光路168號9樓</p>
+            <p style="margin-bottom: 0">電子信箱：service@fongai.co</p>
+          </div>
+
+          <div class="version-tag">政策版本：V1.0-NHRI</div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function openPolicyModal() {
+        document.getElementById("policyModal").classList.add("open");
+      }
+
+      function closePolicyModal() {
+        document.getElementById("policyModal").classList.remove("open");
+      }
+
+      // 點擊遮罩空白處也可關閉
+      document
+        .getElementById("policyModal")
+        .addEventListener("click", function (e) {
+          if (e.target === this) closePolicyModal();
+        });
+
+      function handleDecline() {
+        // TODO: 串接實際流程，例如返回歡迎頁面或關閉檢測應用程式
+        console.log("使用者選擇不同意並離開");
+      }
+
+      function handleAgree() {
+        // TODO: 串接實際流程，例如導向手動登入或健保卡讀取頁面
+        console.log("使用者已瞭解並同意");
+      }
+    </script>
+  </body>
+</html>
