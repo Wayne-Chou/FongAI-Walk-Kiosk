@@ -253,48 +253,16 @@
         justify-content: center;
         gap: 8px;
         letter-spacing: 2px;
+        background: var(--sage-pale);
+        color: var(--ink);
       }
       .btn-answer:active {
         transform: scale(0.95);
       }
-      .btn-yes {
-        background: linear-gradient(135deg, var(--coral) 0%, #a83829 100%);
+      .btn-answer.selected {
+        background: linear-gradient(135deg, #3a9160 0%, #2c7a4b 100%);
         color: white;
-        box-shadow: 0 6px 20px rgba(199, 75, 58, 0.35);
-      }
-      .btn-yes.selected {
-        background: linear-gradient(135deg, var(--coral) 0%, #a83829 100%);
-        box-shadow: 0 6px 20px rgba(199, 75, 58, 0.35);
-      }
-      .btn-no {
-        background: linear-gradient(135deg, var(--sky) 0%, #2a6090 100%);
-        color: white;
-        box-shadow: 0 6px 20px rgba(58, 123, 168, 0.35);
-      }
-      .btn-no.selected {
-        background: linear-gradient(135deg, var(--sky) 0%, #2a6090 100%);
-        box-shadow: 0 6px 20px rgba(58, 123, 168, 0.35);
-      }
-      /* Radio 圓鈕：未選擇時是空心白框，選中後中間出現實心白點，
-         取代原本寫死在文字裡的 ✓/✗ 符號，單靠這個標示選取狀態 */
-      .radio-mark {
-        position: relative;
-        width: 22px;
-        height: 22px;
-        border-radius: 50%;
-        border: 2.5px solid white;
-        flex-shrink: 0;
-      }
-      .selected .radio-mark::after {
-        content: "";
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
-        background: white;
+        box-shadow: 0 6px 20px rgba(58, 145, 96, 0.35);
       }
       .nav-bar {
         display: flex;
@@ -813,15 +781,6 @@
           padding: 15px;
           font-size: 30px;
         }
-        .radio-mark {
-          width: 30px;
-          height: 30px;
-          border-width: 3px;
-        }
-        .selected .radio-mark::after {
-          width: 16px;
-          height: 16px;
-        }
         #screen-question .question-body:not(:has(.timer-card)) .question-card {
           padding: 24px;
         }
@@ -1190,7 +1149,6 @@
               onchange="changeLang(this.value)"
             >
               <option value="zh">國語</option>
-              <option value="en">English</option>
             </select>
           </div>
           <div class="illustration-wrap" id="illustration-wrap">
@@ -1272,7 +1230,7 @@
     </div>
 
     <script>
-      const LANGUAGES = { zh: "國語", en: "English" };
+      const LANGUAGES = { zh: "國語" };
 
       const CATEGORY_ICONS = {
         認知力: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3a4 4 0 0 0-4 4c0 1.1.45 2.1 1.17 2.83A4 4 0 0 0 5 13a4 4 0 0 0 4 4v4"/><path d="M15 3a4 4 0 0 1 4 4c0 1.1-.45 2.1-1.17 2.83A4 4 0 0 1 19 13a4 4 0 0 1-4 4v4"/><line x1="9" y1="21" x2="15" y2="21"/><line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="13" x2="15" y2="13"/></svg>`,
@@ -1289,11 +1247,7 @@
           id: "s_cog1",
           category: "認知力",
           text: "1. 您最近一年來,是否有記憶明顯減退的情形?",
-          textEn:
-            "1. Have you noticed a significant decline in your memory over the past year?",
           subText: "例如:重複問同樣的問題、容易忘記最近發生的事",
-          subTextEn:
-            "e.g., repeatedly asking the same question, or often forgetting things that happened recently",
           type: "yesno",
           illustration: "memory",
           abnormalAnswer: "yes",
@@ -1302,9 +1256,7 @@
           id: "s_mob1",
           category: "行動力",
           text: "2. 您是否出現以下「任一種」情況?",
-          textEn: "2. Have you experienced any of the following?",
           subText: "2-1. 非常擔心自己會跌倒",
-          subTextEn: "2-1. Feeling very worried about falling",
           type: "yesno",
           illustration: "fall_worry",
           abnormalAnswer: "yes",
@@ -1313,9 +1265,7 @@
           id: "s_mob2",
           category: "行動力",
           text: "2. 您是否出現以下「任一種」情況?",
-          textEn: "2. Have you experienced any of the following?",
           subText: "2-2. 過去一年內曾跌倒過?",
-          subTextEn: "2-2. Have you fallen at all in the past year?",
           type: "yesno",
           illustration: "fall_past",
           abnormalAnswer: "yes",
@@ -1324,10 +1274,7 @@
           id: "s_mob3",
           category: "行動力",
           text: "2. 您是否出現以下「任一種」情況?",
-          textEn: "2. Have you experienced any of the following?",
           subText: "2-3. 坐著時,必須抓握東西才能從椅子上站起來?",
-          subTextEn:
-            "2-3. When sitting, do you need to hold onto something to stand up from a chair?",
           type: "yesno",
           illustration: "chair_grip",
           abnormalAnswer: "yes",
@@ -1336,8 +1283,6 @@
           id: "s_nut1",
           category: "營養力",
           text: "3. 在非刻意減重的情況下,過去三個月,您的體重是否減輕 3 公斤或以上?",
-          textEn:
-            "3. Without intentionally trying to lose weight, have you lost 3 kg (about 6.6 lbs) or more in the past three months?",
           type: "yesno",
           illustration: "weight",
           abnormalAnswer: "yes",
@@ -1346,8 +1291,6 @@
           id: "s_nut2",
           category: "營養力",
           text: "4. 過去三個月,您是否曾經食慾不好?",
-          textEn:
-            "4. In the past three months, have you experienced a poor appetite?",
           type: "yesno",
           illustration: "appetite",
           abnormalAnswer: "yes",
@@ -1356,11 +1299,7 @@
           id: "s_vis1",
           category: "視力",
           text: "5. 您的眼睛看遠、看近或閱讀是否有困難?",
-          textEn:
-            "5. Do you have difficulty seeing far away, seeing up close, or reading?",
           subText: "例如:看不清楚路標、閱讀時需要靠很近或很遠才看得清楚",
-          subTextEn:
-            "e.g., unable to see road signs clearly, or needing to hold reading material very close or very far away to see it clearly",
           type: "yesno",
           illustration: "vision",
           abnormalAnswer: "yes",
@@ -1369,11 +1308,7 @@
           id: "s_aud1",
           category: "聽力",
           text: "6. 您的聽力是否出現以下「任一種」情況?",
-          textEn:
-            "6. Have you experienced any of the following hearing issues?",
           subText: "6-1. 電話或手機交談時聽不清楚,或因為沒聽到鈴聲常漏接電話?",
-          subTextEn:
-            "6-1. Difficulty hearing during phone calls, or often missing calls because you didn't hear the ringtone?",
           type: "yesno",
           illustration: "phone_hear",
           abnormalAnswer: "yes",
@@ -1382,11 +1317,7 @@
           id: "s_aud2",
           category: "聽力",
           text: "6. 您的聽力是否出現以下「任一種」情況?",
-          textEn:
-            "6. Have you experienced any of the following hearing issues?",
           subText: "6-2. 看電視／聽收音機時,常被家人或朋友說音量開太大聲?",
-          subTextEn:
-            "6-2. Family or friends often say the TV or radio volume is too loud?",
           type: "yesno",
           illustration: "tv_loud",
           abnormalAnswer: "yes",
@@ -1395,11 +1326,7 @@
           id: "s_aud3",
           category: "聽力",
           text: "6. 您的聽力是否出現以下「任一種」情況?",
-          textEn:
-            "6. Have you experienced any of the following hearing issues?",
           subText: "6-3. 與人交談時,常需要對方提高說話音量或再說一次?",
-          subTextEn:
-            "6-3. Others often need to raise their voice or repeat themselves when talking to you?",
           type: "yesno",
           illustration: "repeat",
           abnormalAnswer: "yes",
@@ -1408,11 +1335,7 @@
           id: "s_aud4",
           category: "聽力",
           text: "6. 您的聽力是否出現以下「任一種」情況?",
-          textEn:
-            "6. Have you experienced any of the following hearing issues?",
           subText: "6-4. 因為聽力問題而不想去參加朋友聚會或活動?",
-          subTextEn:
-            "6-4. Do you avoid social gatherings or activities because of hearing difficulties?",
           type: "yesno",
           illustration: "social_avoid",
           abnormalAnswer: "yes",
@@ -1421,8 +1344,6 @@
           id: "s_dep1",
           category: "情緒力",
           text: "7. 過去兩週,您是否常感到厭煩(心煩或「阿雜」),或覺得生活沒有希望?",
-          textEn:
-            "7. Over the past two weeks, have you often felt easily annoyed or troubled, or felt that life is hopeless?",
           type: "yesno",
           illustration: "gloomy",
           abnormalAnswer: "yes",
@@ -1431,8 +1352,6 @@
           id: "s_dep2",
           category: "情緒力",
           text: "8. 過去兩週,您是否減少很多的活動和原本您感興趣的事?",
-          textEn:
-            "8. Over the past two weeks, have you significantly reduced activities or things you used to enjoy?",
           type: "yesno",
           illustration: "interest",
           abnormalAnswer: "yes",
@@ -1624,8 +1543,8 @@
         const answerArea = document.getElementById("answer-area");
         if (q.type === "yesno") {
           answerArea.innerHTML = `<div class="answer-buttons">
-            <button class="btn-answer btn-yes ${ans === "yes" ? "selected" : ""}" onclick="answer('yes')"><span class="radio-mark"></span>是</button>
-            <button class="btn-answer btn-no ${ans === "no" ? "selected" : ""}" onclick="answer('no')"><span class="radio-mark"></span>否</button>
+            <button class="btn-answer ${ans === "yes" ? "selected" : ""}" onclick="answer('yes')">是</button>
+            <button class="btn-answer ${ans === "no" ? "selected" : ""}" onclick="answer('no')">否</button>
           </div>`;
         }
 
@@ -1656,34 +1575,26 @@
       function changeLang(val) {
         state.language = val;
       }
+      function stripNumbering(str) {
+        return str.replace(/^\d+(-\d+)?\.\s*/, "");
+      }
       function readQuestionAloud() {
         if (!("speechSynthesis" in window)) return;
         window.speechSynthesis.cancel();
-        const q = state.questions[state.currentIndex];
-        const isEnglish = state.language === "en";
-        let parts;
-        if (isEnglish) {
-          parts = [q.textEn];
-          if (q.subTextEn) parts.push(q.subTextEn);
-        } else {
-          parts = [document.getElementById("question-text").textContent];
-          const subtextEl = document.getElementById("question-subtext");
-          if (subtextEl.style.display !== "none" && subtextEl.textContent) {
-            parts.push(subtextEl.textContent);
-          }
+        const parts = [
+          stripNumbering(document.getElementById("question-text").textContent),
+        ];
+        const subtextEl = document.getElementById("question-subtext");
+        if (subtextEl.style.display !== "none" && subtextEl.textContent) {
+          parts.push(stripNumbering(subtextEl.textContent));
         }
-        const utterance = new SpeechSynthesisUtterance(
-          parts.join(isEnglish ? ". " : "。"),
-        );
-        utterance.lang = isEnglish ? "en-US" : "zh-TW";
+        const utterance = new SpeechSynthesisUtterance(parts.join("。"));
+        utterance.lang = "zh-TW";
         utterance.rate = 0.85;
         const speak = () => {
           const voices = window.speechSynthesis.getVoices();
-          const prefix = isEnglish ? "en" : "zh";
-          const matchVoice = voices.find(
-            (v) => v.lang && v.lang.startsWith(prefix),
-          );
-          if (matchVoice) utterance.voice = matchVoice;
+          const zhVoice = voices.find((v) => v.lang && v.lang.startsWith("zh"));
+          if (zhVoice) utterance.voice = zhVoice;
           window.speechSynthesis.speak(utterance);
         };
         if (window.speechSynthesis.getVoices().length === 0) {
