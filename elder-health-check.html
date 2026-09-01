@@ -270,6 +270,59 @@
         color: white;
         box-shadow: 0 6px 20px rgba(58, 145, 96, 0.35);
       }
+      /* 選中色測試切換：color-theme-coral/sky/sage 由 selectColorTheme()
+         切換在 #screen-question 上，不設定 class 時（預設）沿用上面的綠色 */
+      #screen-question.color-theme-coral .btn-answer.selected {
+        background: linear-gradient(135deg, var(--coral) 0%, #a83829 100%);
+        box-shadow: 0 6px 20px rgba(199, 75, 58, 0.35);
+      }
+      #screen-question.color-theme-sky .btn-answer.selected {
+        background: linear-gradient(135deg, var(--sky) 0%, #2a6090 100%);
+        box-shadow: 0 6px 20px rgba(58, 123, 168, 0.35);
+      }
+      #screen-question.color-theme-sage .btn-answer.selected {
+        background: linear-gradient(135deg, var(--sage) 0%, #5a3e2c 100%);
+        box-shadow: 0 6px 20px rgba(111, 78, 55, 0.35);
+      }
+      /* 測試用選色列：暫時性功能，不特別做響應式/防捲動處理 */
+      .color-theme-picker {
+        padding: 10px 16px;
+        border-top: 1.5px solid var(--border);
+        background: var(--mist);
+      }
+      .color-theme-picker-title {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--ink-light);
+        margin-bottom: 8px;
+      }
+      .color-theme-picker-options {
+        display: flex;
+        gap: 12px;
+      }
+      .color-theme-swatch {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 3px solid transparent;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      }
+      .color-theme-swatch.active {
+        border-color: var(--ink);
+      }
+      .color-theme-swatch-green {
+        background: linear-gradient(135deg, #3a9160 0%, #2c7a4b 100%);
+      }
+      .color-theme-swatch-coral {
+        background: linear-gradient(135deg, var(--coral) 0%, #a83829 100%);
+      }
+      .color-theme-swatch-sky {
+        background: linear-gradient(135deg, var(--sky) 0%, #2a6090 100%);
+      }
+      .color-theme-swatch-sage {
+        background: linear-gradient(135deg, var(--sage) 0%, #5a3e2c 100%);
+      }
       .nav-bar {
         display: flex;
         justify-content: space-between;
@@ -1168,6 +1221,35 @@
           </div>
           <div id="answer-area"></div>
         </div>
+        <div class="color-theme-picker">
+          <div class="color-theme-picker-title">選擇按鈕顏色</div>
+          <div class="color-theme-picker-options">
+            <button
+              class="color-theme-swatch color-theme-swatch-green active"
+              onclick="selectColorTheme(0)"
+              id="color-theme-swatch-0"
+              title="綠色（預設）"
+            ></button>
+            <button
+              class="color-theme-swatch color-theme-swatch-coral"
+              onclick="selectColorTheme(1)"
+              id="color-theme-swatch-1"
+              title="紅色"
+            ></button>
+            <button
+              class="color-theme-swatch color-theme-swatch-sky"
+              onclick="selectColorTheme(2)"
+              id="color-theme-swatch-2"
+              title="藍色"
+            ></button>
+            <button
+              class="color-theme-swatch color-theme-swatch-sage"
+              onclick="selectColorTheme(3)"
+              id="color-theme-swatch-3"
+              title="咖啡色"
+            ></button>
+          </div>
+        </div>
         <div class="nav-bar">
           <div class="nav-left">
             <button
@@ -1443,7 +1525,27 @@
         currentIndex: 0,
         answers: {},
         history: [],
+        colorTheme: 0,
       };
+      const COLOR_THEMES = [
+        "",
+        "color-theme-coral",
+        "color-theme-sky",
+        "color-theme-sage",
+      ];
+      function selectColorTheme(index) {
+        state.colorTheme = index;
+        const screenEl = document.getElementById("screen-question");
+        COLOR_THEMES.forEach((c) => c && screenEl.classList.remove(c));
+        const cls = COLOR_THEMES[index];
+        if (cls) screenEl.classList.add(cls);
+        document
+          .querySelectorAll(".color-theme-swatch")
+          .forEach((btn) => btn.classList.remove("active"));
+        document
+          .getElementById(`color-theme-swatch-${index}`)
+          .classList.add("active");
+      }
 
       function showScreen(id) {
         document
@@ -1561,8 +1663,8 @@
         const answerArea = document.getElementById("answer-area");
         if (q.type === "yesno") {
           answerArea.innerHTML = `<div class="answer-buttons">
-            <button class="btn-answer ${ans === "yes" ? "selected" : ""}" onclick="answer('yes')">是</button>
-            <button class="btn-answer ${ans === "no" ? "selected" : ""}" onclick="answer('no')">否</button>
+            <button class="btn-answer ${ans === "yes" ? "selected" : ""}" onclick="answer('yes')">✓ 是</button>
+            <button class="btn-answer ${ans === "no" ? "selected" : ""}" onclick="answer('no')">✗ 否</button>
           </div>`;
         }
 
