@@ -147,10 +147,16 @@
         line-height: 1.6;
         font-family: "Noto Serif TC", serif;
       }
-      /* 有子問題（q.subText 存在）時，主問題降級為引言、縮小字級，
-         .question-card 的 has-subtext class 由 renderQuestion() 切換 */
-      .question-card.has-subtext .question-text {
+      /* 數字編號子題（如 2-1、6-3）：子題才是實際要回答的問題，
+         主問題降級為引言、縮小字級。has-subtext-question class
+         由 renderQuestion() 依 q.isExample 切換 */
+      .question-card.has-subtext-question .question-text {
         font-size: 13px;
+      }
+      /* 「例如:」舉例說明子題：主問題維持一般大小，子題（.sub-text）
+         才是輔助說明，縮小字級 */
+      .question-card.has-subtext-example .sub-text {
+        font-size: 15px;
       }
       .sub-text {
         font-size: 19px;
@@ -773,9 +779,15 @@
         }
         #screen-question
           .question-body:not(:has(.timer-card))
-          .question-card.has-subtext
+          .question-card.has-subtext-question
           .question-text {
           font-size: 22px;
+        }
+        #screen-question
+          .question-body:not(:has(.timer-card))
+          .question-card.has-subtext-example
+          .sub-text {
+          font-size: 24px;
         }
         #screen-question .question-body:not(:has(.timer-card)) .btn-answer {
           padding: 15px;
@@ -1248,6 +1260,7 @@
           category: "認知力",
           text: "1. 您最近一年來,是否有記憶明顯減退的情形?",
           subText: "例如:重複問同樣的問題、容易忘記最近發生的事",
+          isExample: true,
           type: "yesno",
           illustration: "memory",
           abnormalAnswer: "yes",
@@ -1300,6 +1313,7 @@
           category: "視力",
           text: "5. 您的眼睛看遠、看近或閱讀是否有困難?",
           subText: "例如:看不清楚路標、閱讀時需要靠很近或很遠才看得清楚",
+          isExample: true,
           type: "yesno",
           illustration: "vision",
           abnormalAnswer: "yes",
@@ -1523,11 +1537,15 @@
         if (q.subText) {
           subtextEl.textContent = q.subText;
           subtextEl.style.display = "";
-          questionCardEl.classList.add("has-subtext");
+          questionCardEl.classList.toggle("has-subtext-example", !!q.isExample);
+          questionCardEl.classList.toggle("has-subtext-question", !q.isExample);
         } else {
           subtextEl.textContent = "";
           subtextEl.style.display = "none";
-          questionCardEl.classList.remove("has-subtext");
+          questionCardEl.classList.remove(
+            "has-subtext-question",
+            "has-subtext-example",
+          );
         }
 
         const illustrationImg = document.getElementById("illustration-img");
