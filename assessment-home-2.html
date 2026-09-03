@@ -112,6 +112,52 @@
         letter-spacing: 0.5px;
       }
 
+      /* ── Header 語系入口 ── */
+      .btn-lang {
+        height: 42px;
+        min-width: 168px;
+        padding: 0 16px;
+        border-radius: 999px;
+        border: 1.5px solid rgba(111, 78, 55, 0.22);
+        background: rgba(255, 255, 255, 0.55);
+        backdrop-filter: blur(8px);
+        box-shadow: 0 4px 12px rgba(111, 78, 55, 0.08);
+        color: var(--primary);
+        font-family: inherit;
+        font-size: 0.9rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        flex-shrink: 0;
+        transition:
+          border-color 0.2s ease,
+          background 0.2s ease;
+      }
+      .btn-lang:hover {
+        border-color: rgba(111, 78, 55, 0.4);
+        background: rgba(255, 255, 255, 0.72);
+      }
+      .btn-lang:active {
+        transform: scale(0.98);
+      }
+      .btn-lang .fa-globe {
+        font-size: 0.92rem;
+        flex-shrink: 0;
+      }
+      .btn-lang-label {
+        flex: 1;
+        text-align: left;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+      }
+      .btn-lang .fa-chevron-down {
+        font-size: 0.68rem;
+        opacity: 0.7;
+        flex-shrink: 0;
+      }
+
       /* 右側文字區 */
       .six-text {
         padding: 0 16px 0 12px;
@@ -253,6 +299,123 @@
         text-align: center;
         z-index: 1;
       }
+
+      /* ── 語系 Modal overlay（覆蓋整個 viewport） ── */
+      .lang-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(43, 32, 24, 0.5);
+        backdrop-filter: blur(5px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+      }
+      .lang-overlay.is-open {
+        display: flex;
+      }
+      .lang-modal {
+        width: 540px;
+        min-height: 440px;
+        padding: 40px 40px 32px;
+        border-radius: 18px;
+        background: rgba(255, 252, 248, 0.96);
+        border: 1px solid rgba(255, 255, 255, 0.85);
+        box-shadow: 0 24px 60px rgba(60, 40, 28, 0.28);
+        backdrop-filter: blur(16px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .lang-modal-header {
+        text-align: center;
+        margin-bottom: 28px;
+      }
+      .lang-modal-title {
+        font-size: 1.75rem;
+        font-weight: 800;
+        color: var(--primary);
+        letter-spacing: 0.5px;
+      }
+      .lang-modal-subtitle {
+        margin-top: 8px;
+        font-size: 1rem;
+        font-weight: 500;
+        color: var(--text-light);
+      }
+      .lang-option-list {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      .lang-option {
+        width: 100%;
+        height: 84px;
+        border-radius: 16px;
+        border: 1.5px solid rgba(111, 78, 55, 0.22);
+        background: rgba(255, 255, 255, 0.88);
+        color: var(--primary);
+        font-family: inherit;
+        font-size: 1.5rem;
+        font-weight: 800;
+        letter-spacing: 1px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 24px;
+        transition:
+          background 0.15s ease,
+          border-color 0.15s ease,
+          box-shadow 0.15s ease;
+      }
+      .lang-option .fa-check {
+        font-size: 1.15rem;
+        visibility: hidden;
+        flex-shrink: 0;
+      }
+      .lang-option span {
+        text-align: left;
+      }
+      .lang-option.is-selected {
+        background: #ead9c8;
+        border-color: var(--secondary);
+        border-width: 2px;
+        box-shadow: 0 8px 20px rgba(111, 78, 55, 0.16);
+        color: var(--primary-dark);
+      }
+      .lang-option.is-selected .fa-check {
+        visibility: visible;
+      }
+      .lang-option:not(.is-selected):hover {
+        background: #fff;
+        border-color: rgba(111, 78, 55, 0.38);
+      }
+      .lang-option:not(.is-selected):active {
+        background: #f7f1ea;
+      }
+      .lang-modal-close {
+        margin-top: 28px;
+        width: 100%;
+        height: 56px;
+        border-radius: 14px;
+        border: 1.5px solid rgba(111, 78, 55, 0.28);
+        background: #f3ebe3;
+        color: var(--primary-dark);
+        font-family: inherit;
+        font-size: 1.08rem;
+        font-weight: 800;
+        letter-spacing: 2px;
+        cursor: pointer;
+      }
+      .lang-modal-close:hover {
+        background: #eadfd4;
+        border-color: rgba(111, 78, 55, 0.4);
+      }
+      .lang-modal-close:active {
+        background: #e4d5c6;
+      }
     </style>
   </head>
   <body>
@@ -268,6 +431,16 @@
           </div>
           <h1>FongAI</h1>
         </div>
+        <button
+          type="button"
+          class="btn-lang"
+          id="btnLang"
+          aria-haspopup="dialog"
+        >
+          <i class="fa-solid fa-globe" aria-hidden="true"></i>
+          <span class="btn-lang-label">選擇語系</span>
+          <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+        </button>
       </header>
 
       <main class="main-action-area">
@@ -294,5 +467,78 @@
 
       <footer class="footer-info">© 2026 Fong Health Technology // v2.0</footer>
     </div>
+
+    <div class="lang-overlay" id="langOverlay">
+      <div
+        class="lang-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="langModalTitle"
+      >
+        <div class="lang-modal-header">
+          <div class="lang-modal-title" id="langModalTitle">選擇語系</div>
+          <div class="lang-modal-subtitle">Choose Language</div>
+        </div>
+        <div class="lang-option-list">
+          <button
+            type="button"
+            class="lang-option is-selected"
+            data-lang="zh"
+            aria-pressed="true"
+          >
+            <span>中文</span>
+            <i class="fa-solid fa-check" aria-hidden="true"></i>
+          </button>
+          <button
+            type="button"
+            class="lang-option"
+            data-lang="en"
+            aria-pressed="false"
+          >
+            <span>English</span>
+            <i class="fa-solid fa-check" aria-hidden="true"></i>
+          </button>
+        </div>
+        <button type="button" class="lang-modal-close" id="langModalClose">
+          關閉
+        </button>
+      </div>
+    </div>
+    <script>
+      (function () {
+        const overlay = document.getElementById("langOverlay");
+        const btnLang = document.getElementById("btnLang");
+        const btnClose = document.getElementById("langModalClose");
+        const modal = overlay.querySelector(".lang-modal");
+        const options = overlay.querySelectorAll(".lang-option");
+
+        function openModal() {
+          overlay.classList.add("is-open");
+        }
+
+        function closeModal() {
+          overlay.classList.remove("is-open");
+        }
+
+        btnLang.addEventListener("click", openModal);
+        btnClose.addEventListener("click", closeModal);
+        overlay.addEventListener("click", function (e) {
+          if (e.target === overlay) closeModal();
+        });
+        modal.addEventListener("click", function (e) {
+          e.stopPropagation();
+        });
+
+        options.forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            options.forEach(function (el) {
+              const selected = el === btn;
+              el.classList.toggle("is-selected", selected);
+              el.setAttribute("aria-pressed", selected ? "true" : "false");
+            });
+          });
+        });
+      })();
+    </script>
   </body>
 </html>
