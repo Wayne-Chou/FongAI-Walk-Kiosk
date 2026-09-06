@@ -828,15 +828,19 @@
       }
       .result-view-switch {
         display: flex;
+        align-items: flex-start;
         gap: 12px;
-        padding: 16px 22px;
-        background: #fff;
-        border-bottom: 2px solid #f2f2f2;
+        margin: 0 22px;
+        padding: 16px 0 0;
+        background: transparent;
+        position: relative;
+        z-index: 2;
+        overflow: visible;
       }
       .result-view-btn {
         flex: 1;
         height: 56px;
-        padding: 0 14px;
+        padding: 0 24px;
         border: 2px solid #8a6a52;
         border-radius: 12px;
         background: #fffaf5;
@@ -850,11 +854,11 @@
         align-items: center;
         justify-content: flex-start;
         gap: 10px;
-        box-shadow: 0 3px 0 rgba(111, 78, 55, 0.18);
+        white-space: nowrap;
+        box-shadow: none;
         transition:
           background-color 0.12s ease,
           border-color 0.12s ease,
-          box-shadow 0.12s ease,
           transform 0.08s ease;
       }
       .result-view-btn::before {
@@ -868,34 +872,65 @@
         background: transparent;
       }
       .result-view-btn.on::before {
-        border-color: #fff;
-        background: radial-gradient(circle, #fff 0 5px, transparent 5.5px);
+        border-color: #6f4e37;
+        background: radial-gradient(circle, #6f4e37 0 5px, transparent 5.5px);
       }
       .result-view-btn:hover:not(.on) {
         background: #f3ebe3;
         border-color: #6f4e37;
-        box-shadow: 0 4px 0 rgba(111, 78, 55, 0.22);
       }
       .result-view-btn:focus-visible {
         outline: 3px solid var(--ui-coffee);
         outline-offset: 2px;
       }
-      .result-view-btn:active {
+      .result-view-btn:active:not(.on) {
         transform: translateY(1px);
-        box-shadow: none;
       }
       .result-view-btn .fa-check {
         display: none;
       }
       .result-view-btn.on {
-        background: #6f4e37;
-        border-color: #6f4e37;
-        color: #ffffff;
-        box-shadow: 0 3px 0 #4e342e;
+        position: relative;
+        z-index: 2;
+        height: 56px;
+        background: #fff;
+        color: #6f4e37;
+        border: 2px solid #8a6a52;
+        border-bottom: none;
+        border-radius: 12px 12px 0 0;
+        box-shadow: none;
       }
       .result-view-btn.on:hover {
-        background: #6f4e37;
-        border-color: #6f4e37;
+        background: #fff;
+        color: #6f4e37;
+        border-color: #8a6a52;
+        border-bottom: none;
+      }
+      .main-tab-panel {
+        display: none;
+        margin-top: 0;
+        margin-right: 22px;
+        margin-bottom: 16px;
+        margin-left: 22px;
+        border: 2px solid #8a6a52;
+        background: #fff;
+        overflow: hidden;
+        position: relative;
+        z-index: 1;
+      }
+      .main-tab-panel.active {
+        display: block;
+        margin-top: -2px;
+      }
+      .overall-panel.active {
+        border-radius: 0 12px 12px 12px;
+      }
+      .fitness-panel.active {
+        border-radius: 12px 0 12px 12px;
+      }
+      .main-tab-panel .sppb-band,
+      .main-tab-panel .analysis-band {
+        border-bottom: none;
       }
       .gauge-band.is-hidden,
       .sppb-band.is-hidden,
@@ -937,6 +972,7 @@
         </button>
       </div>
 
+      <div class="main-tab-panel overall-panel active" id="overallPanel">
       <div class="gauge-band">
         <div class="gauge-title">跌倒風險評估</div>
         <div class="gauge-wrap"><canvas id="gaugeChart"></canvas></div>
@@ -961,7 +997,9 @@
         </div>
        
       </div>
+      </div>
 
+      <div class="main-tab-panel fitness-panel" id="fitnessPanel">
       <div class="analysis-band is-hidden">
         <div class="analysis-hdr">
           <div class="band-label">三項體能測驗</div>
@@ -1070,6 +1108,7 @@
           </div>
         </div>
       </div>
+      </div>
 
       <div class="result-band" data-grade="C">
         <div class="result-grade-text">VIVIFRAIL 等級</div>
@@ -1124,6 +1163,8 @@
         const analysisBand = document.querySelector(".analysis-band");
         const btnOverall = document.getElementById("btnOverall");
         const btnFitness = document.getElementById("btnFitness");
+        const overallPanel = document.getElementById("overallPanel");
+        const fitnessPanel = document.getElementById("fitnessPanel");
         const showOverall = view === "overall";
 
         gaugeBand.classList.toggle("is-hidden", !showOverall);
@@ -1131,6 +1172,8 @@
         analysisBand.classList.toggle("is-hidden", showOverall);
         btnOverall.classList.toggle("on", showOverall);
         btnFitness.classList.toggle("on", !showOverall);
+        overallPanel.classList.toggle("active", showOverall);
+        fitnessPanel.classList.toggle("active", !showOverall);
 
         requestAnimationFrame(function () {
           if (showOverall && gaugeChartInst) gaugeChartInst.resize();
