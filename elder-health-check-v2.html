@@ -126,8 +126,7 @@
         margin-bottom: 16px;
         position: relative;
         overflow: hidden;
-        /* 避免在空間不足時被 flex 引擎壓縮到裁切文字，改由
-           #question-body 既有的 overflow-y:auto 捲動來承接溢出內容 */
+       
         flex-shrink: 0;
       }
       .question-card::before {
@@ -147,13 +146,11 @@
         line-height: 1.6;
         font-family: "Noto Serif TC", serif;
       }
-      /* 群組題（mob2 / nut3 / aud6 / dep7）也會加上 has-subtext-question。
-         主題目字級必須與單題 .question-text 相同，不可再縮小。 */
+     
       .question-card.has-subtext-question .question-text {
         font-size: 17px;
       }
-      /* 「例如:」舉例說明子題：主問題維持一般大小，子題（.sub-text）
-         才是輔助說明，縮小字級 */
+     
       .question-card.has-subtext-example .sub-text {
         font-size: 15px;
       }
@@ -223,8 +220,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        /* 避免在空間不足時被 flex 引擎壓縮到裁切圖片，改由
-           #question-body 既有的 overflow-y:auto 捲動來承接溢出內容 */
+       
         flex-shrink: 0;
       }
       .illustration-wrap svg,
@@ -319,8 +315,7 @@
         padding: 12px 16px;
         border-top: 1.5px solid var(--border);
         background: white;
-        position: sticky;
-        bottom: 0;
+       
         gap: 8px;
       }
       .nav-left {
@@ -437,21 +432,18 @@
         color: var(--ink);
         border: 1.5px solid var(--border);
       }
-      /* 首頁「開始自評」按鈕：白底 + coral 文字/邊框，沿用現有色票 */
+     
       .btn-coral {
         background: white;
         color: var(--coral);
         border: 1.5px solid var(--coral);
       }
-      /* 首頁「返回」按鈕：sage 淡底 + sage 文字，呼應「開始自評」的 sage
-         漸層但降低視覺重量，圖示 svg 用 stroke="currentColor" 會自動
-         跟著 color 一起變成 sage，不需要另外設定 */
+      
       .btn-sage-pale {
         background: var(--sage-pale);
         color: var(--sage);
       }
-      /* 結果列表末尾「SPPB 體能檢測」/「回首頁」按鈕專屬配色，
-         取代原本兩顆都用 .btn-secondary（白底）沒有區隔的狀況 */
+     
       .btn-sppb {
         background: linear-gradient(135deg, var(--amber) 0%, #a06f20 100%);
         color: white;
@@ -710,17 +702,14 @@
       .form-input:focus {
         border-color: var(--sage);
       }
-      /* .btn-action 是跨畫面共用 class（歷史紀錄/報告頁按鈕也在用），
-         這裡只針對首頁按鈕加大縮放，用 #screen-home 前綴限定範圍，
-         不影響其他畫面既有的按鈕樣式。垂直 padding 下限抓 13px，
-         搭配 15px 字級，確保按鈕實際高度不低於長者可觸控的 44px 門檻。 */
+      
       #screen-home .btn-action {
         padding: clamp(15px, 2.6dvh, 17px) 20px;
         font-size: clamp(17px, 2.4dvh, 19px);
         margin-bottom: clamp(7px, 1.4dvh, 11px);
         gap: 9px;
       }
-      /* 圖示原本寫死 width="18" height="18"，改用 CSS 覆蓋讓它能響應式縮放 */
+      
       #screen-home .btn-action svg {
         width: 20px;
         height: 20px;
@@ -739,8 +728,7 @@
         animation: slideIn 0.25s ease;
       }
 
-      /* ===== #screen-home 平板放大（僅調整寬度 >=768px 時的上限，
-         手機沿用上面各 clamp() 的中低段數值） ===== */
+     
       @media (min-width: 768px) {
         .home-hero {
           padding: clamp(44px, 7dvh, 76px) 32px clamp(34px, 5.8dvh, 64px);
@@ -796,10 +784,7 @@
         }
       }
 
-      /* ===== #screen-question 平板放大：僅套用在「非計時題」畫面
-         （.question-body 底下沒有 .timer-card），計時題（目前僅
-         f_mob1 一題）在 iPad Air 上已經沒有安全餘裕，維持手機版
-         固定值不動，避免溢出捲動 ===== */
+     
       @media (min-width: 768px) {
         #screen-question
           .question-body:not(:has(.timer-card))
@@ -849,8 +834,7 @@
         }
       }
 
-      /* ===== #screen-question 共用外殼平板放大：category-name、
-         progress-pill、audio-controls、nav-bar ===== */
+     
       @media (min-width: 768px) {
         .category-name {
           font-size: 24px;
@@ -884,7 +868,7 @@
         }
       }
 
-      /* ===== #screen-report 平板放大 ===== */
+     
       @media (min-width: 768px) {
         .report-header {
           padding: 32px;
@@ -933,8 +917,7 @@
         }
       }
 
-      /* ===== #screen-report iPad Pro 專屬加碼（寬度 >=1024px），
-         在 768px 層的基礎上再放大一階，善用 Pro 較充裕的餘裕 ===== */
+     
       @media (min-width: 1024px) {
         .report-header {
           padding: 40px;
@@ -1014,7 +997,7 @@
           </div>
           <div class="home-title">長者量六力</div>
           <div class="home-subtitle">
-            HPA 銀髮健康功能自評表<br />六大向度全面評估,守護長者健康
+            HPA 銀髮健康功能自評表<br />六大向度全面評估，守護長者健康
           </div>
         </div>
         <div class="home-body">
@@ -1199,7 +1182,7 @@
                   d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"
                 />
               </svg>
-              點我朗讀
+              <span id="btn-audio-label">點我朗讀</span>
             </button>
             <select
               class="lang-select"
@@ -1207,6 +1190,7 @@
               onchange="changeLang(this.value)"
             >
               <option value="zh">國語</option>
+              <option value="en">English</option>
             </select>
           </div>
           <div class="illustration-wrap" id="illustration-wrap">
@@ -1288,7 +1272,7 @@
     </div>
 
     <script>
-      const LANGUAGES = { zh: "國語" };
+      const LANGUAGES = { zh: "國語", en: "English" };
 
       const CATEGORY_ICONS = {
         認知力: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3a4 4 0 0 0-4 4c0 1.1.45 2.1 1.17 2.83A4 4 0 0 0 5 13a4 4 0 0 0 4 4v4"/><path d="M15 3a4 4 0 0 1 4 4c0 1.1-.45 2.1-1.17 2.83A4 4 0 0 1 19 13a4 4 0 0 1-4 4v4"/><line x1="9" y1="21" x2="15" y2="21"/><line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="13" x2="15" y2="13"/></svg>`,
@@ -1304,8 +1288,12 @@
         {
           id: "s_cog1",
           category: "認知力",
-          text: "1. 您最近一年來,是否有記憶明顯減退的情形?",
-          subText: "例如:重複問同樣的問題、容易忘記最近發生的事",
+          text: "1. 您最近一年來，是否有記憶明顯減退的情形？",
+          textEn:
+            "1. Over the past year, have you had a noticeable decline in memory?",
+          subText: "例如：重複問同樣的問題、容易忘記最近發生的事",
+          subTextEn:
+            "For example: asking the same question repeatedly, or easily forgetting recent events",
           isExample: true,
           type: "yesno",
           illustration: "memory",
@@ -1314,8 +1302,10 @@
         {
           id: "s_mob1",
           category: "行動力",
-          text: "2. 您是否出現以下「任一種」情況?",
-          subText: "2-1. 非常擔心自己會跌倒",
+          text: "2. 您是否出現以下「任一種」情況？",
+          textEn: "2. Have you had any of the following?",
+          subText: "2-1. 非常擔心自己會跌倒？",
+          subTextEn: "2-1. Are you very worried about falling?",
           type: "yesno",
           illustration: "fall_worry",
           abnormalAnswer: "yes",
@@ -1324,8 +1314,10 @@
         {
           id: "s_mob2",
           category: "行動力",
-          text: "2. 您是否出現以下「任一種」情況?",
-          subText: "2-2. 過去一年內曾跌倒過?",
+          text: "2. 您是否出現以下「任一種」情況？",
+          textEn: "2. Have you had any of the following?",
+          subText: "2-2. 過去一年內曾跌倒過？",
+          subTextEn: "2-2. Have you fallen in the past year?",
           type: "yesno",
           illustration: "fall_past",
           abnormalAnswer: "yes",
@@ -1334,8 +1326,11 @@
         {
           id: "s_mob3",
           category: "行動力",
-          text: "2. 您是否出現以下「任一種」情況?",
-          subText: "2-3. 坐著時,必須抓握東西才能從椅子上站起來?",
+          text: "2. 您是否出現以下「任一種」情況？",
+          textEn: "2. Have you had any of the following?",
+          subText: "2-3. 坐著時，必須抓握東西才能從椅子上站起來？",
+          subTextEn:
+            "2-3. When sitting, do you need to hold onto something to stand up from a chair?",
           type: "yesno",
           illustration: "chair_grip",
           abnormalAnswer: "yes",
@@ -1345,8 +1340,11 @@
           id: "s_nut1",
           category: "營養力",
           text: "請回答以下問題：",
+          textEn: "Please answer the following questions:",
           subText:
-            "3. 在非刻意減重的情況下,過去三個月,您的體重是否減輕 3 公斤或以上?",
+            "3. 在非刻意減重的情況下，過去三個月，您的體重是否減輕 3 公斤或以上？",
+          subTextEn:
+            "3. Without trying to lose weight, have you lost 3 kilograms or more in the past three months?",
           type: "yesno",
           illustration: "weight",
           abnormalAnswer: "yes",
@@ -1356,7 +1354,10 @@
           id: "s_nut2",
           category: "營養力",
           text: "請回答以下問題：",
-          subText: "4. 過去三個月,您是否曾經食慾不好?",
+          textEn: "Please answer the following questions:",
+          subText: "4. 過去三個月，您是否曾經食慾不好？",
+          subTextEn:
+            "4. In the past three months, have you had a poor appetite?",
           type: "yesno",
           illustration: "appetite",
           abnormalAnswer: "yes",
@@ -1365,8 +1366,12 @@
         {
           id: "s_vis1",
           category: "視力",
-          text: "5. 您的眼睛看遠、看近或閱讀是否有困難?",
-          subText: "例如:看不清楚路標、閱讀時需要靠很近或很遠才看得清楚",
+          text: "5. 您的眼睛看遠、看近或閱讀是否有困難？",
+          textEn:
+            "5. Do you have difficulty seeing far, seeing near, or reading?",
+          subText: "例如：看不清楚路標、閱讀時需要靠很近或很遠才看得清楚",
+          subTextEn:
+            "For example: not being able to see road signs clearly, or needing to hold reading material very close or very far to see it clearly",
           isExample: true,
           type: "yesno",
           illustration: "vision",
@@ -1375,8 +1380,11 @@
         {
           id: "s_aud1",
           category: "聽力",
-          text: "6. 您的聽力是否出現以下「任一種」情況?",
-          subText: "6-1. 電話或手機交談時聽不清楚,或因為沒聽到鈴聲常漏接電話?",
+          text: "6. 您的聽力是否出現以下「任一種」情況？",
+          textEn: "6. Has your hearing shown any of the following?",
+          subText: "6-1. 電話或手機交談時聽不清楚，或因為沒聽到鈴聲常漏接電話？",
+          subTextEn:
+            "6-1. Do you have trouble hearing during phone or mobile calls, or often miss calls because you did not hear the ringtone?",
           type: "yesno",
           illustration: "phone_hear",
           abnormalAnswer: "yes",
@@ -1385,8 +1393,11 @@
         {
           id: "s_aud2",
           category: "聽力",
-          text: "6. 您的聽力是否出現以下「任一種」情況?",
-          subText: "6-2. 看電視／聽收音機時,常被家人或朋友說音量開太大聲?",
+          text: "6. 您的聽力是否出現以下「任一種」情況？",
+          textEn: "6. Has your hearing shown any of the following?",
+          subText: "6-2. 看電視／聽收音機時，常被家人或朋友說音量開太大聲？",
+          subTextEn:
+            "6-2. When watching TV or listening to the radio, do family or friends often say the volume is too loud?",
           type: "yesno",
           illustration: "tv_loud",
           abnormalAnswer: "yes",
@@ -1395,8 +1406,11 @@
         {
           id: "s_aud3",
           category: "聽力",
-          text: "6. 您的聽力是否出現以下「任一種」情況?",
-          subText: "6-3. 與人交談時,常需要對方提高說話音量或再說一次?",
+          text: "6. 您的聽力是否出現以下「任一種」情況？",
+          textEn: "6. Has your hearing shown any of the following?",
+          subText: "6-3. 與人交談時，常需要對方提高說話音量或再說一次？",
+          subTextEn:
+            "6-3. When talking with others, do you often need them to speak louder or repeat themselves?",
           type: "yesno",
           illustration: "repeat",
           abnormalAnswer: "yes",
@@ -1405,8 +1419,11 @@
         {
           id: "s_aud4",
           category: "聽力",
-          text: "6. 您的聽力是否出現以下「任一種」情況?",
-          subText: "6-4. 因為聽力問題而不想去參加朋友聚會或活動?",
+          text: "6. 您的聽力是否出現以下「任一種」情況？",
+          textEn: "6. Has your hearing shown any of the following?",
+          subText: "6-4. 因為聽力問題而不想去參加朋友聚會或活動？",
+          subTextEn:
+            "6-4. Do you avoid friends' gatherings or activities because of hearing problems?",
           type: "yesno",
           illustration: "social_avoid",
           abnormalAnswer: "yes",
@@ -1416,8 +1433,11 @@
           id: "s_dep1",
           category: "情緒力",
           text: "請回答以下問題：",
+          textEn: "Please answer the following questions:",
           subText:
-            "7. 過去兩週,您是否常感到厭煩(心煩或「阿雜」),或覺得生活沒有希望?",
+            "7. 過去兩週，您是否常感到厭煩（心煩或「阿雜」），或覺得生活沒有希望？",
+          subTextEn:
+            "7. Over the past two weeks, have you often felt bothered (irritable or restless), or felt that life is hopeless?",
           type: "yesno",
           illustration: "gloomy",
           abnormalAnswer: "yes",
@@ -1427,7 +1447,10 @@
           id: "s_dep2",
           category: "情緒力",
           text: "請回答以下問題：",
-          subText: "8. 過去兩週,您是否減少很多的活動和原本您感興趣的事?",
+          textEn: "Please answer the following questions:",
+          subText: "8. 過去兩週，您是否減少很多的活動和原本您感興趣的事？",
+          subTextEn:
+            "8. Over the past two weeks, have you done much less of the activities and things you used to be interested in?",
           type: "yesno",
           illustration: "interest",
           abnormalAnswer: "yes",
@@ -1506,9 +1529,12 @@
         currentIndex: 0,
         answers: {},
         history: [],
+        speechStatus: "idle",
+        currentUtterance: null,
       };
 
       function showScreen(id) {
+        if (id === "screen-home") stopSpeech();
         document
           .querySelectorAll(".screen")
           .forEach((s) => s.classList.remove("active"));
@@ -1614,21 +1640,22 @@
 
       const ASSESSMENT_ADVICE = {
         認知力:
-          "多做益智活動(閱讀、拼圖、下棋)、保持規律睡眠,並維持社交互動。",
+          "多做益智活動（閱讀、拼圖、下棋）、保持規律睡眠，並維持社交互動。",
         行動力:
-          "建議從每天散步10-15分鐘開始,並注意居家防跌安全。",
+          "建議從每天散步10-15分鐘開始，並注意居家防跌安全。",
         營養力:
-          "建議每餐攝取足夠蛋白質,保持規律飲食、多喝水。",
+          "建議每餐攝取足夠蛋白質，保持規律飲食、多喝水。",
         視力:
-          "閱讀時保持充足光線,每年至少做一次視力檢查。",
+          "閱讀時保持充足光線，每年至少做一次視力檢查。",
         聽力:
-          "建議面對面交談、放慢語速,並定期進行聽力保持檢查。",
+          "建議面對面交談、放慢語速，並定期進行聽力保持檢查。",
         情緒力:
-          "建議多與家人朋友聯繫,餐與社區活動,保持規律作息。",
+          "建議多與家人朋友聯繫，餐與社區活動，保持規律作息。",
       };
 
       /* ===== 開始評估 → 直接進入題目畫面，固定使用長者本人題組 ===== */
       function startAssessment() {
+        stopSpeech();
         state.answers = {};
         state.currentIndex = 0;
         state.role = "self";
@@ -1785,21 +1812,30 @@
       }
       function changeLang(val) {
         state.language = val;
+        if (state.speechStatus !== "idle") stopSpeech();
       }
       function stripNumbering(str) {
         return str.replace(/^\d+(-\d+)?\.\s*/, "");
       }
-      function readQuestionAloud() {
-        if (!("speechSynthesis" in window)) return;
-        window.speechSynthesis.cancel();
-        const q = state.questions[state.currentIndex];
+      function collectSpeechParts(q) {
+        const isEn = state.language === "en";
         const parts = [];
         if (q.group) {
           const groupItems = getGroupQuestions(q);
-          parts.push(stripNumbering(groupItems[0].text));
-          groupItems.forEach((item) => {
-            if (item.subText) parts.push(stripNumbering(item.subText));
-          });
+          const mainText = isEn ? groupItems[0].textEn : groupItems[0].text;
+          if (isEn && !mainText) return null;
+          if (mainText) parts.push(stripNumbering(mainText));
+          for (let i = 0; i < groupItems.length; i++) {
+            const item = groupItems[i];
+            const subText = isEn ? item.subTextEn : item.subText;
+            if (isEn && item.subText && !item.subTextEn) return null;
+            if (subText) parts.push(stripNumbering(subText));
+          }
+        } else if (isEn) {
+          if (!q.textEn) return null;
+          if (q.subText && !q.subTextEn) return null;
+          parts.push(stripNumbering(q.textEn));
+          if (q.subTextEn) parts.push(stripNumbering(q.subTextEn));
         } else {
           parts.push(
             stripNumbering(
@@ -1811,22 +1847,124 @@
             parts.push(stripNumbering(subtextEl.textContent));
           }
         }
-        const utterance = new SpeechSynthesisUtterance(parts.join("。"));
-        utterance.lang = "zh-TW";
-        utterance.rate = 0.85;
-        const speak = () => {
-          const voices = window.speechSynthesis.getVoices();
-          const zhVoice = voices.find((v) => v.lang && v.lang.startsWith("zh"));
-          if (zhVoice) utterance.voice = zhVoice;
-          window.speechSynthesis.speak(utterance);
-        };
-        if (window.speechSynthesis.getVoices().length === 0) {
-          window.speechSynthesis.onvoiceschanged = speak;
+        return parts;
+      }
+      function updateAudioButtonLabel() {
+        const label = document.getElementById("btn-audio-label");
+        if (!label) return;
+        if (state.speechStatus === "speaking") {
+          label.textContent = "暫停朗讀";
+        } else if (state.speechStatus === "paused") {
+          label.textContent = "繼續朗讀";
         } else {
-          speak();
+          label.textContent = "點我朗讀";
+        }
+      }
+      function stopSpeech() {
+        if (!("speechSynthesis" in window)) {
+          state.speechStatus = "idle";
+          state.currentUtterance = null;
+          updateAudioButtonLabel();
+          return;
+        }
+        state.speechStatus = "idle";
+        state.currentUtterance = null;
+        updateAudioButtonLabel();
+        window.speechSynthesis.cancel();
+      }
+      function getSpeechLocale() {
+        return state.language === "en" ? "en-US" : "zh-TW";
+      }
+      function pickSpeechVoice(voices) {
+        if (state.language === "en") {
+          return (
+            voices.find((v) => v.lang === "en-US") ||
+            voices.find((v) => v.lang && v.lang.startsWith("en"))
+          );
+        }
+        return (
+          voices.find((v) => v.lang === "zh-TW") ||
+          voices.find((v) => v.lang && v.lang.startsWith("zh"))
+        );
+      }
+      function speakCurrentUtterance(utterance) {
+        if (state.currentUtterance !== utterance) return;
+        if (state.speechStatus === "idle" || state.speechStatus === "paused") {
+          return;
+        }
+        const voices = window.speechSynthesis.getVoices();
+        const matchedVoice = pickSpeechVoice(voices);
+        if (matchedVoice) utterance.voice = matchedVoice;
+        window.speechSynthesis.speak(utterance);
+      }
+      function readQuestionAloud() {
+        if (!("speechSynthesis" in window)) return;
+        if (state.speechStatus === "speaking") {
+          window.speechSynthesis.pause();
+          state.speechStatus = "paused";
+          updateAudioButtonLabel();
+          return;
+        }
+        if (state.speechStatus === "paused") {
+          state.speechStatus = "speaking";
+          updateAudioButtonLabel();
+          if (window.speechSynthesis.paused) {
+            window.speechSynthesis.resume();
+          } else if (
+            !window.speechSynthesis.speaking &&
+            state.currentUtterance
+          ) {
+            speakCurrentUtterance(state.currentUtterance);
+          } else {
+            window.speechSynthesis.resume();
+          }
+          return;
+        }
+        const q = state.questions[state.currentIndex];
+        const parts = collectSpeechParts(q);
+        if (!parts) {
+          window.alert("目前尚未提供英文題目內容");
+          state.speechStatus = "idle";
+          state.currentUtterance = null;
+          updateAudioButtonLabel();
+          return;
+        }
+        const utterance = new SpeechSynthesisUtterance(
+          parts.join(state.language === "en" ? ". " : "。"),
+        );
+        utterance.lang = getSpeechLocale();
+        utterance.rate = 0.85;
+        utterance.onstart = () => {
+          if (state.currentUtterance !== utterance) return;
+          state.speechStatus = "speaking";
+          updateAudioButtonLabel();
+        };
+        utterance.onend = () => {
+          if (state.currentUtterance !== utterance) return;
+          state.speechStatus = "idle";
+          state.currentUtterance = null;
+          updateAudioButtonLabel();
+        };
+        utterance.onerror = () => {
+          if (state.currentUtterance !== utterance) return;
+          state.speechStatus = "idle";
+          state.currentUtterance = null;
+          updateAudioButtonLabel();
+        };
+        state.currentUtterance = utterance;
+        state.speechStatus = "speaking";
+        updateAudioButtonLabel();
+        if (window.speechSynthesis.getVoices().length === 0) {
+          window.speechSynthesis.onvoiceschanged = () => {
+            window.speechSynthesis.onvoiceschanged = null;
+            speakCurrentUtterance(utterance);
+          };
+        } else {
+          speakCurrentUtterance(utterance);
         }
       }
       function prevQuestion() {
+        stopSpeech();
         const prev = findPrevScreenIndex(state.currentIndex);
         if (prev === -1) {
           showScreen("screen-home");
@@ -1836,6 +1974,7 @@
         }
       }
       function nextQuestion() {
+        stopSpeech();
         const next = findNextScreenIndex(state.currentIndex);
         if (next === -1) {
           finishAssessment();
@@ -1845,6 +1984,7 @@
         }
       }
       function finishAssessment() {
+        stopSpeech();
         const results = computeResults();
         const today = new Date();
         const dateStr = `${today.getFullYear()}${String(today.getMonth() + 1).padStart(2, "0")}${String(today.getDate()).padStart(2, "0")}`;
@@ -1891,16 +2031,16 @@
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
               ※ 建議
             </div>
-            <div class="advice-text">評估結果如有需注意(包含:${abnormals.join("、")}),可於回診時請教醫師。</div>
-            <div class="disclaimer">本項內容僅供個人列印參考使用,而非任何醫事證明文件。</div>
+            <div class="advice-text">評估結果如有需注意（包含：${abnormals.join("、")}），可於回診時請教醫師。</div>
+            <div class="disclaimer">本項內容僅供個人列印參考使用，而非任何醫事證明文件。</div>
           </div>`
               : `
           <div class="advice-card">
             <div class="advice-title">🎉 各項結果均良好</div>
-            <div class="advice-text">恭喜!本次六力評估結果均為良好,請持續維持良好的生活習慣。</div>
+            <div class="advice-text">恭喜！本次六力評估結果均為良好，請持續維持良好的生活習慣。</div>
           </div>`
           }
-          <button class="btn-action btn-sppb">接著做 AI防跌檢測 →</button>
+         
           <button class="btn-action btn-primary" onclick="showScreen('screen-home')">回首頁</button>`;
         document.getElementById("report-body").innerHTML = html;
         showScreen("screen-report");
