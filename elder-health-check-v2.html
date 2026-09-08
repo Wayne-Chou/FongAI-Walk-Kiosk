@@ -109,14 +109,6 @@
         transition: width 0.4s ease;
         border-radius: 0 2px 2px 0;
       }
-      #question-datetime {
-        padding: 6px 20px;
-        font-size: 12px;
-        font-weight: 500;
-        color: var(--ink-light);
-        text-align: right;
-        flex-shrink: 0;
-      }
       .question-body {
         flex: 1;
         padding: 20px;
@@ -1177,7 +1169,6 @@
             style="width: 0%"
           ></div>
         </div>
-        <div id="question-datetime"></div>
         <div class="category-strip">
           <div class="category-name" id="category-name">認知力</div>
           <div class="progress-pill" id="progress-text">1 / 6</div>
@@ -1551,38 +1542,10 @@
 
       function showScreen(id) {
         if (id === "screen-home") stopSpeech();
-        if (id === "screen-question") startQuestionClock();
-        else stopQuestionClock();
         document
           .querySelectorAll(".screen")
           .forEach((s) => s.classList.remove("active"));
         document.getElementById(id).classList.add("active");
-      }
-
-      let questionClockTimer = null;
-      function formatQuestionDateTime(date) {
-        const y = date.getFullYear();
-        const m = String(date.getMonth() + 1).padStart(2, "0");
-        const d = String(date.getDate()).padStart(2, "0");
-        const hh = String(date.getHours()).padStart(2, "0");
-        const mm = String(date.getMinutes()).padStart(2, "0");
-        const ss = String(date.getSeconds()).padStart(2, "0");
-        return `${y}/${m}/${d} ${hh}:${mm}:${ss}`;
-      }
-      function updateQuestionDateTime() {
-        const el = document.getElementById("question-datetime");
-        if (!el) return;
-        el.textContent = formatQuestionDateTime(new Date());
-      }
-      function stopQuestionClock() {
-        if (questionClockTimer === null) return;
-        clearInterval(questionClockTimer);
-        questionClockTimer = null;
-      }
-      function startQuestionClock() {
-        if (questionClockTimer !== null) return;
-        updateQuestionDateTime();
-        questionClockTimer = setInterval(updateQuestionDateTime, 1000);
       }
 
       function isQuestionVisible(q) {
