@@ -109,6 +109,14 @@
         transition: width 0.4s ease;
         border-radius: 0 2px 2px 0;
       }
+      #question-datetime {
+        padding: 6px 20px;
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--ink-light);
+        text-align: right;
+        flex-shrink: 0;
+      }
       .question-body {
         flex: 1;
         padding: 20px;
@@ -557,6 +565,14 @@
         color: var(--sage);
         margin-right: 4px;
       }
+      .eval-advice-abnormal {
+        background: var(--coral-pale);
+        border: 1.5px solid var(--coral);
+        color: var(--coral);
+      }
+      .eval-advice-abnormal .eval-advice-label {
+        color: var(--coral);
+      }
       .badge-normal,
       .badge-abnormal {
         display: inline-flex;
@@ -566,8 +582,7 @@
       .badge-normal svg,
       .badge-abnormal svg {
         flex-shrink: 0;
-        /* em 會跟著徽章當下的 font-size 自動縮放，不用為每個響應式層級
-           另外設定圖示尺寸 */
+       
         width: 1em;
         height: 1em;
       }
@@ -893,12 +908,12 @@
         }
         .badge-normal,
         .badge-abnormal {
-          font-size: 18px;
+          font-size: 28px;
           padding: 4px 14px;
           border-radius: 22px;
         }
         .eval-advice {
-          font-size: 18px;
+          font-size: 28px;
           padding: 12px 16px;
         }
         .advice-card {
@@ -909,7 +924,7 @@
           font-size: 25px;
         }
         .disclaimer {
-          font-size: 18px;
+          font-size: 28px;
         }
         #screen-report .btn-action {
           padding: 23px 32px;
@@ -942,12 +957,12 @@
         }
         .badge-normal,
         .badge-abnormal {
-          font-size: 22px;
+          font-size: 28px;
           padding: 6px 16px;
           border-radius: 24px;
         }
         .eval-advice {
-          font-size: 22px;
+          font-size: 28px;
         }
         .advice-card {
           padding: 23px;
@@ -957,7 +972,7 @@
           font-size: 31px;
         }
         .disclaimer {
-          font-size: 21px;
+          font-size: 30px;
         }
         #screen-report .btn-action {
           padding: 27px 36px;
@@ -1162,6 +1177,7 @@
             style="width: 0%"
           ></div>
         </div>
+        <div id="question-datetime"></div>
         <div class="category-strip">
           <div class="category-name" id="category-name">認知力</div>
           <div class="progress-pill" id="progress-text">1 / 6</div>
@@ -1535,10 +1551,38 @@
 
       function showScreen(id) {
         if (id === "screen-home") stopSpeech();
+        if (id === "screen-question") startQuestionClock();
+        else stopQuestionClock();
         document
           .querySelectorAll(".screen")
           .forEach((s) => s.classList.remove("active"));
         document.getElementById(id).classList.add("active");
+      }
+
+      let questionClockTimer = null;
+      function formatQuestionDateTime(date) {
+        const y = date.getFullYear();
+        const m = String(date.getMonth() + 1).padStart(2, "0");
+        const d = String(date.getDate()).padStart(2, "0");
+        const hh = String(date.getHours()).padStart(2, "0");
+        const mm = String(date.getMinutes()).padStart(2, "0");
+        const ss = String(date.getSeconds()).padStart(2, "0");
+        return `${y}/${m}/${d} ${hh}:${mm}:${ss}`;
+      }
+      function updateQuestionDateTime() {
+        const el = document.getElementById("question-datetime");
+        if (!el) return;
+        el.textContent = formatQuestionDateTime(new Date());
+      }
+      function stopQuestionClock() {
+        if (questionClockTimer === null) return;
+        clearInterval(questionClockTimer);
+        questionClockTimer = null;
+      }
+      function startQuestionClock() {
+        if (questionClockTimer !== null) return;
+        updateQuestionDateTime();
+        questionClockTimer = setInterval(updateQuestionDateTime, 1000);
       }
 
       function isQuestionVisible(q) {
@@ -1987,7 +2031,7 @@
         stopSpeech();
         const results = computeResults();
         const today = new Date();
-        const dateStr = `${today.getFullYear()}${String(today.getMonth() + 1).padStart(2, "0")}${String(today.getDate()).padStart(2, "0")}`;
+        const dateStr = `${today.getFullYear()}${String(today.getMonth() + 1).padStart(2, "0")}${String(today.getDate()).padStart(2, "0")}${String(today.getHours()).padStart(2, "0")}${String(today.getMinutes()).padStart(2, "0")}`;
         state.history.unshift({
           date: dateStr,
           results,
@@ -1998,7 +2042,7 @@
         const rec = state.history[index];
         const d = rec.date;
         document.getElementById("report-date-label").textContent =
-          `${d.slice(0, 4)}年${d.slice(4, 6)}月${d.slice(6, 8)}日`;
+          `${d.slice(0, 4)}年${d.slice(4, 6)}月${d.slice(6, 8)}日 ${d.slice(8, 10)}:${d.slice(10, 12)}`;
         const abnormals = Object.entries(rec.results)
           .filter(([, v]) => v)
           .map(([k]) => k);
@@ -2016,7 +2060,7 @@
                       <span>${cat}</span>
                       <span class="${isAbnormal ? "badge-abnormal" : "badge-normal"}">${isAbnormal ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>需注意' : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>良好'}</span>
                     </div>
-                    ${advice ? `<div class="eval-advice"><span class="eval-advice-label">建議</span>${advice}</div>` : ""}
+                    ${advice ? `<div class="eval-advice eval-advice-abnormal"><span class="eval-advice-label">建議</span>${advice}</div>` : ""}
                   </li>`;
                   })
                   .join("")}
