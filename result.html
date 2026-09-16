@@ -99,6 +99,103 @@
         border-left: 5px solid var(--color-high);
       }
 
+      /* GAUGE SECTION（儀表圖容器，作為 Vivifrail 徽章定位基準） */
+      .gauge-section {
+        position: relative;
+      }
+
+      /* VIVIFRAIL 徽章：等級色塊 + 分類文字
+         定位規則：三個斷點統一使用 top: 8px; right: 8px，
+         與容器右上角保持一致的固定內縮距離，不隨斷點各自亂調 */
+      .vivifrail-badge {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: #f8fafc;
+        border: 2px solid #b45309;
+        color: var(--main-text);
+        font-weight: 900;
+        line-height: 1;
+        padding: 9px;
+        border-radius: 12px;
+        white-space: nowrap;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        z-index: 2;
+      }
+      .badge-level {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        flex-shrink: 0;
+        border-radius: 12px;
+        font-size: 18px;
+        font-weight: 900;
+      }
+      /* A~D 四個等級的顏色系統：換等級時只需切換這個 class + 文字內容 */
+      .badge-level.level-a {
+        background: #dc3545;
+        color: #ffffff;
+      }
+      .badge-level.level-b {
+        background: #ffc107;
+        color: #ffffff;
+      }
+      .badge-level.level-c {
+        background: #0d6efd;
+        color: #ffffff;
+      }
+      .badge-level.level-d {
+        background: #198754;
+        color: #ffffff;
+      }
+      .badge-text {
+        font-size: 19px;
+        color: #1e293b;
+      }
+
+      /* 手機（<= 600px）：縮小 */
+      @media (max-width: 600px) {
+        .vivifrail-badge {
+          top: 8px;
+          right: 8px;
+          gap: 9px;
+          padding: 7px;
+        }
+        .badge-level {
+          width: 30px;
+          height: 30px;
+          font-size: 16px;
+        }
+        .badge-text {
+          font-size: 17px;
+        }
+      }
+
+      /* 平板（601px ~ 1024px）：可視寬度通常比桌面瀏覽器視窗更寬裕，
+         且儀表圖是置中的窄扇形（半徑受限於 canvas 高度，非寬度），
+         右上角在此寬度下仍是安全空白區，故放到目前手機/桌面版本中最大的尺寸 */
+      @media (min-width: 601px) and (max-width: 1024px) {
+        .vivifrail-badge {
+          top: 8px;
+          right: 8px;
+          gap: 14px;
+          padding: 11px;
+        }
+        .badge-level {
+          width: 48px;
+          height: 48px;
+          font-size: 22px;
+        }
+        .badge-text {
+          font-size: 23px;
+        }
+      }
+
       /* HEADER SECTION */
       .report-header {
         background: white;
@@ -595,6 +692,35 @@
       .flow-content {
         padding: 20px;
       }
+
+      /* ===== 測試用：等級切換按鈕樣式 START（正式上線前可整段刪除）===== */
+      .test-level-switcher {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 16px 20px;
+        margin-top: 20px;
+        background: #fff;
+        border: 1px dashed var(--border-color);
+      }
+      .test-level-btn {
+        padding: 10px 16px;
+        font-size: 0.9rem;
+        font-weight: 700;
+        background: white;
+        border: 2px solid var(--nav-dark);
+        color: var(--nav-dark);
+        border-radius: 8px;
+        cursor: pointer;
+      }
+      .test-level-btn:hover {
+        background: #f1f5f9;
+      }
+      .test-level-btn.active {
+        background: var(--nav-dark);
+        color: #ffffff;
+      }
+      /* ===== 測試用：等級切換按鈕樣式 END ===== */
     </style>
   </head>
 
@@ -651,6 +777,10 @@
         </section>
         <div style="background: #fff">
           <div class="gauge-section">
+            <span class="vivifrail-badge">
+              <span class="badge-level level-b">B</span>
+              <span class="badge-text">衰弱者</span>
+            </span>
             <canvas id="gaugeChart"></canvas>
           </div>
           <div class="flow-content">
@@ -671,6 +801,23 @@
             </div>
           </div>
         </div>
+
+        <!-- 測試用：等級切換按鈕，正式上線前可移除 -->
+        <div class="test-level-switcher">
+          <button type="button" class="test-level-btn" data-level="a">
+            A 失能者
+          </button>
+          <button type="button" class="test-level-btn active" data-level="b">
+            B 衰弱者
+          </button>
+          <button type="button" class="test-level-btn" data-level="c">
+            C 衰弱前期者
+          </button>
+          <button type="button" class="test-level-btn" data-level="d">
+            D 健康者
+          </button>
+        </div>
+        <!-- /測試用：等級切換按鈕 -->
 
         <!-- 最新消息 -->
         <div class="campaign-card">
@@ -878,3 +1025,43 @@
       // 在這裡可以加入 AJAX 邏輯抓取該日期的受測數據
     });
 </script>
+
+<!-- ===== 測試用：等級切換按鈕邏輯 START（正式上線前可整段刪除）===== -->
+<script>
+  // Vivifrail 等級對照表：字母 / 顯示名稱 / 對應的 .badge-level 修飾 class
+  const VIVIFRAIL_LEVELS = {
+    a: { letter: "A", name: "失能者", levelClass: "level-a" },
+    b: { letter: "B", name: "衰弱者", levelClass: "level-b" },
+    c: { letter: "C", name: "衰弱前期者", levelClass: "level-c" },
+    d: { letter: "D", name: "健康者", levelClass: "level-d" },
+  };
+
+  function setVivifrailLevel(key) {
+    const info = VIVIFRAIL_LEVELS[key];
+    if (!info) return;
+
+    const levelEl = document.querySelector(".badge-level");
+    const textEl = document.querySelector(".badge-text");
+
+    if (levelEl) {
+      Object.values(VIVIFRAIL_LEVELS).forEach((item) => {
+        levelEl.classList.remove(item.levelClass);
+      });
+      levelEl.classList.add(info.levelClass);
+      levelEl.textContent = info.letter;
+    }
+
+    if (textEl) {
+      textEl.textContent = info.name;
+    }
+
+    document.querySelectorAll(".test-level-btn").forEach((btn) => {
+      btn.classList.toggle("active", btn.dataset.level === key);
+    });
+  }
+
+  document.querySelectorAll(".test-level-btn").forEach((btn) => {
+    btn.addEventListener("click", () => setVivifrailLevel(btn.dataset.level));
+  });
+</script>
+<!-- ===== 測試用：等級切換按鈕邏輯 END ===== -->
