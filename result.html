@@ -99,18 +99,43 @@
         border-left: 5px solid var(--color-high);
       }
 
-      /* GAUGE SECTION（儀表圖容器，作為 Vivifrail 徽章定位基準） */
-      .gauge-section {
-        position: relative;
+      /* RESULT COLUMNS：Vivifrail 面板 + 同齡排行榜內容 並排 50/50
+         本身不額外加 padding，兩欄各自的內距分別交給
+         .vivifrail-panel 的卡片 padding 與 .flow-content 原本既有的 padding 負責
+         align-items 明確設為 stretch（預設值），確保兩欄格高一致，
+         兩欄內容再各自撐滿到這個格高 */
+      .result-columns {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        align-items: stretch;
+        gap: 20px;
       }
 
-      /* VIVIFRAIL 徽章：等級色塊 + 分類文字
-         定位規則：三個斷點統一使用 top: 8px; right: 8px，
-         與容器右上角保持一致的固定內縮距離，不隨斷點各自亂調 */
+      /* VIVIFRAIL 面板：Logo + 等級徽章的獨立小卡片
+         height: 100% 讓它明確撐滿 .result-columns 分配到的格高，
+         不只是依賴 grid 預設 stretch 行為 */
+      .vivifrail-panel {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        text-align: center;
+        background: #f8fafc;
+        border: 1.5px solid rgba(13, 110, 253, 0.35);
+        border-radius: 12px;
+        padding: 24px 20px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        height: 100%;
+      }
+      .vivifrail-logo {
+        width: 100%;
+        max-width: 180px;
+        height: auto;
+      }
+
+      /* VIVIFRAIL 徽章：等級色塊 + 分類文字（已改為一般文件流排版，不再絕對定位） */
       .vivifrail-badge {
-        position: absolute;
-        top: 8px;
-        right: 8px;
         display: flex;
         align-items: center;
         gap: 12px;
@@ -123,7 +148,6 @@
         border-radius: 12px;
         white-space: nowrap;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-        z-index: 2;
       }
       .badge-level {
         display: flex;
@@ -158,11 +182,12 @@
         color: #1e293b;
       }
 
-      /* 手機（<= 600px）：縮小 */
+      /* 手機（<= 600px）：縮小，並改成上下堆疊（Vivifrail 面板在上、排行榜內容在下） */
       @media (max-width: 600px) {
+        .result-columns {
+          grid-template-columns: 1fr;
+        }
         .vivifrail-badge {
-          top: 8px;
-          right: 8px;
           gap: 9px;
           padding: 7px;
         }
@@ -176,13 +201,9 @@
         }
       }
 
-      /* 平板（601px ~ 1024px）：可視寬度通常比桌面瀏覽器視窗更寬裕，
-         且儀表圖是置中的窄扇形（半徑受限於 canvas 高度，非寬度），
-         右上角在此寬度下仍是安全空白區，故放到目前手機/桌面版本中最大的尺寸 */
+      /* 平板（601px ~ 1024px）：沿用桌面版 50/50 並排，僅微調徽章內部間距 */
       @media (min-width: 601px) and (max-width: 1024px) {
         .vivifrail-badge {
-          top: 8px;
-          right: 8px;
           gap: 14px;
           padding: 11px;
         }
@@ -357,16 +378,20 @@
         margin-bottom: 5px;
       }
 
-      /* leaderboard */
+      /* leaderboard：欄寬變窄（右欄只剩半版寬度）後，改成垂直堆疊＋置中，
+         圖示與標題在上、進度條在下，滿版寬度呈現 */
       .leaderboard-showcase {
         border: 2px solid var(--border-color);
         padding: 30px;
         display: flex;
+        flex-direction: column;
         align-items: center;
-        justify-content: space-between;
-        gap: 30px;
+        justify-content: center;
+        text-align: center;
+        gap: 20px;
         position: relative;
         transition: all 0.3s ease;
+        flex: 1;
       }
       .leader-badge-left {
         display: flex;
@@ -387,7 +412,7 @@
         flex-direction: column;
       }
       .leader-title {
-        font-size: 30px;
+        font-size: 27px;
         font-weight: 900;
         letter-spacing: 1px;
       }
@@ -407,8 +432,7 @@
         font-weight: 900;
       }
       .leader-stats-right {
-        flex-grow: 1;
-        max-width: 420px;
+        width: 100%;
         display: flex;
         flex-direction: column;
         gap: 12px;
@@ -673,24 +697,14 @@
       }
 
       @media (max-width: 600px) {
-        .leaderboard-showcase {
-          flex-direction: column;
-          align-items: flex-start;
-          gap: 20px;
-        }
-        .leader-stats-right {
-          width: 100%;
-          max-width: 100%;
-        }
-        .flow-content {
-          padding: 0 20px 30px;
-        }
         .report-header {
           padding: 20px 20px 0;
         }
       }
       .flow-content {
-        padding: 20px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
       }
 
       /* ===== 測試用：等級切換按鈕樣式 START（正式上線前可整段刪除）===== */
@@ -777,25 +791,34 @@
         </section>
         <div style="background: #fff">
           <div class="gauge-section">
-            <span class="vivifrail-badge">
-              <span class="badge-level level-b">B</span>
-              <span class="badge-text">衰弱者</span>
-            </span>
             <canvas id="gaugeChart"></canvas>
           </div>
-          <div class="flow-content">
-            <div class="leaderboard-showcase status-excellent">
-              <div class="leader-badge-left">
-                <div class="leader-icon-box">
-                  <i class="fa-solid fa-chart-line"></i>
+          <div class="result-columns">
+            <div class="vivifrail-panel">
+              <img
+                src="assets/logo-vivifrail.png"
+                alt="Vivifrail"
+                class="vivifrail-logo"
+              />
+              <span class="vivifrail-badge">
+                <span class="badge-level level-b">B</span>
+                <span class="badge-text">衰弱者</span>
+              </span>
+            </div>
+            <div class="flow-content">
+              <div class="leaderboard-showcase status-excellent">
+                <div class="leader-badge-left">
+                  <div class="leader-icon-box">
+                    <i class="fa-solid fa-chart-line"></i>
+                  </div>
+                  <div class="leader-main-data">
+                    <span class="leader-title">優於 50% 同齡群體</span>
+                  </div>
                 </div>
-                <div class="leader-main-data">
-                  <span class="leader-title">優於 50% 同齡群體</span>
-                </div>
-              </div>
-              <div class="leader-stats-right">
-                <div class="progress-container">
-                  <div class="progress-fill"></div>
+                <div class="leader-stats-right">
+                  <div class="progress-container">
+                    <div class="progress-fill"></div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -987,43 +1010,6 @@
       },
     ],
   });
-  // --- 雷達圖邏輯 ---
-  new Chart(document.getElementById("radarChart"), {
-    type: "radar",
-    data: {
-      labels: ["平衡", "起坐", "步行"],
-      datasets: [
-        {
-          data: [3, 3, 3],
-          backgroundColor: "rgba(13, 148, 136, 0.15)",
-          borderColor: "#0D9488",
-          borderWidth: 2,
-          pointRadius: 2,
-          pointBackgroundColor: "#0D9488",
-        },
-      ],
-    },
-    options: {
-      scales: {
-        r: {
-          min: 0,
-          max: 4,
-          ticks: { display: false, stepSize: 1 },
-          pointLabels: { display: false },
-          grid: { color: "rgba(203, 213, 225, 0.6)" },
-        },
-      },
-      plugins: { legend: { display: false } },
-    },
-  });
-
-  // 日期監聽器
-  document
-    .getElementById("reportDate")
-    .addEventListener("change", function (e) {
-      console.log("正在搜尋日期：", e.target.value);
-      // 在這裡可以加入 AJAX 邏輯抓取該日期的受測數據
-    });
 </script>
 
 <!-- ===== 測試用：等級切換按鈕邏輯 START（正式上線前可整段刪除）===== -->
