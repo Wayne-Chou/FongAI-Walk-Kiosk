@@ -511,6 +511,171 @@
         clear: both;
         display: table;
       }
+
+      /* ==================== 新增：左側抽屜選單 ====================
+         畫面左緣固定一個「拉把」，點一下或往右滑即可拉出側邊選單；
+         點遮罩、點關閉鈕或往左滑即可收回。 */
+
+      /* 左緣拉把：貼齊畫面左邊、垂直置中，寬度落在 container 的左側留白內 */
+      .drawer-handle {
+        position: fixed;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 900;
+        width: 34px;
+        height: 130px;
+        border: none;
+        border-radius: 0 16px 16px 0;
+        background: #2c3e50;
+        color: #fff;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        box-shadow: 4px 0 14px rgba(44, 62, 80, 0.3);
+        transition:
+          width 0.2s ease,
+          opacity 0.2s ease;
+      }
+      .drawer-handle:active {
+        width: 42px;
+      }
+      .drawer-handle i {
+        font-size: 1rem;
+      }
+      .drawer-handle-text {
+        writing-mode: vertical-rl;
+        font-size: 1rem;
+        font-weight: 700;
+        letter-spacing: 4px;
+      }
+      /* 抽屜打開時把拉把藏起來 */
+      body.drawer-open .drawer-handle {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      /* 半透明遮罩 */
+      .drawer-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 950;
+        background: rgba(15, 23, 42, 0.5);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+      }
+      body.drawer-open .drawer-overlay {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      /* 抽屜本體 */
+      .side-drawer {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        z-index: 1000;
+        width: 340px;
+        max-width: 82vw;
+        background: #ffffff;
+        border-radius: 0 24px 24px 0;
+        box-shadow: 10px 0 40px rgba(15, 23, 42, 0.3);
+        padding: 30px 26px;
+        display: flex;
+        flex-direction: column;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+      }
+      body.drawer-open .side-drawer {
+        transform: translateX(0);
+      }
+
+      .drawer-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 18px;
+        margin-bottom: 26px;
+        border-bottom: 2px solid #e2e8f0;
+      }
+      .drawer-header h2 {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #2c3e50;
+        letter-spacing: 2px;
+      }
+      .drawer-close {
+        width: 56px;
+        height: 56px;
+        border: none;
+        border-radius: 50%;
+        background: #e2e8f0;
+        color: #2c3e50;
+        font-size: 1.6rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .drawer-close:active {
+        background: #cbd5e1;
+      }
+
+      /* 待機按鈕：深色實心底＋白色大字，在白色抽屜上一眼可辨 */
+      .standby-btn {
+        width: 100%;
+        min-height: 96px;
+        border: none;
+        border-radius: 18px;
+        background: #2c3e50;
+        color: #ffffff;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        padding: 18px 22px;
+        text-align: left;
+        box-shadow: 0 10px 24px rgba(44, 62, 80, 0.3);
+        transition:
+          transform 0.15s ease,
+          background 0.15s ease;
+      }
+      .standby-btn:active {
+        transform: scale(0.97);
+        background: #1e293b;
+      }
+      .standby-icon {
+        flex-shrink: 0;
+        width: 58px;
+        height: 58px;
+        border-radius: 50%;
+        background: #facc15;
+        color: #2c3e50;
+        font-size: 1.7rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .standby-text {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .standby-title {
+        font-size: 1.7rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+      }
+      .standby-desc {
+        font-size: 1rem;
+        font-weight: 500;
+        color: #e2e8f0;
+      }
     </style>
   </head>
   <body>
@@ -594,6 +759,46 @@
       </div>
     </div>
 
+    <!-- ==================== 新增：左側抽屜選單 ==================== -->
+    <button
+      class="drawer-handle"
+      id="drawerHandle"
+      aria-label="打開選單"
+      aria-controls="sideDrawer"
+      aria-expanded="false"
+      onclick="openDrawer()"
+    >
+      <i class="fa-solid fa-chevron-right"></i>
+      <span class="drawer-handle-text">管理</span>
+    </button>
+
+    <div
+      class="drawer-overlay"
+      id="drawerOverlay"
+      onclick="closeDrawer()"
+    ></div>
+
+    <aside class="side-drawer" id="sideDrawer" aria-label="側邊選單">
+      <div class="drawer-header">
+        <h2>選單</h2>
+        <button
+          class="drawer-close"
+          aria-label="關閉選單"
+          onclick="closeDrawer()"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <button class="standby-btn" id="standbyBtn" onclick="handleStandby()">
+        <span class="standby-icon"><i class="fa-solid fa-moon"></i></span>
+        <span class="standby-text">
+          <span class="standby-title">待機</span>
+          <span class="standby-desc">讓畫面進入待機</span>
+        </span>
+      </button>
+    </aside>
+
     <script>
       function updateDateTime() {
         const now = new Date();
@@ -631,6 +836,45 @@
       function handleManualLogin() {
         // TODO: 在此串接手動登入邏輯，例如導向輸入身分證字號的頁面
         console.log("手動登入按鈕被點擊");
+      }
+
+      /* ==================== 新增：左側抽屜選單 ==================== */
+      const drawerHandle = document.getElementById("drawerHandle");
+      const sideDrawer = document.getElementById("sideDrawer");
+
+      function openDrawer() {
+        document.body.classList.add("drawer-open");
+        drawerHandle.setAttribute("aria-expanded", "true");
+      }
+
+      function closeDrawer() {
+        document.body.classList.remove("drawer-open");
+        drawerHandle.setAttribute("aria-expanded", "false");
+      }
+
+      // 滑動手勢：從拉把往右滑打開、在抽屜上往左滑關閉
+      function addSwipe(el, onSwipe) {
+        let startX = null;
+        el.addEventListener(
+          "touchstart",
+          (e) => (startX = e.touches[0].clientX),
+          { passive: true },
+        );
+        el.addEventListener("touchend", (e) => {
+          if (startX === null) return;
+          const dx = e.changedTouches[0].clientX - startX;
+          startX = null;
+          onSwipe(dx);
+        });
+      }
+      addSwipe(drawerHandle, (dx) => dx > 30 && openDrawer());
+      addSwipe(sideDrawer, (dx) => dx < -50 && closeDrawer());
+
+      // 待機按鈕點擊事件（請依實際流程串接）
+      function handleStandby() {
+        // TODO: 在此串接待機邏輯，例如切換到待機畫面或關閉螢幕
+        console.log("待機按鈕被點擊");
+        closeDrawer();
       }
     </script>
   </body>
