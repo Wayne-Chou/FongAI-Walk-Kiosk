@@ -416,6 +416,119 @@
       .lang-modal-close:active {
         background: #e4d5c6;
       }
+
+      /* ══════════ 新增：Header 右側按鈕群組（待機＋語系） ══════════ */
+      .header-actions {
+        display: flex;
+        flex-direction: column; /* 語系在上、待機在下 */
+        align-items: flex-end;
+        gap: 10px;
+      }
+
+      /* 待機按鈕：沿用語系按鈕的膠囊外型，看起來是同一組設定類按鈕 */
+      .btn-standby {
+        height: 42px;
+        min-width: 168px; /* 與語系按鈕同寬，上下對齊 */
+        padding: 0 16px;
+        border-radius: 999px;
+        border: 1.5px solid rgba(111, 78, 55, 0.22);
+        background: rgba(255, 255, 255, 0.55);
+        backdrop-filter: blur(8px);
+        box-shadow: 0 4px 12px rgba(111, 78, 55, 0.08);
+        color: var(--primary);
+        font-family: inherit;
+        font-size: 0.9rem;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        flex-shrink: 0;
+        white-space: nowrap;
+        transition:
+          border-color 0.2s ease,
+          background 0.2s ease;
+      }
+      .btn-standby:hover {
+        border-color: rgba(111, 78, 55, 0.4);
+        background: rgba(255, 255, 255, 0.72);
+      }
+      .btn-standby:active {
+        transform: scale(0.98);
+      }
+      .btn-standby .fa-moon {
+        font-size: 0.92rem;
+      }
+
+      /* ══════════ 新增：待機確認視窗（沿用語系彈窗風格） ══════════ */
+      .standby-modal {
+        min-height: auto;
+        width: 480px;
+        padding: 40px 40px 32px;
+      }
+      .standby-modal-icon {
+        width: 76px;
+        height: 76px;
+        border-radius: 50%;
+        background: linear-gradient(
+          135deg,
+          var(--primary),
+          var(--primary-dark)
+        );
+        color: #fff;
+        font-size: 2rem;
+        display: grid;
+        place-items: center;
+        box-shadow: 0 10px 24px rgba(111, 78, 55, 0.28);
+        margin-bottom: 20px;
+      }
+      .standby-modal .lang-modal-header {
+        margin-bottom: 30px;
+      }
+      .standby-modal .lang-modal-subtitle {
+        font-size: 1.1rem;
+        color: #6b5d50;
+      }
+      .standby-actions {
+        width: 100%;
+        display: flex;
+        gap: 14px;
+      }
+      .standby-actions button {
+        flex: 1;
+        height: 64px;
+        border-radius: 14px;
+        font-family: inherit;
+        font-size: 1.25rem;
+        font-weight: 800;
+        letter-spacing: 2px;
+        cursor: pointer;
+      }
+      .btn-standby-cancel {
+        border: 1.5px solid rgba(111, 78, 55, 0.28);
+        background: #f3ebe3;
+        color: var(--primary-dark);
+      }
+      .btn-standby-cancel:hover {
+        background: #eadfd4;
+      }
+      .btn-standby-cancel:active {
+        background: #e4d5c6;
+      }
+      .btn-standby-confirm {
+        border: none;
+        background: linear-gradient(
+          135deg,
+          var(--primary),
+          var(--primary-dark)
+        );
+        color: #fff;
+        box-shadow: 0 10px 24px rgba(111, 78, 55, 0.3);
+      }
+      .btn-standby-confirm:active {
+        transform: scale(0.98);
+      }
     </style>
   </head>
   <body>
@@ -431,16 +544,28 @@
           </div>
           <h1>FongAI</h1>
         </div>
-        <button
-          type="button"
-          class="btn-lang"
-          id="btnLang"
-          aria-haspopup="dialog"
-        >
-          <i class="fa-solid fa-globe" aria-hidden="true"></i>
-          <span class="btn-lang-label">選擇語系</span>
-          <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
-        </button>
+        <!-- 新增：右側按鈕群組（原本的語系按鈕在上、待機在下） -->
+        <div class="header-actions">
+          <button
+            type="button"
+            class="btn-lang"
+            id="btnLang"
+            aria-haspopup="dialog"
+          >
+            <i class="fa-solid fa-globe" aria-hidden="true"></i>
+            <span class="btn-lang-label">選擇語系</span>
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </button>
+          <button
+            type="button"
+            class="btn-standby"
+            id="btnStandby"
+            aria-haspopup="dialog"
+          >
+            <i class="fa-solid fa-moon" aria-hidden="true"></i>
+            <span class="btn-lang-label">待機</span>
+          </button>
+        </div>
       </header>
 
       <main class="main-action-area">
@@ -504,6 +629,37 @@
         </button>
       </div>
     </div>
+
+    <!-- 新增：待機確認視窗 -->
+    <div class="lang-overlay" id="standbyOverlay">
+      <div
+        class="lang-modal standby-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="standbyModalTitle"
+      >
+        <div class="standby-modal-icon">
+          <i class="fa-solid fa-moon" aria-hidden="true"></i>
+        </div>
+        <div class="lang-modal-header">
+          <div class="lang-modal-title" id="standbyModalTitle">
+            確定要進入待機嗎？
+          </div>
+          <div class="lang-modal-subtitle">
+            按「進入待機」後，畫面將暫停使用
+          </div>
+        </div>
+        <div class="standby-actions">
+          <button type="button" class="btn-standby-cancel" id="standbyCancel">
+            取消
+          </button>
+          <button type="button" class="btn-standby-confirm" id="standbyConfirm">
+            進入待機
+          </button>
+        </div>
+      </div>
+    </div>
+
     <script>
       (function () {
         const overlay = document.getElementById("langOverlay");
@@ -537,6 +693,33 @@
               el.setAttribute("aria-pressed", selected ? "true" : "false");
             });
           });
+        });
+      })();
+
+      /* ══════════ 新增：待機確認視窗 ══════════ */
+      (function () {
+        const overlay = document.getElementById("standbyOverlay");
+        const btnStandby = document.getElementById("btnStandby");
+        const btnCancel = document.getElementById("standbyCancel");
+        const btnConfirm = document.getElementById("standbyConfirm");
+
+        function openStandby() {
+          overlay.classList.add("is-open");
+        }
+        function closeStandby() {
+          overlay.classList.remove("is-open");
+        }
+
+        btnStandby.addEventListener("click", openStandby);
+        btnCancel.addEventListener("click", closeStandby);
+        overlay.addEventListener("click", function (e) {
+          if (e.target === overlay) closeStandby();
+        });
+
+        btnConfirm.addEventListener("click", function () {
+          // TODO: 在此串接待機邏輯，例如切換到待機畫面或關閉螢幕
+          console.log("進入待機");
+          closeStandby();
         });
       })();
     </script>
