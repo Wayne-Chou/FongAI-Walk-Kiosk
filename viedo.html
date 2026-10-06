@@ -512,169 +512,169 @@
         display: table;
       }
 
-      /* ==================== 新增：左側抽屜選單 ====================
-         畫面左緣固定一個「拉把」，點一下或往右滑即可拉出側邊選單；
-         點遮罩、點關閉鈕或往左滑即可收回。 */
-
-      /* 左緣拉把：貼齊畫面左邊、垂直置中，寬度落在 container 的左側留白內 */
-      .drawer-handle {
-        position: fixed;
-        left: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        z-index: 900;
-        width: 34px;
-        height: 130px;
-        border: none;
-        border-radius: 0 16px 16px 0;
-        background: #2c3e50;
-        color: #fff;
+      /* ==================== 新增：長按衛生局 Logo 開啟待機（隱藏入口） ==================== */
+      .gov-logo-zone {
         cursor: pointer;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        box-shadow: 4px 0 14px rgba(44, 62, 80, 0.3);
-        transition:
-          width 0.2s ease,
-          opacity 0.2s ease;
+        -webkit-touch-callout: none; /* 避免長按跳出系統選單（儲存圖片等） */
+        touch-action: manipulation;
+        transition: transform 0.2s ease;
       }
-      .drawer-handle:active {
-        width: 42px;
+      .gov-logo-zone img {
+        pointer-events: none; /* 避免圖片被拖曳 */
+        -webkit-user-drag: none;
       }
-      .drawer-handle i {
-        font-size: 1rem;
-      }
-      .drawer-handle-text {
-        writing-mode: vertical-rl;
-        font-size: 1rem;
-        font-weight: 700;
-        letter-spacing: 4px;
-      }
-      /* 抽屜打開時把拉把藏起來 */
-      body.drawer-open .drawer-handle {
-        opacity: 0;
-        pointer-events: none;
+      .gov-logo-zone.is-pressing {
+        transform: scale(0.96); /* 按住時輕微內縮，讓工作人員知道有按到 */
       }
 
-      /* 半透明遮罩 */
-      .drawer-overlay {
+      /* ==================== 新增：待機確認視窗 ==================== */
+      .standby-overlay {
         position: fixed;
         inset: 0;
-        z-index: 950;
-        background: rgba(15, 23, 42, 0.5);
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.3s ease;
-      }
-      body.drawer-open .drawer-overlay {
-        opacity: 1;
-        pointer-events: auto;
-      }
-
-      /* 抽屜本體 */
-      .side-drawer {
-        position: fixed;
-        top: 0;
-        left: 0;
-        bottom: 0;
         z-index: 1000;
-        width: 340px;
-        max-width: 82vw;
+        background: rgba(15, 23, 42, 0.5);
+        backdrop-filter: blur(5px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 30px;
+      }
+      .standby-overlay.is-open {
+        display: flex;
+      }
+      .standby-modal {
+        width: 540px;
+        max-width: 100%;
+        padding: 44px 40px 36px;
+        border-radius: 24px;
         background: #ffffff;
-        border-radius: 0 24px 24px 0;
-        box-shadow: 10px 0 40px rgba(15, 23, 42, 0.3);
-        padding: 30px 26px;
+        box-shadow: 0 24px 60px rgba(15, 23, 42, 0.3);
         display: flex;
         flex-direction: column;
-        transform: translateX(-100%);
-        transition: transform 0.3s ease;
+        align-items: center;
+        text-align: center;
       }
-      body.drawer-open .side-drawer {
-        transform: translateX(0);
+      .standby-modal-icon {
+        width: 84px;
+        height: 84px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #0984e3, #0868b3);
+        color: #fff;
+        font-size: 2.2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 12px 26px rgba(9, 132, 227, 0.4);
+        margin-bottom: 22px;
+      }
+      .standby-modal-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #2c3e50;
+        letter-spacing: 1px;
+      }
+      .standby-modal-subtitle {
+        margin-top: 10px;
+        font-size: 1.15rem;
+        font-weight: 500;
+        color: #5a6e85;
       }
 
-      .drawer-header {
+      /* 喚醒方式提示 */
+      .wake-hint {
+        width: 100%;
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        padding-bottom: 18px;
-        margin-bottom: 26px;
-        border-bottom: 2px solid #e2e8f0;
+        gap: 14px;
+        margin: 28px 0;
+        padding: 18px 22px;
+        border-radius: 16px;
+        background: #e3effa;
+        border: 1.5px solid rgba(9, 132, 227, 0.25);
+        color: #2c3e50;
+        font-size: 1.2rem;
+        font-weight: 700;
+        line-height: 1.5;
+        text-align: left;
       }
-      .drawer-header h2 {
+      .wake-hint i {
+        font-size: 1.7rem;
+        color: #0984e3;
+        flex-shrink: 0;
+      }
+      .wake-hint b {
+        color: #0984e3;
+      }
+
+      .standby-actions {
+        width: 100%;
+        display: flex;
+        gap: 16px;
+      }
+      .standby-actions button {
+        flex: 1;
+        height: 68px;
+        border-radius: 16px;
+        font-family: inherit;
+        font-size: 1.35rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        cursor: pointer;
+        transition: transform 0.15s ease;
+      }
+      .standby-actions button:active {
+        transform: scale(0.97);
+      }
+      .btn-standby-cancel {
+        border: 1.5px solid #cbd5e1;
+        background: #f0f6fa;
+        color: #2c3e50;
+      }
+      .btn-standby-confirm {
+        border: none;
+        background: linear-gradient(135deg, #0984e3, #0868b3);
+        color: #fff;
+        box-shadow: 0 10px 24px rgba(9, 132, 227, 0.4);
+      }
+
+      /* ==================== 新增：待機畫面（全黑，點兩下喚醒） ==================== */
+      .standby-screen {
+        position: fixed;
+        inset: 0;
+        z-index: 2000;
+        background: #000;
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        cursor: pointer;
+        touch-action: manipulation;
+      }
+      .standby-screen.is-on {
+        display: flex;
+      }
+      .standby-screen-title {
         font-size: 1.8rem;
         font-weight: 700;
-        color: #2c3e50;
-        letter-spacing: 2px;
+        letter-spacing: 4px;
+        color: rgba(255, 255, 255, 0.4);
       }
-      .drawer-close {
-        width: 56px;
-        height: 56px;
-        border: none;
-        border-radius: 50%;
-        background: #e2e8f0;
-        color: #2c3e50;
-        font-size: 1.6rem;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      .drawer-close:active {
-        background: #cbd5e1;
-      }
-
-      /* 待機按鈕：深色實心底＋白色大字，在白色抽屜上一眼可辨 */
-      .standby-btn {
-        width: 100%;
-        min-height: 96px;
-        border: none;
-        border-radius: 18px;
-        background: #2c3e50;
-        color: #ffffff;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 18px;
-        padding: 18px 22px;
-        text-align: left;
-        box-shadow: 0 10px 24px rgba(44, 62, 80, 0.3);
-        transition:
-          transform 0.15s ease,
-          background 0.15s ease;
-      }
-      .standby-btn:active {
-        transform: scale(0.97);
-        background: #1e293b;
-      }
-      .standby-icon {
-        flex-shrink: 0;
-        width: 58px;
-        height: 58px;
-        border-radius: 50%;
-        background: #facc15;
-        color: #2c3e50;
-        font-size: 1.7rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      .standby-text {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-      }
-      .standby-title {
-        font-size: 1.7rem;
-        font-weight: 700;
-        letter-spacing: 2px;
-      }
-      .standby-desc {
-        font-size: 1rem;
+      .standby-screen-hint {
+        font-size: 1.2rem;
         font-weight: 500;
-        color: #e2e8f0;
+        letter-spacing: 2px;
+        color: rgba(255, 255, 255, 0.3);
+        animation: standby-fade 3s ease-in-out infinite;
+      }
+      @keyframes standby-fade {
+        0%,
+        100% {
+          opacity: 0.5;
+        }
+        50% {
+          opacity: 1;
+        }
       }
     </style>
   </head>
@@ -759,45 +759,43 @@
       </div>
     </div>
 
-    <!-- ==================== 新增：左側抽屜選單 ==================== -->
-    <button
-      class="drawer-handle"
-      id="drawerHandle"
-      aria-label="打開選單"
-      aria-controls="sideDrawer"
-      aria-expanded="false"
-      onclick="openDrawer()"
-    >
-      <i class="fa-solid fa-chevron-right"></i>
-      <span class="drawer-handle-text">管理</span>
-    </button>
-
-    <div
-      class="drawer-overlay"
-      id="drawerOverlay"
-      onclick="closeDrawer()"
-    ></div>
-
-    <aside class="side-drawer" id="sideDrawer" aria-label="側邊選單">
-      <div class="drawer-header">
-        <h2>選單</h2>
-        <button
-          class="drawer-close"
-          aria-label="關閉選單"
-          onclick="closeDrawer()"
-        >
-          <i class="fa-solid fa-xmark"></i>
-        </button>
+    <!-- ==================== 新增：待機確認視窗 ==================== -->
+    <div class="standby-overlay" id="standbyOverlay">
+      <div
+        class="standby-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="standbyModalTitle"
+      >
+        <div class="standby-modal-icon">
+          <i class="fa-solid fa-moon" aria-hidden="true"></i>
+        </div>
+        <div class="standby-modal-title" id="standbyModalTitle">
+          確定要進入待機嗎？
+        </div>
+        <div class="standby-modal-subtitle">
+          按「進入待機」後，畫面將暫停使用
+        </div>
+        <div class="wake-hint">
+          <i class="fa-solid fa-hand-pointer" aria-hidden="true"></i>
+          <span>要喚醒時，請在螢幕上<b>連續點兩下</b></span>
+        </div>
+        <div class="standby-actions">
+          <button type="button" class="btn-standby-cancel" id="standbyCancel">
+            取消
+          </button>
+          <button type="button" class="btn-standby-confirm" id="standbyConfirm">
+            進入待機
+          </button>
+        </div>
       </div>
+    </div>
 
-      <button class="standby-btn" id="standbyBtn" onclick="handleStandby()">
-        <span class="standby-icon"><i class="fa-solid fa-moon"></i></span>
-        <span class="standby-text">
-          <span class="standby-title">待機</span>
-          <span class="standby-desc">讓畫面進入待機</span>
-        </span>
-      </button>
-    </aside>
+    <!-- ==================== 新增：待機畫面 ==================== -->
+    <div class="standby-screen" id="standbyScreen" aria-hidden="true">
+      <div class="standby-screen-title">待機中</div>
+      <div class="standby-screen-hint">點兩下螢幕喚醒</div>
+    </div>
 
     <script>
       function updateDateTime() {
@@ -838,44 +836,81 @@
         console.log("手動登入按鈕被點擊");
       }
 
-      /* ==================== 新增：左側抽屜選單 ==================== */
-      const drawerHandle = document.getElementById("drawerHandle");
-      const sideDrawer = document.getElementById("sideDrawer");
+      /* ==================== 新增：長按衛生局 Logo 開啟待機 ==================== */
+      (function () {
+        // 模擬模式：true = 點一下衛生局 Logo 就開啟（方便用滑鼠展示）
+        //          false = 正式版，需長按衛生局 Logo 才會開啟
+        const DEMO_MODE = true;
+        const LONG_PRESS_MS = 2000; // 正式版長按秒數，可自行調整
 
-      function openDrawer() {
-        document.body.classList.add("drawer-open");
-        drawerHandle.setAttribute("aria-expanded", "true");
-      }
+        const govLogo = document.querySelector(".gov-logo-zone");
+        const overlay = document.getElementById("standbyOverlay");
+        const btnCancel = document.getElementById("standbyCancel");
+        const btnConfirm = document.getElementById("standbyConfirm");
+        const screen = document.getElementById("standbyScreen");
 
-      function closeDrawer() {
-        document.body.classList.remove("drawer-open");
-        drawerHandle.setAttribute("aria-expanded", "false");
-      }
+        let pressTimer = null;
 
-      // 滑動手勢：從拉把往右滑打開、在抽屜上往左滑關閉
-      function addSwipe(el, onSwipe) {
-        let startX = null;
-        el.addEventListener(
-          "touchstart",
-          (e) => (startX = e.touches[0].clientX),
-          { passive: true },
-        );
-        el.addEventListener("touchend", (e) => {
-          if (startX === null) return;
-          const dx = e.changedTouches[0].clientX - startX;
-          startX = null;
-          onSwipe(dx);
+        function startPress(e) {
+          if (e.button !== undefined && e.button !== 0) return;
+          govLogo.classList.add("is-pressing");
+          pressTimer = setTimeout(function () {
+            pressTimer = null;
+            govLogo.classList.remove("is-pressing");
+            openStandby();
+          }, LONG_PRESS_MS);
+        }
+        function cancelPress() {
+          if (pressTimer) clearTimeout(pressTimer);
+          pressTimer = null;
+          govLogo.classList.remove("is-pressing");
+        }
+
+        if (DEMO_MODE) {
+          govLogo.addEventListener("click", openStandby);
+        } else {
+          govLogo.addEventListener("pointerdown", startPress);
+          ["pointerup", "pointerleave", "pointercancel"].forEach(function (ev) {
+            govLogo.addEventListener(ev, cancelPress);
+          });
+        }
+        govLogo.addEventListener("contextmenu", function (e) {
+          e.preventDefault();
         });
-      }
-      addSwipe(drawerHandle, (dx) => dx > 30 && openDrawer());
-      addSwipe(sideDrawer, (dx) => dx < -50 && closeDrawer());
 
-      // 待機按鈕點擊事件（請依實際流程串接）
-      function handleStandby() {
-        // TODO: 在此串接待機邏輯，例如切換到待機畫面或關閉螢幕
-        console.log("待機按鈕被點擊");
-        closeDrawer();
-      }
+        function openStandby() {
+          overlay.classList.add("is-open");
+        }
+        function closeStandby() {
+          overlay.classList.remove("is-open");
+        }
+
+        btnCancel.addEventListener("click", closeStandby);
+        overlay.addEventListener("click", function (e) {
+          if (e.target === overlay) closeStandby();
+        });
+
+        btnConfirm.addEventListener("click", function () {
+          closeStandby();
+          screen.classList.add("is-on");
+          // TODO: 在此串接待機邏輯（例如暫停影片、降低亮度）
+          console.log("進入待機");
+        });
+
+        // 待機畫面：400ms 內連點兩下即喚醒（滑鼠與觸控皆適用）
+        let lastTap = 0;
+        screen.addEventListener("pointerup", function () {
+          const now = Date.now();
+          if (now - lastTap < 400) {
+            lastTap = 0;
+            screen.classList.remove("is-on");
+            // TODO: 在此串接喚醒邏輯
+            console.log("喚醒");
+          } else {
+            lastTap = now;
+          }
+        });
+      })();
     </script>
   </body>
 </html>

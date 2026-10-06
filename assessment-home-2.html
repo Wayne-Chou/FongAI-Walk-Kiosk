@@ -417,48 +417,17 @@
         background: #e4d5c6;
       }
 
-      /* ══════════ 新增：Header 右側按鈕群組（待機＋語系） ══════════ */
-      .header-actions {
-        display: flex;
-        flex-direction: column; /* 語系在上、待機在下 */
-        align-items: flex-end;
-        gap: 10px;
-      }
-
-      /* 待機按鈕：沿用語系按鈕的膠囊外型，看起來是同一組設定類按鈕 */
-      .btn-standby {
-        height: 42px;
-        min-width: 168px; /* 與語系按鈕同寬，上下對齊 */
-        padding: 0 16px;
-        border-radius: 999px;
-        border: 1.5px solid rgba(111, 78, 55, 0.22);
-        background: rgba(255, 255, 255, 0.55);
-        backdrop-filter: blur(8px);
-        box-shadow: 0 4px 12px rgba(111, 78, 55, 0.08);
-        color: var(--primary);
-        font-family: inherit;
-        font-size: 0.9rem;
-        font-weight: 700;
-        letter-spacing: 0.5px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
+      /* ══════════ 新增：長按 FongAI 開啟待機（隱藏入口） ══════════ */
+      .brand-mark {
         cursor: pointer;
-        flex-shrink: 0;
-        white-space: nowrap;
-        transition:
-          border-color 0.2s ease,
-          background 0.2s ease;
+        user-select: none;
+        -webkit-user-select: none;
+        -webkit-touch-callout: none; /* 避免長按跳出系統選單 */
+        touch-action: manipulation;
+        transition: transform 0.2s ease;
       }
-      .btn-standby:hover {
-        border-color: rgba(111, 78, 55, 0.4);
-        background: rgba(255, 255, 255, 0.72);
-      }
-      .btn-standby:active {
-        transform: scale(0.98);
-      }
-      .btn-standby .fa-moon {
-        font-size: 0.92rem;
+      .brand-mark.is-pressing {
+        transform: scale(0.97); /* 按住時輕微內縮，讓工作人員知道有按到 */
       }
 
       /* ══════════ 新增：待機確認視窗（沿用語系彈窗風格） ══════════ */
@@ -529,6 +498,74 @@
       .btn-standby-confirm:active {
         transform: scale(0.98);
       }
+
+      /* 喚醒方式提示 */
+      .wake-hint {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 16px 20px;
+        margin-bottom: 26px;
+        border-radius: 14px;
+        background: #f3ebe3;
+        border: 1.5px solid rgba(111, 78, 55, 0.2);
+        color: var(--primary-dark);
+        font-size: 1.15rem;
+        font-weight: 700;
+        line-height: 1.5;
+      }
+      .wake-hint i {
+        font-size: 1.6rem;
+        color: var(--primary);
+        flex-shrink: 0;
+      }
+      .wake-hint b {
+        color: var(--primary);
+        font-weight: 800;
+      }
+
+      /* ══════════ 新增：待機畫面（全黑，點兩下喚醒） ══════════ */
+      .standby-screen {
+        position: fixed;
+        inset: 0;
+        z-index: 200;
+        background: #000;
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        cursor: pointer;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+      }
+      .standby-screen.is-on {
+        display: flex;
+      }
+      .standby-screen-title {
+        font-size: 1.6rem;
+        font-weight: 800;
+        letter-spacing: 4px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+      .standby-screen-hint {
+        font-size: 1.1rem;
+        font-weight: 500;
+        letter-spacing: 2px;
+        color: rgba(255, 255, 255, 0.3);
+        animation: standby-fade 3s ease-in-out infinite;
+      }
+      @keyframes standby-fade {
+        0%,
+        100% {
+          opacity: 0.5;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
     </style>
   </head>
   <body>
@@ -544,28 +581,16 @@
           </div>
           <h1>FongAI</h1>
         </div>
-        <!-- 新增：右側按鈕群組（原本的語系按鈕在上、待機在下） -->
-        <div class="header-actions">
-          <button
-            type="button"
-            class="btn-lang"
-            id="btnLang"
-            aria-haspopup="dialog"
-          >
-            <i class="fa-solid fa-globe" aria-hidden="true"></i>
-            <span class="btn-lang-label">選擇語系</span>
-            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
-          </button>
-          <button
-            type="button"
-            class="btn-standby"
-            id="btnStandby"
-            aria-haspopup="dialog"
-          >
-            <i class="fa-solid fa-moon" aria-hidden="true"></i>
-            <span class="btn-lang-label">待機</span>
-          </button>
-        </div>
+        <button
+          type="button"
+          class="btn-lang"
+          id="btnLang"
+          aria-haspopup="dialog"
+        >
+          <i class="fa-solid fa-globe" aria-hidden="true"></i>
+          <span class="btn-lang-label">選擇語系</span>
+          <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+        </button>
       </header>
 
       <main class="main-action-area">
@@ -649,6 +674,10 @@
             按「進入待機」後，畫面將暫停使用
           </div>
         </div>
+        <div class="wake-hint">
+          <i class="fa-solid fa-hand-pointer" aria-hidden="true"></i>
+          <span>要喚醒時，請在螢幕上<b>連續點兩下</b></span>
+        </div>
         <div class="standby-actions">
           <button type="button" class="btn-standby-cancel" id="standbyCancel">
             取消
@@ -658,6 +687,12 @@
           </button>
         </div>
       </div>
+    </div>
+
+    <!-- 新增：待機畫面 -->
+    <div class="standby-screen" id="standbyScreen" aria-hidden="true">
+      <div class="standby-screen-title">待機中</div>
+      <div class="standby-screen-hint">點兩下螢幕喚醒</div>
     </div>
 
     <script>
@@ -696,12 +731,49 @@
         });
       })();
 
-      /* ══════════ 新增：待機確認視窗 ══════════ */
+      /* ══════════ 新增：長按 FongAI 開啟待機確認視窗 ══════════ */
       (function () {
+        // 模擬模式：true = 點一下 FongAI 就開啟（方便用滑鼠展示）
+        //          false = 正式版，需長按 FongAI 才會開啟
+        const DEMO_MODE = true;
+        const LONG_PRESS_MS = 2000; // 正式版長按秒數，可自行調整
+
+        const brand = document.querySelector(".brand-mark");
         const overlay = document.getElementById("standbyOverlay");
-        const btnStandby = document.getElementById("btnStandby");
         const btnCancel = document.getElementById("standbyCancel");
         const btnConfirm = document.getElementById("standbyConfirm");
+        const screen = document.getElementById("standbyScreen");
+
+        let pressTimer = null;
+
+        function startPress(e) {
+          if (e.button !== undefined && e.button !== 0) return;
+          brand.classList.add("is-pressing");
+          pressTimer = setTimeout(function () {
+            pressTimer = null;
+            brand.classList.remove("is-pressing");
+            openStandby();
+          }, LONG_PRESS_MS);
+        }
+        function cancelPress() {
+          if (pressTimer) clearTimeout(pressTimer);
+          pressTimer = null;
+          brand.classList.remove("is-pressing");
+        }
+
+        if (DEMO_MODE) {
+          brand.addEventListener("click", function () {
+            openStandby();
+          });
+        } else {
+          brand.addEventListener("pointerdown", startPress);
+          ["pointerup", "pointerleave", "pointercancel"].forEach(function (ev) {
+            brand.addEventListener(ev, cancelPress);
+          });
+        }
+        brand.addEventListener("contextmenu", function (e) {
+          e.preventDefault();
+        });
 
         function openStandby() {
           overlay.classList.add("is-open");
@@ -710,16 +782,30 @@
           overlay.classList.remove("is-open");
         }
 
-        btnStandby.addEventListener("click", openStandby);
         btnCancel.addEventListener("click", closeStandby);
         overlay.addEventListener("click", function (e) {
           if (e.target === overlay) closeStandby();
         });
 
         btnConfirm.addEventListener("click", function () {
-          // TODO: 在此串接待機邏輯，例如切換到待機畫面或關閉螢幕
-          console.log("進入待機");
           closeStandby();
+          screen.classList.add("is-on");
+          // TODO: 在此串接待機邏輯（例如暫停影片、降低亮度）
+          console.log("進入待機");
+        });
+
+        // 待機畫面：400ms 內連點兩下即喚醒（滑鼠與觸控皆適用）
+        let lastTap = 0;
+        screen.addEventListener("pointerup", function () {
+          const now = Date.now();
+          if (now - lastTap < 400) {
+            lastTap = 0;
+            screen.classList.remove("is-on");
+            // TODO: 在此串接喚醒邏輯
+            console.log("喚醒");
+          } else {
+            lastTap = now;
+          }
         });
       })();
     </script>
